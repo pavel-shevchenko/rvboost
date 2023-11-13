@@ -1,0 +1,11 @@
+.cache
+.turbo
+.idea
+.vscode
+package.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+dist
+public
+build
+coverage

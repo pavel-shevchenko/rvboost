@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  prepare:
+    container_name: bizdata_saas__prepare
+    image: node:18.17.0-alpine
+    volumes:
+      - ./:/project_root
+    working_dir: /project_root
+    entrypoint: >
+      /bin/sh -c "
+        apk add curl git && rm -rf /var/cache/* && mkdir /var/cache/apk
+        mkdir -p /bin && curl -fsSL "https://github.com/pnpm/pnpm/releases/download/v8.10.2/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
+        cd /project_root
+        pnpm install
+        export PATH=/project_root/node_modules/.bin:$PATH
+        apk add --no-cache libc6-compat
+        apk update
+        turbo build --filter='./packages/*'
+        exit 0;
+      "
+    networks:
+      - app_network
+
+  web:
+    container_name: bizdata_saas__web__dev
+    build:
+      dockerfile: ./apps/web/development.dockerfile
+    volumes:
+      - ./:/project_root
+    env_file:
+      - .env
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+
+  api:
+    container_name: bizdata_saas__api__dev
+    build:
+      dockerfile: ./apps/api/development.dockerfile
+    volumes:
+      - ./:/project_root
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+    environment:
+      MIKRO_ORM_DEBUG: true
+      MIKRO_ORM_VERBOSE: true

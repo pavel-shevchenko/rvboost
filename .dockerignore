@@ -1,0 +1,17 @@
+# next.js
+**/.next
+**/out
+**/build
+
+# apps & packages
+**/dist
+**/node_modules
+
+# other
+.git
+.github
+.husky
+**/.turbo
+s3minio
+certbot
+nginx
