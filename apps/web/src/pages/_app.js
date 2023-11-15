@@ -14,7 +14,11 @@ import { Remove_Org, Set_Org } from '../store/actions/actions';
 
 import ApiContext from '../utils/apiContext';
 import { apiReducer, initialStateApi } from '../store/reducers/apiReducer';
-import { Fetch_failure, Fetch_init, Fetch_success } from '../store/actions/actions';
+import {
+  Fetch_failure,
+  Fetch_init,
+  Fetch_success
+} from '../store/actions/actions';
 
 import CaslContext from '../utils/caslContext';
 import { ability } from '../utils/caslAbility';
@@ -65,7 +69,7 @@ function MyApp(props) {
   const LogOut = () => {
     dispatchAuth(Logout);
     dispatchOrg(Remove_Org);
-    firebase.auth().signOut();
+    // firebase.auth().signOut();
   };
 
   const fetchFailure = (error) => {
@@ -87,7 +91,9 @@ function MyApp(props) {
 
   return (
     <AuthContext.Provider value={{ authState, LogIn, LogOut, firebase }}>
-      <ApiContext.Provider value={{ apiState, fetchFailure, fetchInit, fetchSuccess }}>
+      <ApiContext.Provider
+        value={{ apiState, fetchFailure, fetchInit, fetchSuccess }}
+      >
         <OrgContext.Provider value={{ SetOrg, orgState }}>
           <CaslContext.Provider value={ability}>
             <ThemeProvider theme={theme}>

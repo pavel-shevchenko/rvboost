@@ -108,11 +108,13 @@ function createAuthGuard(type?: string | string[]): Type<IAuthGuard> {
 
 const createPassportContext = (req, res) => (type, options, callback: Function) =>
   new Promise((resolve, reject) =>
+    // @ts-ignore
     passport.authenticate(
       type,
       options,
       async (request, reply, err, user, info, status) => {
         try {
+          // @ts-ignore
           request.authInfo = info;
           req.authInfo = info;
 

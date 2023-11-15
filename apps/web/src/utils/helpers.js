@@ -26,7 +26,9 @@ export const apiErrorHandler = (error) => {
       let errorMessage = error.response.data.message
         ? error.response.data.message
         : 'Request Failed Please Try Again or Contact Support';
-      let errorType = error.response.data.type ? error.response.data.type : '500 Server Error';
+      let errorType = error.response.data.type
+        ? error.response.data.type
+        : '500 Server Error';
       errorNotification(errorType, errorMessage);
     }
   } else if (error.type && error.message) {

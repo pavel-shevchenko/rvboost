@@ -77,7 +77,8 @@ const AppsWrapper = styled.div`
 
 const Dashboard = () => {
   const { authState } = useContext(AuthContext);
-  const { fetchFailure, fetchInit, fetchSuccess, apiState } = useContext(ApiContext);
+  const { fetchFailure, fetchInit, fetchSuccess, apiState } =
+    useContext(ApiContext);
   const { isLoading } = apiState;
   const [orgs, setOrgs] = useState([]);
   let token = authState?.user.jwt_token;
@@ -98,10 +99,12 @@ const Dashboard = () => {
       user_id
     };
 
-    const result = await axios.get(`/api/org`, { params, headers }).catch((err) => {
-      fetchFailure(err);
-    });
-    let adminOrgs = result.data.filter((item) => item.role === 'admin');
+    const result = await axios
+      .get(`/api/organization/get-owned-organization`, { params, headers })
+      .catch((err) => {
+        fetchFailure(err);
+      });
+    let adminOrgs = result.data; /*.filter((item) => item.role === 'admin')*/
 
     setOrgs(adminOrgs);
     fetchSuccess();
@@ -123,9 +126,13 @@ const Dashboard = () => {
       user_id
     };
 
-    await axios.post(`/api/org`, data, { headers }).catch((err) => {
-      fetchFailure(err);
-    });
+    await axios
+      .post('/api/organization/new-owned-organization/' + org_name, data, {
+        headers
+      })
+      .catch((err) => {
+        fetchFailure(err);
+      });
 
     getOrgs();
     fetchSuccess();
@@ -151,7 +158,7 @@ const Dashboard = () => {
                   <Link href={`/app/${org.id}/dashboard`} state={{ org }}>
                     <a>
                       <StyledCard key={org.id}>
-                        <StyledLink>{org.org_name}</StyledLink>
+                        <StyledLink>{org.name}</StyledLink>
                         <RoleText>Role: admin</RoleText>
                       </StyledCard>
                     </a>

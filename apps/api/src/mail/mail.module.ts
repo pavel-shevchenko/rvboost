@@ -18,7 +18,7 @@ import { join } from 'path';
         }
       },
       defaults: {
-        from: '"Bizdata Saas" <test@bizdata.ru>'
+        from: `"Bizdata Saas" <${process.env?.NOREPLY_EMAIL_FROM}>`
       },
       template: {
         dir: join(__dirname, 'templates/pages'),

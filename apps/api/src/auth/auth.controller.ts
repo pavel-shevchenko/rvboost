@@ -25,7 +25,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('local-login')
   async localLogin(@Request() req: RequestWithUser) {
-    return this.authService.generateToken(req.user);
+    return this.authService.getAuthTokenWithUser(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -34,13 +34,13 @@ export class AuthController {
     return req.user;
   }
 
-  @Get('restore-password/:email')
-  async restorePassword(@Param('email') email: string): Promise<any> {
-    return this.authService.restorePassword(email);
+  @Get('reset-password/:email')
+  async resetPassword(@Param('email') email: string): Promise<any> {
+    return this.authService.resetPassword(email);
   }
 
-  @Post('reset-password')
-  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return this.authService.resetPassword(resetPasswordDto);
+  @Post('restore-password')
+  restorePassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.restorePassword(resetPasswordDto);
   }
 }

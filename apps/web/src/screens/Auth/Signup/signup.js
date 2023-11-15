@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { useRouter } from 'next/router';
+import jwt_decode from 'jwt-decode';
 
 import AuthContext from '../../../utils/authContext';
 import ApiContext from '../../../utils/apiContext';
@@ -17,8 +18,9 @@ import ContinueWith from '../../../components/Auth/continueWith';
 import GoogleButton from '../../../components/Auth/Buttons/googleButton';
 import LoadingOverlay from '../../../components/Common/loadingOverlay';
 import SignUpFormHeader from './signupFormHeader';
+import axios from '../../../services/axios';
 
-// TODO: replace with actual data
+// This frontend application root public url
 const getData = () => ({
   site: {
     siteMetadata: {
@@ -31,8 +33,9 @@ const Signup = () => {
   const location = useRouter();
   const data = getData();
   const domainUrl = data.site.siteMetadata.siteUrl;
-  const { firebase } = useContext(AuthContext);
-  const { fetchFailure, fetchInit, fetchSuccess, apiState } = useContext(ApiContext);
+  const { firebase, LogIn } = useContext(AuthContext);
+  const { fetchFailure, fetchInit, fetchSuccess, apiState } =
+    useContext(ApiContext);
   const { isLoading } = apiState;
   const [invite_key, setInviteKey] = useState();
   const [isInviteFlow, setInviteFlow] = useState();
@@ -50,13 +53,18 @@ const Signup = () => {
   }, []);
   /* eslint-disable */
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (
+    values,
+    { props, resetForm, setErrors, setSubmitting }
+  ) => {
     fetchInit();
 
     let email = values.email;
     let password = values.password;
     let username = values.username;
 
+    // Comment old functionality at the end of the method
+    /*
     let authRes = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -74,6 +82,47 @@ const Signup = () => {
       invite_key,
       location
     );
+    */
+
+    // New functionality at the end of the method
+    const authData = { email, password, username };
+    const res = await axios
+      .post(`/api/auth/local-registration`, authData)
+      .catch((err) => {
+        const errors = err?.response?.data;
+        if (
+          !errors ||
+          typeof errors !== 'object' ||
+          !Object.keys(errors).length
+        ) {
+          fetchFailure(err);
+        } else {
+          setErrors(errors);
+          fetchSuccess();
+        }
+      });
+    const jwt_token = res?.data?.access_token;
+    const curUser = res?.data?.user;
+    if (!jwt_token) return;
+
+    try {
+      const jwt_data = jwt_decode(jwt_token);
+      console.log('jwt_data', jwt_data);
+    } catch {
+      console.log('JWT token decode failed');
+      let error = {
+        type: 'Authentication Failed',
+        message: 'Authentication Failed, please try again or contact Support'
+      };
+
+      fetchFailure(error);
+    }
+
+    // Save user data to global state
+    let user = { id: curUser.id, username, jwt_token, email };
+    await LogIn(user);
+
+    location.push('/auth/create-organization');
   };
 
   //Google OAuth2 Signin
@@ -178,8 +227,10 @@ const Signup = () => {
             )}
           </Formik>
 
+          {/*
           <ContinueWith />
           <GoogleButton GoogleSignin={GoogleSignin} />
+          */}
         </AuthCard>
       </div>
     </React.Fragment>

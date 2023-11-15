@@ -14,6 +14,7 @@ import Button from '../../../components/Auth/Buttons/authButton';
 import Input from '../../../components/Common/forms/TextInput';
 import Label from '../../../components/Auth/authFormLabel';
 import InputWrapper from '../../../components/Common/forms/TextInputWrapper';
+import axios from '../../../services/axios';
 
 const Wrapper = styled.div`
   background-color: ${colors.gray50};
@@ -33,8 +34,9 @@ const Wrapper = styled.div`
 `;
 
 const PasswordReset = () => {
-  const { firebase } = useContext(AuthContext);
-  const { fetchFailure, fetchInit, fetchSuccess, apiState } = useContext(ApiContext);
+  const { firebase, authState } = useContext(AuthContext);
+  const { fetchFailure, fetchInit, fetchSuccess, apiState } =
+    useContext(ApiContext);
   const { isLoading } = apiState;
   const [success, setSuccess] = useState(false);
 
@@ -44,12 +46,17 @@ const PasswordReset = () => {
 
     let email = event.target.email.value;
 
+    /*
     await firebase
       .auth()
       .sendPasswordResetEmail(email)
       .catch((err) => {
         fetchFailure(err);
       });
+    */
+    await axios.get('/api/auth/reset-password/' + email).catch((err) => {
+      fetchFailure(err);
+    });
 
     setSuccess(true);
     fetchSuccess();

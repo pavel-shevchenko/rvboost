@@ -23,7 +23,7 @@ export const LoginAuth = async (
   //server authentication, returns jwt token
   let email = authRes.user.email;
   let data = { email, token };
-  
+
   // Command out for temporary localhost development. (Unable to axios post to correct port:80)
   let authServerRes = await axios.post(`/auth/login`, data).catch((err) => {
     fetchFailure(err);
@@ -99,7 +99,14 @@ export const SignupAuth = async (
   // the url the user is redirected to after email verify
   const confirmEmailUrl = `${domainUrl}/auth/confirmedemail`;
 
-  let authData = { email, username, token, confirmEmailUrl, isInviteFlow, invite_key };
+  let authData = {
+    email,
+    username,
+    token,
+    confirmEmailUrl,
+    isInviteFlow,
+    invite_key
+  };
 
   await axios.post(`/auth/signup`, authData).catch((err) => {
     fetchFailure(err);
@@ -116,8 +123,8 @@ export const ValidSchema = Yup.object().shape({
     .max(50, 'Name Too Long')
     .required('Name Required'),
   password: Yup.string()
-    .min(3, 'Password must be at least 3 Characters')
-    .max(50, 'Password Too Long')
+    .min(7, 'Password must be at least 7 Characters')
+    .max(20, 'Password Too Long')
     .required('Password Required')
 });
 

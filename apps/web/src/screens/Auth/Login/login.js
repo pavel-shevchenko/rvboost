@@ -20,6 +20,8 @@ import GoogleButton from '../../../components/Auth/Buttons/googleButton';
 import LoadingOverlay from '../../../components/Common/loadingOverlay';
 import LoginFormHeader from './loginFormHeader';
 import AuthCard from '../../../components/Auth/authCard';
+import axios from '../../../services/axios';
+import jwt_decode from 'jwt-decode';
 
 const ForgotPasswordWrapper = styled.div`
   display: flex;
@@ -54,7 +56,8 @@ const StyledLink = styled.a`
 const Login = () => {
   const location = useRouter();
   const { firebase, LogIn } = useContext(AuthContext);
-  const { fetchFailure, fetchInit, fetchSuccess, apiState } = useContext(ApiContext);
+  const { fetchFailure, fetchInit, fetchSuccess, apiState } =
+    useContext(ApiContext);
   const { isLoading } = apiState;
   const [invite_key, setInviteKey] = useState();
   const [isInviteFlow, setInviteFlow] = useState();
@@ -73,13 +76,18 @@ const Login = () => {
 
   /* eslint-enable */
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (
+    values,
+    { props, resetForm, setErrors, setSubmitting }
+  ) => {
     fetchInit();
 
     // TODO: Use `login_or_email` on request
     let email = values.email;
     let password = values.password;
 
+    // Comment old functionality at the end of the method
+    /*
     let authRes = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -96,6 +104,52 @@ const Login = () => {
       invite_key,
       location
     );
+    */
+    // New functionality at the end of the method
+    const authData = { login_or_email: email, password };
+    const res = await axios
+      .post(`/api/auth/local-login`, authData)
+      .catch((err) => {
+        const errors = err?.response?.data;
+        if (
+          !errors ||
+          typeof errors !== 'object' ||
+          !Object.keys(errors).length
+        ) {
+          fetchFailure(err);
+        } else {
+          setErrors(errors);
+          fetchSuccess();
+        }
+      });
+    const jwt_token = res?.data?.access_token;
+    const curUser = res?.data?.user;
+    if (!jwt_token) return;
+
+    try {
+      const jwt_data = jwt_decode(jwt_token);
+      console.log('jwt_data', jwt_data);
+    } catch {
+      console.log('JWT token decode failed');
+      let error = {
+        type: 'Authentication Failed',
+        message: 'Authentication Failed, please try again or contact Support'
+      };
+
+      fetchFailure(error);
+    }
+
+    // Save user data to global state
+    let user = {
+      id: curUser.id,
+      email,
+      username: curUser.username,
+      // photo,
+      // provider,
+      jwt_token
+    };
+    await LogIn(user);
+    location.push(`/user/dashboard`);
   };
 
   //Google OAuth2 Signin
@@ -192,8 +246,10 @@ const Login = () => {
             </ForgotPassword>
           </ForgotPasswordWrapper>
 
+          {/*
           <ContinueWith />
           <GoogleButton GoogleSignin={GoogleSignin} />
+          */}
         </AuthCard>
       </div>
     </React.Fragment>
