@@ -9,7 +9,7 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard, LocalAuthGuard } from './guards';
+import { LocalAuthGuard } from './guards';
 import { LocalRegistrationDto, ResetPasswordDto } from 'validation';
 import RequestWithUser from '../common/typing/request_w_user.interface';
 
@@ -26,12 +26,6 @@ export class AuthController {
   @Post('local-login')
   async localLogin(@Request() req: RequestWithUser) {
     return this.authService.getAuthTokenWithUser(req.user);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('jwt-user-info')
-  jwtUserInfo(@Request() req: RequestWithUser) {
-    return req.user;
   }
 
   @Get('reset-password/:email')

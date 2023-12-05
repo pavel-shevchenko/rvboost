@@ -1,8 +1,8 @@
 import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core';
-import { BaseEntity } from '../../common/entities/base.entity';
 import { IUser } from 'typing';
-import { Organization } from '../../organization/entity/organization.entity';
-import { UserRoleInOrganization } from '../../organization/entity/user-role-in-org.entity';
+
+import { BaseEntity } from '../../common/entities';
+import { Organization, UserRoleInOrganization } from '../../organization/entity';
 
 @Entity({
   tableName: 'users'

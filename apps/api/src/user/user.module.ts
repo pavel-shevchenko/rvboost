@@ -4,6 +4,7 @@ import { UserDbService } from './user_db.service';
 import { AuthModule } from '../auth';
 import { MailModule } from '../mail';
 import { OrganizationModule } from '../organization';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { OrganizationModule } from '../organization';
     forwardRef(() => AuthModule),
     forwardRef(() => OrganizationModule)
   ],
+  controllers: [UserController],
   providers: [UserService, UserDbService],
   exports: [UserService, UserDbService]
 })

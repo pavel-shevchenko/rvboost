@@ -28,7 +28,7 @@ export class AuthService {
 
   async registration(userDto: LocalRegistrationDto) {
     if (await this.userDbService.getPassportUserByEmail(userDto.email)) {
-      throw new BadRequestException({ email: 'E-mail is busy!' });
+      throw new BadRequestException({ email: 'E-mail уже зарегистрирован!' });
     }
     const passwordHash = await bcrypt.hash(userDto.password, 5);
     const user: User = await this.userDbService.createUserByLocalDto({
@@ -62,19 +62,20 @@ export class AuthService {
     password: string
   ): Promise<User> {
     const user = await this.userDbService.getPassportUserByEmail(loginOrEmail);
-    if (!user) throw new UnauthorizedException({ email: 'Email not found!' });
+    if (!user)
+      throw new UnauthorizedException({ login_or_email: 'Email не найден' });
 
     const oldAndNewPasswordsEquals =
       !!user?.passwordHash &&
       (await bcrypt.compare(password, user?.passwordHash));
 
     if (user && oldAndNewPasswordsEquals) return user;
-    throw new UnauthorizedException({ password: 'The password is incorrect!' });
+    throw new UnauthorizedException({ password: 'Пароль не подходит' });
   }
 
   async resetPassword(email: string) {
     const user = await this.userDbService.getPassportUserByEmail(email);
-    if (!user) throw new BadRequestException({ email: 'Email not found!' });
+    if (!user) throw new BadRequestException({ email: 'Email не найден' });
     this.sendRestorePasswordLink(user);
   }
 
@@ -94,7 +95,7 @@ export class AuthService {
     const user = await this.userDbService.getPassportUserByEmail(
       resetPasswordDto.email
     );
-    if (!user) throw new BadRequestException({ message: 'E-mail not found' });
+    if (!user) throw new BadRequestException({ message: 'E-mail не найден' });
 
     if (
       user.passwordResetToken &&

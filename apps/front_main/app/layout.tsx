@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import '@/app/_components/root-layout/styles/css/globals.css';
+
 export const metadata: Metadata = {
   title: 'Saas-Biz',
   description: ''

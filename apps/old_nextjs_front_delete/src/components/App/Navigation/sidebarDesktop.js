@@ -45,7 +45,7 @@ const LogoWrapper = styled.div`
 `;
 
 const SidebarItems = styled.div`
-  height: 'calc(100vh - 120px)';
+  height: calc(100vh - 120px);
   overflow-x: hidden;
   flex: 1;
   padding: 24px 0;
@@ -121,12 +121,18 @@ const SidebarDesktop = ({ theme, toggleTheme, org_id, location, collapsed }) => 
         {collapsed ? (
           <SmallLogo />
         ) : (
-          <LargeLogo textColor={theme === THEMES.DARK ? colors.white : colors.blueZodiac} />
+          <LargeLogo
+            textColor={theme === THEMES.DARK ? colors.white : colors.blueZodiac}
+          />
         )}
       </LogoWrapper>
       <SidebarItems>
         <ScrollBar options={{ suppressScrollX: true }}>
-          <Menu mode="inline" theme={theme} selectedKeys={[selectedKey && selectedKey.id]}>
+          <Menu
+            mode="inline"
+            theme={theme}
+            selectedKeys={[selectedKey && selectedKey.id]}
+          >
             {menus.map(({ id, route, icon, name }) => (
               <Menu.Item key={id} title={name}>
                 <Link href={route || '#'} passHref>
