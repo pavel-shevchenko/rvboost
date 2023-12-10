@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { env } from 'next-runtime-env';
 
 import { IUser } from 'typing';
 import { LocalLoginDto } from 'validation/src/dto/local_login';
@@ -17,7 +18,7 @@ export const initUserStore = async () => {
   const authToken = await getCookie(AuthCookieName);
   const fetch = useFetch(authToken);
   const currentUser = await fetch.get(
-    'http://193.168.46.135/api/user/current-user-info'
+    `${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`
   );
 
   const state: UserStoreState = { authToken, ...currentUser };
@@ -42,22 +43,23 @@ export const useUserStore = create<UserStore>()(
     authToken: '',
     email: '',
     username: '',
+    isAdmin: null,
     login: async (dto: LocalLoginDto) => {
       const fetch = useFetch('_STUB', false);
       const res = await fetch.post(
-        'http://193.168.46.135/api/auth/local-login',
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/auth/local-login`,
         dto
       );
       const authToken = res?.access_token;
       const currentUser = res?.user;
 
-      setCookie(AuthCookieName, authToken);
       set({ authToken, ...currentUser });
+      await setCookie(AuthCookieName, authToken);
     },
     register: async (dto: LocalRegistrationDto) => {
       const fetch = useFetch();
       const res = await fetch.post(
-        'http://193.168.46.135/api/auth/local-registration',
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/auth/local-registration`,
         dto
       );
       const authToken = res?.access_token;

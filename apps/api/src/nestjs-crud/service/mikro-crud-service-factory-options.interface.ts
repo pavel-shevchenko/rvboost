@@ -1,0 +1,21 @@
+import { AnyEntity, EntityData, RequiredEntityData } from '@mikro-orm/core';
+import { Type } from '@nestjs/common';
+
+export interface MikroCrudServiceFactoryOptions<
+  Entity extends AnyEntity<Entity> = any,
+  CreateDto extends RequiredEntityData<Entity> = RequiredEntityData<Entity>,
+  UpdateDto extends EntityData<Entity> = EntityData<Entity>,
+> {
+  /**
+   * The entity's constructor whose repository will be auto-injected.
+   */
+  entity: Type<Entity>;
+  /**
+   * Be used to infer the generic types and apply validation in the
+   * controller.
+   */
+  dto: {
+    create: Type<CreateDto>;
+    update: Type<UpdateDto>;
+  };
+}

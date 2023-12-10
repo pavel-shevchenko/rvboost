@@ -2,6 +2,8 @@
 
 import { SyntheticEvent, useState } from 'react';
 import styled from 'styled-components';
+import { message } from 'antd';
+import { env } from 'next-runtime-env';
 
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { LoadingOverlay } from '@/app/_components/common';
@@ -12,7 +14,6 @@ import {
   ResetSuccess
 } from '@/app/auth/forgot-password/_components';
 import { useFetch } from '@/services/hooks/useFetch';
-import { message } from 'antd';
 
 const Wrapper = styled.div`
   background-color: ${colors.gray50};
@@ -46,7 +47,7 @@ export default function Login() {
     try {
       const fetch = useFetch();
       const res = await fetch.get(
-        'http://193.168.46.135/api/auth/reset-password/' + email
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/auth/reset-password/${email}`
       );
       setSuccess(true);
     } catch (errors: any) {

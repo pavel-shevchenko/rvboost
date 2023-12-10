@@ -4,12 +4,11 @@ import styled from 'styled-components';
 import ScrollBar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { Layout, Menu } from 'antd';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-import { getMenus } from './menuConfig';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { LargeLogo, SmallLogo } from '@/app/_components/common/svgs';
+import { useSidebarMenu } from '@/services/hooks/useSidebarMenu';
 
 const StyledIcon = styled.div`
   display: flex;
@@ -18,6 +17,10 @@ const StyledIcon = styled.div`
   margin-right: 0.8rem;
   margin-bottom: 0.5rem;
   padding-top: 0.5rem;
+
+  .anticon {
+    line-height: 27px !important;
+  }
 `;
 
 const StyledSider = styled(Layout.Sider)`
@@ -98,8 +101,8 @@ const Footer = styled.div`
 `;
 
 export const SidebarDesktop = ({ collapsed }: { collapsed: boolean }) => {
-  const menus = getMenus();
-  const selectedKey = menus.find((menu) => menu.route === usePathname());
+  const { menus, selectedId } = useSidebarMenu();
+
   return (
     <StyledSider
       width={200}
@@ -117,9 +120,10 @@ export const SidebarDesktop = ({ collapsed }: { collapsed: boolean }) => {
           <Menu
             mode="inline"
             theme="dark"
-            selectedKeys={[(selectedKey && selectedKey.id) || '']}
+            selectedKeys={[selectedId?.toString() || '']}
             items={menus.map(({ id, route, icon, name }) => ({
               key: id,
+              title: name,
               label: (
                 <Link href={route || '#'} passHref legacyBehavior>
                   <StyledLink>

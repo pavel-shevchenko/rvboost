@@ -22,10 +22,10 @@ services:
     networks:
       - app_network
 
-  web:
-    container_name: bizdata_saas__web__dev
+  front_main:
+    container_name: bizdata_saas__front_main__dev
     build:
-      dockerfile: ./apps/web/development.dockerfile
+      dockerfile: ./apps/front_main/development.dockerfile
     volumes:
       - ./:/project_root
     env_file:

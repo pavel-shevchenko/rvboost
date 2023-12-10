@@ -2,24 +2,13 @@
 
 import { useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { BulbOutlined } from '@ant-design/icons';
 
 import { MobileSidebarItem } from './mobileSidebarItem';
-
-import {
-  FcBarChart,
-  FcCollect,
-  FcConferenceCall,
-  FcGenealogy,
-  FcTimeline,
-  FcUpload,
-  FcPrivacy,
-  FcEngineering
-} from 'react-icons/fc';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { useOutsideClick } from '@/services/hooks';
 import { LargeLogo } from '@/app/_components/common/svgs';
 import { Cross } from '@/app/(auth-protected)/_components/svgs';
+import { useSidebarMenu } from '@/services/hooks/useSidebarMenu';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -156,14 +145,6 @@ const Footer = styled.div`
   }
 `;
 
-const Bulb = styled(BulbOutlined)`
-  color: ${colors.doveGray};
-`;
-
-const Span = styled.span`
-  color: ${colors.doveGray};
-`;
-
 export const SidebarMobile = ({
   toggleMobileMenu
 }: {
@@ -171,6 +152,7 @@ export const SidebarMobile = ({
 }) => {
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
   useOutsideClick(ref, () => toggleMobileMenu(false));
+  const { menus, selectedId } = useSidebarMenu();
 
   return (
     <Wrapper>
@@ -192,54 +174,16 @@ export const SidebarMobile = ({
           </LogoWrapper>
           <Wrapper4>
             <Nav>
-              <MobileSidebarItem
-                link={`/app/dashboard`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcBarChart />}
-                title="Dashboard"
-              />
-              <MobileSidebarItem
-                link={`/app/readupdate`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcCollect />}
-                title="Read Update"
-              />
-              <MobileSidebarItem
-                link={`/app/create`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcUpload />}
-                title="Create"
-              />
-              <MobileSidebarItem
-                link={`/app/permissions`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcPrivacy />}
-                title="Permissions"
-              />
-              <MobileSidebarItem
-                link={`/app/users`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcConferenceCall />}
-                title="Users"
-              />
-              <MobileSidebarItem
-                link={`/app/onboarding`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcTimeline />}
-                title="Onboarding"
-              />
-              <MobileSidebarItem
-                link={`/app/machinelearning`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcGenealogy />}
-                title="Machine Learning"
-              />
-              <MobileSidebarItem
-                link={`/app/settings`}
-                toggleMenu={() => toggleMobileMenu(false)}
-                svg={<FcEngineering />}
-                title="Settings"
-              />
+              {menus.map(({ id, route, icon, name }) => (
+                <MobileSidebarItem
+                  key={id}
+                  link={route}
+                  toggleMenu={() => toggleMobileMenu(false)}
+                  svg={icon}
+                  title={name}
+                  isActive={id === selectedId}
+                />
+              ))}
             </Nav>
             <Footer></Footer>
           </Wrapper4>

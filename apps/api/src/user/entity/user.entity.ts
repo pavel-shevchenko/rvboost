@@ -1,13 +1,20 @@
-import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  Property,
+  Unique
+} from '@mikro-orm/core';
 import { IUser } from 'typing';
 
-import { BaseEntity } from '../../common/entities';
+import { BaseEntity } from '../../common/entities/base.entity';
 import { Organization, UserRoleInOrganization } from '../../organization/entity';
 
 @Entity({
   tableName: 'users'
 })
 export class User extends BaseEntity<User> implements IUser {
+  @Unique()
   @Property()
   email: string;
 
@@ -25,4 +32,7 @@ export class User extends BaseEntity<User> implements IUser {
     pivotEntity: () => UserRoleInOrganization
   })
   organizations = new Collection<Organization>(this);
+
+  @Property({ default: false })
+  isAdmin: boolean;
 }

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { colors } from '@/app/_components/root-layout/styles';
 
 const Wrapper = styled.div`
@@ -24,6 +24,14 @@ const Wrapper = styled.div`
     outline: 2px solid transparent;
     outline-offset: 2px;
   }
+  ${({ isActive }: { isActive: boolean }) =>
+    isActive &&
+    css`
+      color: ${colors.dodgerBlue};
+      background-color: ${colors.lilyWhite};
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    `}
 `;
 
 const SvgWrapper = styled.div`
@@ -39,15 +47,17 @@ export const MobileSidebarItem = ({
   link,
   toggleMenu,
   svg,
-  title
+  title,
+  isActive
 }: {
   link: string;
   toggleMenu: () => void;
   svg: React.ReactNode;
   title: string;
+  isActive: boolean;
 }) => (
   <Link href={link}>
-    <Wrapper onClick={toggleMenu}>
+    <Wrapper {...{ isActive }} onClick={toggleMenu}>
       <SvgWrapper>{svg}</SvgWrapper>
       <TitleWrapper>{title}</TitleWrapper>
     </Wrapper>

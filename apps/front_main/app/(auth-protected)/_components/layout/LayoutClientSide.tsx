@@ -1,8 +1,15 @@
 'use client';
 
-import styled from 'styled-components';
-import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { Refine } from '@refinedev/core';
+import { RefineThemes, notificationProvider } from '@refinedev/antd';
+import dataProvider from '@refinedev/nestjsx-crud';
+import routerProvider from '@refinedev/nextjs-router/app';
+import { ConfigProvider } from 'antd';
+import { env } from 'next-runtime-env';
+
+import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { useWindowSize } from '@/services/hooks';
 import {
   PrivateCabinetHeader,
@@ -81,10 +88,34 @@ export function LayoutClientSide({ children }: { children: React.ReactNode }) {
             <SidebarMobile toggleMobileMenu={toggleShowMobileMenu} />
           )}
           <Main>
-            {/*App Screens Here*/}
-            <ContentWrapper theme="dark" id="primaryLayout">
-              {children}
-            </ContentWrapper>
+            <ConfigProvider theme={RefineThemes.Blue}>
+              <ContentWrapper theme="dark" id="primaryLayout">
+                <Refine
+                  routerProvider={routerProvider}
+                  dataProvider={dataProvider(
+                    `${env('NEXT_PUBLIC_SERVER_URL')}/api`
+                  )}
+                  resources={[
+                    {
+                      name: 'user',
+                      list: '/users',
+                      create: '/users/create',
+                      edit: '/users/edit/:id',
+                      show: '/users/show/:id',
+                      meta: {
+                        canDelete: true
+                      }
+                    }
+                  ]}
+                  options={{
+                    syncWithLocation: true
+                  }}
+                  notificationProvider={notificationProvider}
+                >
+                  {children}
+                </Refine>
+              </ContentWrapper>
+            </ConfigProvider>
           </Main>
         </Content>
       </Wrapper>

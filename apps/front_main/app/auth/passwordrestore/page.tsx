@@ -3,6 +3,7 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { message, Spin } from 'antd';
+import { env } from 'next-runtime-env';
 
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { LoadingOverlay } from '@/app/_components/common';
@@ -86,7 +87,10 @@ export default function PasswordRestore() {
     };
     try {
       const fetch = useFetch();
-      await fetch.post('http://193.168.46.135/api/auth/restore-password', data);
+      await fetch.post(
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/auth/restore-password`,
+        data
+      );
       message.success('Пароль успешно изменён');
       setSuccessMessage('Пароль успешно изменён');
       location.href = Routes.login;

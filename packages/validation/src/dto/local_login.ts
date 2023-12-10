@@ -2,8 +2,7 @@ import {
   IsEmail,
   IsString,
   IsNumberString, // use it for number from url request param
-  Length,
-  Matches
+  Length
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 

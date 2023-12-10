@@ -109,11 +109,11 @@ services:
 #    networks:
 #      - app_network
 
-  web:
-    container_name: bizdata_saas__web__prod
+  front_main:
+    container_name: bizdata_saas__front_main__prod
     build:
       context: .
-      dockerfile: ./apps/web/production-next11.dockerfile
+      dockerfile: ./apps/front_main/production.dockerfile
     restart: unless-stopped
     networks:
       - app_network

@@ -14,6 +14,7 @@ import { User } from '../user/entity';
 import { UserService, UserDbService } from '../user';
 import { MailService } from '../mail';
 import * as process from 'process';
+import { hashPassword } from '../common/helpers';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
     if (await this.userDbService.getPassportUserByEmail(userDto.email)) {
       throw new BadRequestException({ email: 'E-mail уже зарегистрирован!' });
     }
-    const passwordHash = await bcrypt.hash(userDto.password, 5);
+    const passwordHash = await hashPassword(userDto.password);
     const user: User = await this.userDbService.createUserByLocalDto({
       passwordHash,
       email: userDto.email,
@@ -101,7 +102,7 @@ export class AuthService {
       user.passwordResetToken &&
       user.passwordResetToken === resetPasswordDto.token
     ) {
-      user.passwordHash = await bcrypt.hash(resetPasswordDto.newPassword, 5);
+      user.passwordHash = await hashPassword(resetPasswordDto.newPassword);
       user.passwordResetToken = null;
       this.userDbService.saveUser(user);
 

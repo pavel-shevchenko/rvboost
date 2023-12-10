@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { JwtAuthGuard } from '../auth/guards';
-import RequestWithUser from '../common/typing/request_w_user.interface';
+import { RequestWithUser } from '../common/typing';
 import { OrganizationDbService } from './organization_db.service';
 
 @Controller('organization')

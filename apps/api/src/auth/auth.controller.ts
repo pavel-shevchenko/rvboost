@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
 import { LocalRegistrationDto, ResetPasswordDto } from 'validation';
-import RequestWithUser from '../common/typing/request_w_user.interface';
+import { RequestWithUser } from '../common/typing';
 
 @Controller('auth')
 export class AuthController {
