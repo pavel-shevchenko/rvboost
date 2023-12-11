@@ -1,6 +1,6 @@
 import { useUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
-import { DashboardOutlined, UserOutlined } from '@ant-design/icons';
+import { BankOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -47,10 +47,16 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
           icon: <DashboardOutlined />
         },
         {
-          id: 3,
+          id: 2,
           name: 'Пользователи',
           route: Routes.users,
           icon: <UserOutlined />
+        },
+        {
+          id: 3,
+          name: 'Организации',
+          route: Routes.companies,
+          icon: <BankOutlined />
         }
       ];
     else

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PartialType } from '@nestjs/swagger';
-import { CrudUserDto } from 'validation';
 
+import { CrudUserDto } from 'validation';
 import { MikroCrudServiceFactory } from '../nestjs-crud';
 import { User } from './entity';
 import { hashPassword } from '../common/helpers';

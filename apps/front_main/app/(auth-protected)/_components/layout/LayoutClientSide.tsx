@@ -16,6 +16,7 @@ import {
   SidebarDesktop,
   SidebarMobile
 } from '@/app/(auth-protected)/_components/layout';
+import { Routes } from '@/services/helpers/routes';
 
 const Wrapper = styled.div`
   background-color: ${colors.gray100};
@@ -98,10 +99,18 @@ export function LayoutClientSide({ children }: { children: React.ReactNode }) {
                   resources={[
                     {
                       name: 'user',
-                      list: '/users',
-                      create: '/users/create',
-                      edit: '/users/edit/:id',
-                      show: '/users/show/:id',
+                      list: Routes.users,
+                      create: `${Routes.users}/create`,
+                      edit: `${Routes.users}/edit/:id`,
+                      meta: {
+                        canDelete: true
+                      }
+                    },
+                    {
+                      name: 'organization',
+                      list: Routes.companies,
+                      create: `${Routes.companies}/create`,
+                      edit: `${Routes.companies}/edit/:id`,
                       meta: {
                         canDelete: true
                       }

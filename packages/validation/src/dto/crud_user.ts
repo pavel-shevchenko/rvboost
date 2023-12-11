@@ -30,6 +30,5 @@ export class CrudUserDto {
   readonly username: string;
 
   @IsBoolean()
-  // @Transform(({ value} ) => value === 'true')
   isAdmin: boolean;
 }

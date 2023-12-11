@@ -34,4 +34,23 @@ export class OrganizationDbService {
       pivots.map((pivot) => pivot.organization.id)
     );
   }
+
+  async addClientToOrg(user: User, organization: Organization) {
+    const pivot = this.em.create<UserRoleInOrganization>(UserRoleInOrganization, {
+      user,
+      organization,
+      role: UserRoleInOrgEnum.client
+    });
+    await this.em.persistAndFlush([organization, pivot]);
+
+    return organization;
+  }
+
+  async delClientsFromOrg(organization: Organization) {
+    const pivots = await this.em.find(UserRoleInOrganization, {
+      organization,
+      role: UserRoleInOrgEnum.client
+    });
+    return this.em.remove(pivots);
+  }
 }

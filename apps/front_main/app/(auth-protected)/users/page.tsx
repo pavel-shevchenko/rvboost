@@ -12,7 +12,7 @@ import { Table, Space } from 'antd';
 
 import { User } from '@/services/typing/entities';
 
-const PostList: React.FC = () => {
+export default function UserList() {
   const { pageCount, tableProps } = useTable<User>({
     pagination: { pageSize: 50 }
   });
@@ -46,6 +46,4 @@ const PostList: React.FC = () => {
       </Table>
     </List>
   );
-};
-
-export default PostList;
+}

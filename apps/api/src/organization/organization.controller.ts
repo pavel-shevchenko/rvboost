@@ -3,13 +3,27 @@ import { OrganizationService } from './organization.service';
 import { JwtAuthGuard } from '../auth/guards';
 import { RequestWithUser } from '../common/typing';
 import { OrganizationDbService } from './organization_db.service';
+import { MikroCrudControllerFactory } from '../nestjs-crud';
+import { OrganizationCrudService } from './organization_crud.service';
+
+const CRUDController = new MikroCrudControllerFactory<OrganizationCrudService>({
+  service: OrganizationCrudService,
+  actions: ['list', 'create', 'retrieve', 'update', 'destroy'],
+  lookup: { field: 'id' },
+  query: {
+    limit: { max: 200, default: 50 },
+    offset: { max: 10_000 }
+  }
+}).product;
 
 @Controller('organization')
-export class OrganizationController {
+export class OrganizationController extends CRUDController {
   constructor(
-    private readonly organizationService: OrganizationService,
-    private orgDbService: OrganizationDbService
-  ) {}
+    private readonly orgService: OrganizationService,
+    private readonly orgDbService: OrganizationDbService
+  ) {
+    super();
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('new-owned-organization/:organizationName')

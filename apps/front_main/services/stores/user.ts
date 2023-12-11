@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { env } from 'next-runtime-env';
 
-import { IUser } from 'typing';
 import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
 import { useFetch } from '@/services/hooks/useFetch';
@@ -11,6 +10,7 @@ import {
   setCookie,
   delCookie
 } from '@/services/server-actions/cookie';
+import { User } from '@/services/typing/entities';
 
 const AuthCookieName = 'auth_token';
 
@@ -26,7 +26,7 @@ export const initUserStore = async () => {
   return state;
 };
 
-export type UserStoreState = IUser & {
+export type UserStoreState = User & {
   authToken: string;
 };
 
@@ -41,6 +41,7 @@ type UserStore = UserStoreState & UserStoreActions;
 export const useUserStore = create<UserStore>()(
   immer((set) => ({
     authToken: '',
+    id: 0,
     email: '',
     username: '',
     isAdmin: null,
@@ -54,6 +55,7 @@ export const useUserStore = create<UserStore>()(
       const currentUser = res?.user;
 
       set({ authToken, ...currentUser });
+      // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
     },
     register: async (dto: LocalRegistrationDto) => {
