@@ -7,8 +7,9 @@ import {
   ValidateIf
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IUser } from 'typing';
 
-export class CrudUserDto {
+export class CrudUserDto implements IUser {
   @IsString({ message: 'Must be a string' })
   @IsEmail({}, { message: 'Неправильный e-mail' })
   @Transform(({ value }) => value.trim())
@@ -30,5 +31,5 @@ export class CrudUserDto {
   readonly username: string;
 
   @IsBoolean()
-  isAdmin: boolean;
+  isAdmin: boolean | null;
 }

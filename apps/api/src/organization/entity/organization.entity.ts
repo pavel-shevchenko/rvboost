@@ -1,8 +1,15 @@
-import { Collection, Entity, ManyToMany, Property } from '@mikro-orm/core';
+import {
+  Collection,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  Property
+} from '@mikro-orm/core';
 
 import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from '../../user/entity';
 import { IOrganization } from 'typing';
+import { Location } from '../../location/entity';
 
 @Entity({
   tableName: 'organizations'
@@ -21,4 +28,7 @@ export class Organization
   get user() {
     return { id: this.users?.getItems()?.pop()?.id };
   }
+
+  @OneToMany(() => Location, (book) => book.organization)
+  locations = new Collection<Location>(this);
 }

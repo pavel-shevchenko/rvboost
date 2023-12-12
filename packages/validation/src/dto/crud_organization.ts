@@ -8,15 +8,16 @@ import {
   ValidateNested
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IOrganization } from 'typing';
 
 class UserClientInOrg {
   @IsNotEmpty()
   id: number;
 }
 
-export class CrudOrganizationDto {
+export class CrudOrganizationDto implements IOrganization {
   @IsString({ message: 'Must be a string' })
-  @Length(2, 30, { message: 'От 2 до 30 символов' })
+  @Length(2, 200, { message: 'От 2 до 200 символов' })
   readonly name: string;
 
   @IsDefined()

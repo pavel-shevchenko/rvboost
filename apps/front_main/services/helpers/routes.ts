@@ -5,5 +5,6 @@ export const Routes = {
   forgotPassword: '/auth/forgot-password',
   dashboard: '/dashboard',
   users: '/users',
-  companies: '/companies'
+  companies: '/companies',
+  locations: '/locations'
 };

@@ -5,6 +5,8 @@ import { AuthModule } from '../auth';
 import { AppController } from './add.controller';
 import { MikroCrudModule } from '../nestjs-crud';
 import { CrudEntityFilterContext } from '../common/typing';
+import { OrganizationModule } from '../organization';
+import { LocationModule } from '../location';
 
 @Module({
   imports: [
@@ -18,7 +20,9 @@ import { CrudEntityFilterContext } from '../common/typing';
       global: true
     },
     UserModule,
-    AuthModule
+    AuthModule,
+    OrganizationModule,
+    LocationModule
   ],
   controllers: [AppController]
 })

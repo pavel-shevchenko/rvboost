@@ -423,6 +423,9 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
+      typing:
+        specifier: workspace:*
+        version: link:../typing
     devDependencies:
       '@swc/cli':
         specifier: ^0.1.62
