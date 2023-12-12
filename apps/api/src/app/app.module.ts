@@ -7,6 +7,7 @@ import { MikroCrudModule } from '../nestjs-crud';
 import { CrudEntityFilterContext } from '../common/typing';
 import { OrganizationModule } from '../organization';
 import { LocationModule } from '../location';
+import { CardModule } from '../card';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { LocationModule } from '../location';
     UserModule,
     AuthModule,
     OrganizationModule,
-    LocationModule
+    LocationModule,
+    CardModule
   ],
   controllers: [AppController]
 })

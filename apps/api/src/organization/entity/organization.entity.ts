@@ -29,6 +29,6 @@ export class Organization
     return { id: this.users?.getItems()?.pop()?.id };
   }
 
-  @OneToMany(() => Location, (book) => book.organization)
+  @OneToMany(() => Location, (loc) => loc.organization)
   locations = new Collection<Location>(this);
 }

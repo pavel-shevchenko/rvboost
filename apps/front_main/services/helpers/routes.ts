@@ -6,5 +6,6 @@ export const Routes = {
   dashboard: '/dashboard',
   users: '/users',
   companies: '/companies',
-  locations: '/locations'
+  locations: '/locations',
+  cards: '/cards'
 };

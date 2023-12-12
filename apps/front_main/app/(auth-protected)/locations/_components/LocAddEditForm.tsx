@@ -1,13 +1,13 @@
 'use client';
 
-import { Organization, User } from '@/services/typing/entities';
+import { Location, User } from '@/services/typing/entities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Form, Input, Select } from 'antd';
 
 export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
-  const { formProps, saveButtonProps, queryResult } = useForm<Organization>();
+  const { formProps, saveButtonProps, queryResult } = useForm<Location>();
 
-  const { selectProps: userSelectProps } = useSelect<User>({
+  const { selectProps: orgSelectProps } = useSelect<User>({
     resource: 'organization',
     optionLabel: 'id'
   });
@@ -30,7 +30,7 @@ export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
         <Input />
       </Form.Item>
       <Form.Item label="ID организации" name={['organization']}>
-        <Select {...userSelectProps} />
+        <Select {...orgSelectProps} />
       </Form.Item>
     </Form>
   );

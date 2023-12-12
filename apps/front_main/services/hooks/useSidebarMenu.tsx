@@ -2,6 +2,7 @@ import { useUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
 import {
   BankOutlined,
+  CreditCardOutlined,
   DashboardOutlined,
   ShoppingOutlined,
   UserOutlined
@@ -68,6 +69,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
           name: 'Компании',
           route: Routes.locations,
           icon: <ShoppingOutlined />
+        },
+        {
+          id: 6,
+          name: 'Карточки QR',
+          route: Routes.cards,
+          icon: <CreditCardOutlined />
         }
       ];
     else

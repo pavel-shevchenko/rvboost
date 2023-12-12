@@ -10,22 +10,21 @@ import {
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
 
-import { Location, User } from '@/services/typing/entities';
+import { Card, User } from '@/services/typing/entities';
 
-export default function LocationList() {
-  const { pageCount, tableProps } = useTable<Location>({
+export default function CardList() {
+  const { pageCount, tableProps } = useTable<Card>({
     pagination: { pageSize: 50 }
   });
 
   return (
     <List
-      title="Компании"
-      headerButtons={<CreateButton>Новая компания</CreateButton>}
+      title="Карточки QR"
+      headerButtons={<CreateButton>Новая карточка QR</CreateButton>}
     >
       <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="name" title="Название" />
-        <Table.Column dataIndex="address" title="Адрес" />
-        <Table.Column dataIndex="organization" title="ID организации" />
+        <Table.Column dataIndex="linkCustom" title="Кастомная ссылка" />
+        <Table.Column dataIndex="location" title="ID компании" />
         <Table.Column<User>
           title="Действия"
           dataIndex="actions"

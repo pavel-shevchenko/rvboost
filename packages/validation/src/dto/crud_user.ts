@@ -31,5 +31,5 @@ export class CrudUserDto implements IUser {
   readonly username: string;
 
   @IsBoolean()
-  isAdmin: boolean | null;
+  readonly isAdmin: boolean | null;
 }
