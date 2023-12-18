@@ -7,5 +7,6 @@ export const Routes = {
   users: '/users',
   companies: '/companies',
   locations: '/locations',
-  cards: '/cards'
+  cards: '/cards',
+  reviews: '/reviews'
 };

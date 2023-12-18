@@ -205,6 +205,8 @@ export class MikroCrudServiceFactory<
           const entityMeta = entity.__helper!.__meta;
           entityMeta.relations.forEach(({ name }) => {
             const value = entity[name];
+            if (value === null) return;
+
             const relationPath = (
               relationNode ? `${relationNode}.${name}` : name
             ) as RelationPath<Entity>;

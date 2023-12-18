@@ -132,6 +132,15 @@ export function LayoutClientSide({ children }: { children: React.ReactNode }) {
                       meta: {
                         canDelete: true
                       }
+                    },
+                    {
+                      name: 'review',
+                      list: Routes.reviews,
+                      create: `${Routes.reviews}/create`,
+                      edit: `${Routes.reviews}/edit/:id`,
+                      meta: {
+                        canDelete: true
+                      }
                     }
                   ]}
                   options={{

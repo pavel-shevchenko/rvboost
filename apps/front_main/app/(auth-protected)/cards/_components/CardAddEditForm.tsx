@@ -28,6 +28,12 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
         <Checkbox />
       </Form.Item>
       <Form.Item
+        label="Выбор платформы на которую будет переадресация"
+        name="redirectPlatform"
+      >
+        <Select options={redirectPlatforms} />
+      </Form.Item>
+      <Form.Item
         label="Опция переадресации по кастомной ссылке"
         name="isCustomLinkRedirect"
         valuePropName="checked"
@@ -39,12 +45,6 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
         name="linkCustom"
       >
         <Input />
-      </Form.Item>
-      <Form.Item
-        label="Выбор платформы на которую будет переадресация"
-        name="redirectPlatform"
-      >
-        <Select options={redirectPlatforms} />
       </Form.Item>
       <Form.Item label="ID компании" name={['location']}>
         <Select {...locSelectProps} />

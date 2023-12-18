@@ -8,6 +8,7 @@ import { CrudEntityFilterContext } from '../common/typing';
 import { OrganizationModule } from '../organization';
 import { LocationModule } from '../location';
 import { CardModule } from '../card';
+import { ReviewModule } from '../review/review.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { CardModule } from '../card';
     AuthModule,
     OrganizationModule,
     LocationModule,
-    CardModule
+    CardModule,
+    ReviewModule
   ],
   controllers: [AppController]
 })

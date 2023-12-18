@@ -23,6 +23,20 @@ export default function CardList() {
       headerButtons={<CreateButton>Новая карточка QR</CreateButton>}
     >
       <Table {...tableProps} rowKey="id">
+        <Table.Column
+          dataIndex="isReviewInterception"
+          title="Перехват отзыва"
+          render={(v) => (v ? 'Да' : '–')}
+        />
+        <Table.Column
+          dataIndex="redirectPlatform"
+          title="Платформа переадресации"
+        />
+        <Table.Column
+          dataIndex="isCustomLinkRedirect"
+          title="По кастомной ссылке"
+          render={(v) => (v ? 'Да' : '–')}
+        />
         <Table.Column dataIndex="linkCustom" title="Кастомная ссылка" />
         <Table.Column dataIndex="location" title="ID компании" />
         <Table.Column<User>

@@ -4,6 +4,7 @@ import {
   BankOutlined,
   CreditCardOutlined,
   DashboardOutlined,
+  MessageOutlined,
   ShoppingOutlined,
   UserOutlined
 } from '@ant-design/icons';
@@ -75,6 +76,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
           name: 'Карточки QR',
           route: Routes.cards,
           icon: <CreditCardOutlined />
+        },
+        {
+          id: 8,
+          name: 'Отзывы',
+          route: Routes.reviews,
+          icon: <MessageOutlined />
         }
       ];
     else
