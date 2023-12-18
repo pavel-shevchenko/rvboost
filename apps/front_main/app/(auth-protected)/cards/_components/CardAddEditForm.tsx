@@ -46,7 +46,11 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item label="ID компании" name={['location']}>
+      <Form.Item
+        label="ID компании"
+        name={['location']}
+        rules={[{ required: true }]}
+      >
         <Select {...locSelectProps} />
       </Form.Item>
     </Form>

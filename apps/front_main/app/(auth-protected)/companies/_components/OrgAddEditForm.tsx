@@ -14,10 +14,14 @@ export const OrgAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
-      <Form.Item label="Название" name="name">
+      <Form.Item label="Название" name="name" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item label="ID клиента" name={['user', 'id']}>
+      <Form.Item
+        label="ID клиента"
+        name={['user', 'id']}
+        rules={[{ required: true }]}
+      >
         <Select {...userSelectProps} />
       </Form.Item>
     </Form>

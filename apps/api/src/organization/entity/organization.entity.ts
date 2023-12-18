@@ -18,7 +18,7 @@ export class Organization
   extends BaseEntity<Organization>
   implements IOrganization
 {
-  @Property()
+  @Property({ nullable: false })
   name: string;
 
   @ManyToMany({ entity: () => User, mappedBy: (user) => user.organizations })

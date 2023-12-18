@@ -14,19 +14,19 @@ import { Card } from '../../card/entity';
   tableName: 'locations'
 })
 export class Location extends BaseEntity<Location> implements ILocation {
-  @Property()
+  @Property({ nullable: false })
   name: string;
 
-  @Property()
+  @Property({ nullable: false })
   address: string;
 
-  @Property()
+  @Property({ nullable: false })
   linkDefault: string;
 
-  @Property()
+  @Property({ nullable: true })
   linkGoogle: string;
 
-  @Property()
+  @Property({ nullable: true })
   linkTrustPilot: string;
 
   @ManyToOne(() => Organization)

@@ -49,8 +49,9 @@ export const ReviewAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
         getValueProps={(i) => ({
           value: moment(i).format('YYYY-MM-DDTHH:mm')
         })}
+        rules={[{ required: true }]}
       >
-        <input type="datetime-local" className="datepicker" />
+        <input type="datetime-local" className="like-antd-input" />
       </Form.Item>
       <Form.Item
         name={'replyDatetime'}
@@ -59,7 +60,7 @@ export const ReviewAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
           value: moment(i).format('YYYY-MM-DDTHH:mm')
         })}
       >
-        <input type="datetime-local" className="datepicker" />
+        <input type="datetime-local" className="like-antd-input" />
       </Form.Item>
       <Form.Item label="Текст ответа" name="replyText">
         <Input.TextArea />

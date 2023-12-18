@@ -34,7 +34,7 @@ export default function CardList() {
         />
         <Table.Column
           dataIndex="isCustomLinkRedirect"
-          title="По кастомной ссылке"
+          title="Переадресация по кастомной ссылке"
           render={(v) => (v ? 'Да' : '–')}
         />
         <Table.Column dataIndex="linkCustom" title="Кастомная ссылка" />

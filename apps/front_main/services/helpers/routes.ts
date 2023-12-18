@@ -4,6 +4,7 @@ export const Routes = {
   signup: '/auth/signup',
   forgotPassword: '/auth/forgot-password',
   dashboard: '/dashboard',
+  newclient: '/newclient',
   users: '/users',
   companies: '/companies',
   locations: '/locations',

@@ -6,6 +6,7 @@ import {
   DashboardOutlined,
   MessageOutlined,
   ShoppingOutlined,
+  PlusCircleOutlined,
   UserOutlined
 } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -52,6 +53,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
           name: 'Информация',
           route: Routes.dashboard,
           icon: <DashboardOutlined />
+        },
+        {
+          id: 2,
+          name: 'Новый клиент',
+          route: Routes.newclient,
+          icon: <PlusCircleOutlined />
         },
         {
           id: 3,

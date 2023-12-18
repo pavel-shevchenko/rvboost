@@ -1,5 +1,11 @@
-export default function AddClient() {
-  // Содержимое всех страниц с общими путями разное для ролей
+'use client';
 
-  return <></>;
+import { Typography } from 'antd';
+
+export default function AddClient() {
+  return (
+    <>
+      <Typography.Title level={4}>Создание нового клиента</Typography.Title>
+    </>
+  );
 }

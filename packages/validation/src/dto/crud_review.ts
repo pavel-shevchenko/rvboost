@@ -24,16 +24,22 @@ export class CrudReviewDto implements IReview {
   @IsOptional()
   @IsString({ message: 'Must be a string' })
   @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @ValidateIf((object, value) => !!value)
+  @Transform(({ value }) => value?.trim())
   authorName: string;
 
   @IsOptional()
   @IsString({ message: 'Must be a string' })
   @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @ValidateIf((object, value) => !!value)
+  @Transform(({ value }) => value?.trim())
   authorEmail: string;
 
   @IsOptional()
   @IsString({ message: 'Must be a string' })
   @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @ValidateIf((object, value) => !!value)
+  @Transform(({ value }) => value?.trim())
   authorPhone: string;
 
   @IsOptional()
@@ -43,6 +49,8 @@ export class CrudReviewDto implements IReview {
 
   @IsOptional()
   @IsNumberString()
+  @ValidateIf((object, value) => !!value)
+  @Transform(({ value }) => value?.trim())
   reviewRating: string;
 
   @IsNotEmpty()
@@ -64,6 +72,8 @@ export class CrudReviewDto implements IReview {
   @IsOptional()
   @IsString({ message: 'Must be a string' })
   @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @ValidateIf((object, value) => !!value)
+  @Transform(({ value }) => value?.trim())
   reviewExternalLink: string;
 
   @IsOptional()

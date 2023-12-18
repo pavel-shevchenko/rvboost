@@ -14,10 +14,10 @@ export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
-      <Form.Item label="Название" name="name">
+      <Form.Item label="Название" name="name" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item label="Адрес" name="address">
+      <Form.Item label="Адрес" name="address" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
       <Form.Item label="Ссылка на Google" name="linkGoogle">
@@ -26,10 +26,18 @@ export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       <Form.Item label="Ссылка на TrustPilot" name="linkTrustPilot">
         <Input />
       </Form.Item>
-      <Form.Item label="Default Ссылка" name="linkDefault">
+      <Form.Item
+        label="Default Ссылка"
+        name="linkDefault"
+        rules={[{ required: true }]}
+      >
         <Input />
       </Form.Item>
-      <Form.Item label="ID организации" name={['organization']}>
+      <Form.Item
+        label="ID организации"
+        name={['organization']}
+        rules={[{ required: true }]}
+      >
         <Select {...orgSelectProps} />
       </Form.Item>
     </Form>
