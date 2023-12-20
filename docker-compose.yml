@@ -51,7 +51,7 @@ services:
     container_name: bizdata_saas__postgres
     restart: unless-stopped
     volumes:
-      - ./infrastructure/postgres/data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_EXT_PORT}:${POSTGRES_PORT}"
     env_file:
@@ -140,7 +140,7 @@ services:
       MIKRO_ORM_USE_BATCH_UPDATES: true
       MIKRO_ORM_CLI_USE_TS_NODE: false # For works w/o apps/api/tsconfig.json
       MIKRO_ORM_CLI_ALWAYS_ALLOW_TS: false
-      MIKRO_ORM_BASE_DIR: /project_root/apps/api
+      MIKRO_ORM_BASE_DIR: /api_app_root/apps/api
       MIKRO_ORM_ENTITIES: ./dist/**/*.entity.js
       MIKRO_ORM_ENTITIES_TS: ./src/**/*.entity.ts
     networks:
@@ -148,3 +148,6 @@ services:
 
 networks:
   app_network:
+
+volumes:
+  postgres_data:

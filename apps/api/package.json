@@ -86,5 +86,8 @@
   },
   "peerDependencies": {
     "fastify": "4.24.3"
+  },
+  "mikro-orm": {
+    "useTsNode": true
   }
 }

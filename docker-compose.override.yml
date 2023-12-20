@@ -46,3 +46,4 @@ services:
     environment:
       MIKRO_ORM_DEBUG: true
       MIKRO_ORM_VERBOSE: true
+      MIKRO_ORM_BASE_DIR: /project_root/apps/api
