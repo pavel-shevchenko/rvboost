@@ -7,7 +7,7 @@ import { RequiredEntityData } from '@mikro-orm/core';
 export class UserDbService {
   constructor(private readonly em: EntityManager) {}
 
-  async createUserByLocalDto(data: RequiredEntityData<User>) {
+  async createUserByRequiredEntityDto(data: RequiredEntityData<User>) {
     const user: User = this.em.create<User>(User, data);
     await this.em.persistAndFlush(user);
 

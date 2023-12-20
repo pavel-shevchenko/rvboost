@@ -10,10 +10,14 @@ export const UserAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
-      <Form.Item label="Email" name="email" rules={[{ required: true }]}>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true, type: 'email' }]}
+      >
         <Input />
       </Form.Item>
-      <Form.Item label="Имя" name="username">
+      <Form.Item label="Имя" name="username" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
       <Form.Item label="Пароль" name="password">

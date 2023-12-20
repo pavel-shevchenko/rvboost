@@ -8,9 +8,23 @@ import { User } from '../user/entity';
 export class OrganizationDbService {
   constructor(private readonly em: EntityManager) {}
 
-  async newOwnedOrganization(user: User, name: string) {
-    const organization = await this.em.create<Organization>(Organization, {
-      name
+  async newOrganizationForClient(client: User, organizationName: string) {
+    const organization = this.em.create<Organization>(Organization, {
+      name: organizationName
+    });
+    const pivot = this.em.create<UserRoleInOrganization>(UserRoleInOrganization, {
+      user: client,
+      organization,
+      role: UserRoleInOrgEnum.client
+    });
+    await this.em.persistAndFlush([organization, pivot]);
+
+    return organization;
+  }
+
+  async newOwnedOrganization(user: User, organizationName: string) {
+    const organization = this.em.create<Organization>(Organization, {
+      name: organizationName
     });
     const pivot = this.em.create<UserRoleInOrganization>(UserRoleInOrganization, {
       user,

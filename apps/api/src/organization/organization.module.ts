@@ -8,9 +8,11 @@ import { UserModule } from '../user';
 import { MikroCrudModule } from '../nestjs-crud';
 import { Organization } from './entity';
 import { OrganizationCrudService } from './organization_crud.service';
+import { LocationModule } from '../location';
 
 @Module({
   imports: [
+    LocationModule,
     MikroCrudModule,
     MikroOrmModule.forFeature([Organization]),
     forwardRef(() => UserModule)

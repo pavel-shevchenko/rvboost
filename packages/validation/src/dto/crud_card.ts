@@ -7,10 +7,10 @@ import {
   Length,
   ValidateIf
 } from 'class-validator';
-import { ICard, RedirectPlatformEnum, RedirectPlatformType } from 'typing';
+import * as typing from 'typing';
 import { Transform } from 'class-transformer';
 
-export class CrudCardDto implements ICard {
+export class CrudCardDto implements typing.ICard {
   @IsOptional()
   @IsBoolean()
   isReviewInterception: boolean;
@@ -27,8 +27,8 @@ export class CrudCardDto implements ICard {
   linkCustom: string;
 
   @IsOptional()
-  @IsEnum(Object.keys(RedirectPlatformEnum))
-  redirectPlatform: RedirectPlatformType;
+  @IsEnum(Object.keys(typing.RedirectPlatformEnum))
+  redirectPlatform: typing.RedirectPlatformType;
 
   @IsNumber()
   location: number;

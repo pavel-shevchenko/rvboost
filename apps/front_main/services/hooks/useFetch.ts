@@ -1,28 +1,30 @@
 import { Routes } from '@/services/helpers/routes';
 
 export function useFetch(authToken?: string, redirectOn401 = true) {
+  const request = (method: string) => {
+    return (url: string, body?: any) => {
+      const requestOptions: any = {
+        method,
+        headers: {}
+      };
+      if (authToken) {
+        requestOptions.headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      if (body) {
+        requestOptions.headers['Content-Type'] = 'application/json';
+        requestOptions.body = JSON.stringify(body);
+      }
+
+      return fetch(url, requestOptions).then(handleResponse);
+    };
+  };
+
   return {
     get: request('GET'),
     post: request('POST'),
     put: request('PUT'),
     delete: request('DELETE')
   };
-
-  function request(method: string) {
-    return (url: string, body?: any) => {
-      const requestOptions: any = {
-        method
-      };
-      if (authToken) {
-        requestOptions.headers = { Authorization: `Bearer ${authToken}` };
-      }
-      if (body) {
-        requestOptions.headers = { 'Content-Type': 'application/json' };
-        requestOptions.body = JSON.stringify(body);
-      }
-      return fetch(url, requestOptions).then(handleResponse);
-    };
-  }
 
   async function handleResponse(response: any) {
     const isJson = response.headers

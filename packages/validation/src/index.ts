@@ -6,3 +6,4 @@ export * from './dto/crud_organization';
 export * from './dto/crud_location';
 export * from './dto/crud_card';
 export * from './dto/crud_review';
+export * from './dto/new_client';

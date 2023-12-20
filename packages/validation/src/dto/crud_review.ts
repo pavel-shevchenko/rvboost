@@ -13,10 +13,10 @@ import {
   Min,
   ValidateIf
 } from 'class-validator';
-import { IReview, RedirectPlatformEnum, RedirectPlatformType } from 'typing';
+import * as typing from 'typing';
 import { Transform } from 'class-transformer';
 
-export class CrudReviewDto implements IReview {
+export class CrudReviewDto implements typing.IReview {
   @IsOptional()
   @IsBoolean()
   isBadFormCollected: boolean;
@@ -77,8 +77,8 @@ export class CrudReviewDto implements IReview {
   reviewExternalLink: string;
 
   @IsOptional()
-  @IsEnum(Object.keys(RedirectPlatformEnum))
-  platform: RedirectPlatformType;
+  @IsEnum(Object.keys(typing.RedirectPlatformEnum))
+  platform: typing.RedirectPlatformType;
 
   @IsOptional()
   @IsNumber()

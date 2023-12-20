@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { PartialType } from '@nestjs/swagger';
 
 import { CrudUserDto } from 'validation';
 import { MikroCrudServiceFactory } from '../nestjs-crud';
 import { User } from './entity';
-import { hashPassword } from '../common/helpers';
+import { AuthService } from '../auth';
 
 class CrudUserDbDto extends CrudUserDto {
   passwordHash: string;
@@ -20,8 +20,15 @@ const CRUDService = new MikroCrudServiceFactory({
 
 @Injectable()
 export class UserCrudService extends CRUDService {
+  constructor(
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService
+  ) {
+    super();
+  }
+
   async create({ data, user }: { data: CrudUserDbDto; user: User }) {
-    const passwordHash = await hashPassword(data.password);
+    const passwordHash = await this.authService.hashPassword(data.password);
 
     return await super.create({
       data: { ...data, passwordHash },
@@ -30,7 +37,8 @@ export class UserCrudService extends CRUDService {
   }
 
   async update({ entity, data }: { entity: User; data: Partial<CrudUserDbDto> }) {
-    if (data.password) data.passwordHash = await hashPassword(data.password);
+    if (data.password)
+      data.passwordHash = await this.authService.hashPassword(data.password);
 
     return await super.update({ entity, data });
   }
