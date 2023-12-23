@@ -70,10 +70,9 @@ RUN NODE_OPTIONS="--max-old-space-size=12288" turbo build --filter=api...
 FROM node:18.17.0-alpine AS runner
 WORKDIR /api_app_root
 
-RUN apk add --no-cache chromium
-RUN apk update
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+# RUN apk add --no-cache chromium
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+#     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 api
