@@ -1,0 +1,49 @@
+Subject: [PATCH] Developing new-dev-front locally having dev-api&prev-prod-front on server
+---
+Index: docker-compose.override.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/docker-compose.override.yml b/docker-compose.override.yml
+--- a/docker-compose.override.yml	(revision 7488fc110d57edba454251d964fa8739e6c232c5)
++++ b/docker-compose.override.yml	(date 1703627243517)
+@@ -7,6 +7,9 @@
+     volumes:
+       - ./:/project_root
+     working_dir: /project_root
++    depends_on:
++      front_main:
++        condition: service_started
+     entrypoint: >
+       /bin/sh -c "
+         apk add curl git && rm -rf /var/cache/* && mkdir /var/cache/apk
+@@ -22,17 +25,17 @@
+     networks:
+       - app_network
+ 
+-  front_main:
+-    container_name: bizdata_saas__front_main__dev
+-    build:
+-      dockerfile: ./apps/front_main/development.dockerfile
+-    volumes:
+-      - ./:/project_root
+-    env_file:
+-      - .env
+-    depends_on:
+-      prepare:
+-        condition: service_completed_successfully
++#  front_main:
++#    container_name: bizdata_saas__front_main__dev
++#    build:
++#      dockerfile: ./apps/front_main/development.dockerfile
++#    volumes:
++#      - ./:/project_root
++#    env_file:
++#      - .env
++#    depends_on:
++#      prepare:
++#        condition: service_completed_successfully
+ 
+   api:
+     container_name: bizdata_saas__api__dev
