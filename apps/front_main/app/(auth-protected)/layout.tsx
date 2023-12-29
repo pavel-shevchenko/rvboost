@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { initUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
 import {
-  InitUserStoreOnClient,
+  InitUserStoreAndCrudAuthOnClient,
   LayoutClientSide
 } from '@/app/(auth-protected)/_components/layout';
 
@@ -23,7 +23,7 @@ export default async function PrivateCabinetLayout({
 
   return (
     <>
-      <InitUserStoreOnClient state={userStoreInitState} />
+      <InitUserStoreAndCrudAuthOnClient state={userStoreInitState} />
 
       <LayoutClientSide>{children}</LayoutClientSide>
     </>
