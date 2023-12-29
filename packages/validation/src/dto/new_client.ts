@@ -65,7 +65,7 @@ export class NewClientDto implements INewClient {
 
   @IsString({ message: 'Must be a string' })
   @IsEmail({}, { message: 'Неправильный e-mail' })
-  @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => value?.trim())
   clientEmail: string;
 
   @IsString({ message: 'Must be a string' })
@@ -74,7 +74,7 @@ export class NewClientDto implements INewClient {
   clientName: string;
 
   @IsString({ message: 'Must be a string' })
-  @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @Length(7, 20, { message: 'От 7 до 20 символов' })
   @Transform(({ value }) => value?.trim())
   clientPassword: string;
 
@@ -83,5 +83,5 @@ export class NewClientDto implements INewClient {
   @ArrayMinSize(1)
   @ArrayMaxSize(30)
   @Type(() => NewClientCompany)
-  readonly companies: NewClientCompany[];
+  companies: NewClientCompany[];
 }

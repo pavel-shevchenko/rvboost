@@ -9,14 +9,16 @@ import { InputWrapper, TextInput } from '@/app/_components/common/forms';
 import { AuthButton, AuthCard, AuthFormLabel } from '@/app/auth/_components';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
 import { SignupFormHeader } from '@/app/auth/signup/_components';
-import { wrapValidate } from '@/services/helpers/wrapValidate';
-import { createValidator } from 'class-validator-formik';
 import { useUserStore } from '@/services/stores/user';
 import { useRouter } from 'next/navigation';
-import { message } from 'antd';
 import { Routes } from '@/services/helpers/routes';
+import { createFormikValidator } from '@/services/helpers/validation';
 
-const registerValidate = wrapValidate(createValidator(LocalRegistrationDto));
+const registerValidate = createFormikValidator(LocalRegistrationDto, {
+  validator: {
+    skipMissingProperties: true
+  }
+});
 
 export default function Signup() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +29,6 @@ export default function Signup() {
     dto: LocalRegistrationDto,
     { setErrors }: { setErrors: (errors: { [key: string]: string }) => void }
   ) => {
-    const errors = registerValidate(dto);
-    if (Object.keys(errors).length)
-      message.error('Ошибка формы! Обратитесь в техподдержку.');
-
     setIsLoading(true);
     try {
       await register(dto);

@@ -18,8 +18,8 @@
     "antd": "5.12.1",
     "casl": "workspace:*",
     "class-transformer": "^0.5.1",
+    "class-transformer-validator": "^0.9.1",
     "class-validator": "^0.14.0",
-    "class-validator-formik": "^1.0.1",
     "formik": "^2.2.6",
     "immer": "^10.0.3",
     "lottie-react": "^2.1.0",
@@ -43,6 +43,10 @@
     "@types/react-dom": "^18",
     "@types/react-headroom": "^3.2.3",
     "@types/styled-components": "^5.1.32",
+    "rc-field-form": "1.41.0",
     "typescript": "^5.3.2"
+  },
+  "peerDependencies": {
+    "rc-field-form": "1.41.0"
   }
 }

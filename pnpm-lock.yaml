@@ -186,12 +186,12 @@ importers:
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
+      class-transformer-validator:
+        specifier: ^0.9.1
+        version: 0.9.1(class-transformer@0.5.1)(class-validator@0.14.0)
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
-      class-validator-formik:
-        specifier: ^1.0.1
-        version: 1.0.1
       formik:
         specifier: ^2.2.6
         version: 2.4.5(react@18.2.0)
@@ -256,6 +256,9 @@ importers:
       '@types/styled-components':
         specifier: ^5.1.32
         version: 5.1.34
+      rc-field-form:
+        specifier: 1.41.0
+        version: 1.41.0(react-dom@18.2.0)(react@18.2.0)
       typescript:
         specifier: ^5.3.2
         version: 5.3.3
@@ -814,7 +817,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
-    dev: false
 
   /@babel/template@7.22.15:
     resolution: {integrity: sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==}
@@ -2618,10 +2620,6 @@ packages:
     resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
     dev: false
 
-  /@types/validator@13.0.0:
-    resolution: {integrity: sha512-WAy5txG7aFX8Vw3sloEKp5p/t/Xt8jD3GRD9DacnFv6Vo8ubudAsRTXgxpQwU0mpzY/H8U4db3roDuCMjShBmw==}
-    dev: false
-
   /@types/validator@13.11.7:
     resolution: {integrity: sha512-q0JomTsJ2I5Mv7dhHhQLGjMvX0JJm5dyZ1DXQySIUzU1UlwzB8bt+R6+LODUbz0UDIOvEzGc28tk27gBJw2N8Q==}
 
@@ -3031,7 +3029,6 @@ packages:
 
   /async-validator@4.2.5:
     resolution: {integrity: sha512-7HhHjtERjqlNbZtqNqy2rckN/SpOOlmDliet+lP7k+eKZEjPk3DgyeU9lIXLdeLz0uBbbVp+9Qdow9wJWgwwfg==}
-    dev: false
 
   /async@3.2.5:
     resolution: {integrity: sha512-baNZyqaaLhyLVKm/DlvdW051MSgO6b8eVfIezl9E5PqWxFgzLm/wQntEW4zOytVburDEr0JlALEpdOFwvErLsg==}
@@ -3448,40 +3445,18 @@ packages:
     resolution: {integrity: sha512-0TNiGstbQmCFwt4akjjBg5pLRTSyj/PkWQ1ZoO2zntmg9yLqSRxwEa4iCfQLGjqhiqBfOJa7W/E8wfGrTDmlZQ==}
     dev: true
 
-  /class-transformer-validator@0.9.1(class-transformer@0.2.3)(class-validator@0.12.2):
+  /class-transformer-validator@0.9.1(class-transformer@0.5.1)(class-validator@0.14.0):
     resolution: {integrity: sha512-83/KFCyd6UiiwH6PlQS5y17O5TTx58CawvNI+XdrMs0Ig9QI5kiuzRqGcC/WrEpd1F7i4KIxCwdn6m4B6fl0jw==}
     peerDependencies:
       class-transformer: '>=0.2.3'
       class-validator: '>=0.12.0'
     dependencies:
-      class-transformer: 0.2.3
-      class-validator: 0.12.2
-    dev: false
-
-  /class-transformer@0.2.3:
-    resolution: {integrity: sha512-qsP+0xoavpOlJHuYsQJsN58HXSl8Jvveo+T37rEvCEeRfMWoytAyR0Ua/YsFgpM6AZYZ/og2PJwArwzJl1aXtQ==}
+      class-transformer: 0.5.1
+      class-validator: 0.14.0
     dev: false
 
   /class-transformer@0.5.1:
     resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
-
-  /class-validator-formik@1.0.1:
-    resolution: {integrity: sha512-LtMMvT1tLrlDb73Hk6Xv0DJkk7GWlkTr3oCU3mZH1J4/0f2MqfCV7smIO9EIYJsxm9wEWFkiJR/85bi12TnIPw==}
-    engines: {node: '>=10'}
-    dependencies:
-      class-transformer: 0.2.3
-      class-transformer-validator: 0.9.1(class-transformer@0.2.3)(class-validator@0.12.2)
-      class-validator: 0.12.2
-    dev: false
-
-  /class-validator@0.12.2:
-    resolution: {integrity: sha512-TDzPzp8BmpsbPhQpccB3jMUE/3pK0TyqamrK0kcx+ZeFytMA+O6q87JZZGObHHnoo9GM8vl/JppIyKWeEA/EVw==}
-    dependencies:
-      '@types/validator': 13.0.0
-      google-libphonenumber: 3.2.33
-      tslib: 2.6.2
-      validator: 13.0.0
-    dev: false
 
   /class-validator@0.14.0:
     resolution: {integrity: sha512-ct3ltplN8I9fOwUd8GrP8UQixwff129BkEtuWDKL5W45cQuLd19xqmTLu5ge78YDm/fdje6FMt0hGOhl0lii3A==}
@@ -4666,11 +4641,6 @@ packages:
       ignore: 5.3.0
       merge2: 1.4.1
       slash: 3.0.0
-    dev: false
-
-  /google-libphonenumber@3.2.33:
-    resolution: {integrity: sha512-1QKCvAlfq8zY1mviORI9lDzM3I/hwm9+h0CwYBTLq59DBbSHMd5zBOLqHZFiBLicRpwIz46Nynvbywj1XApKvA==}
-    engines: {node: '>=0.10'}
     dev: false
 
   /gopd@1.0.1:
@@ -5907,7 +5877,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: false
 
   /lottie-react@2.4.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-pDJGj+AQlnlyHvOHFK7vLdsDcvbuqvwPZdMlJ360wrzGFurXeKPr8SiRCjLf3LrNYKANQtSsh5dz9UYQHuqx4w==}
@@ -7599,7 +7568,6 @@ packages:
       rc-util: 5.38.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-    dev: false
 
   /rc-image@7.5.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Z9loECh92SQp0nSipc0MBuf5+yVC05H/pzC+Nf8xw1BKDFUJzUeehYBjaWlxly8VGBZJcTHYri61Fz9ng1G3Ag==}
@@ -7994,7 +7962,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-is: 18.2.0
-    dev: false
 
   /rc-virtual-list@3.11.3(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-tu5UtrMk/AXonHwHxUogdXAWynaXsrx1i6dsgg+lOo/KJSF8oBAcprh1z5J3xgnPJD5hXxTL58F8s8onokdt0Q==}
@@ -8029,7 +7996,6 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
-    dev: false
 
   /react-fast-compare@2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
@@ -8106,7 +8072,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /readable-stream@3.6.2:
     resolution: {integrity: sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==}
@@ -8167,7 +8132,6 @@ packages:
 
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
-    dev: false
 
   /relateurl@0.2.7:
     resolution: {integrity: sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==}
@@ -8320,7 +8284,6 @@ packages:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}
@@ -9220,11 +9183,6 @@ packages:
   /valid-data-url@3.0.1:
     resolution: {integrity: sha512-jOWVmzVceKlVVdwjNSenT4PbGghU0SBIizAev8ofZVgivk/TVHXSbNL8LP6M3spZvkR9/QolkyJavGSX5Cs0UA==}
     engines: {node: '>=10'}
-    dev: false
-
-  /validator@13.0.0:
-    resolution: {integrity: sha512-anYx5fURbgF04lQV18nEQWZ/3wHGnxiKdG4aL8J+jEDsm98n/sU/bey+tYk6tnGJzm7ioh5FoqrAiQ6m03IgaA==}
-    engines: {node: '>= 0.10'}
     dev: false
 
   /validator@13.11.0:

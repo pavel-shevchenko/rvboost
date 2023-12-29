@@ -12,18 +12,125 @@ import {
   message
 } from 'antd';
 import { env } from 'next-runtime-env';
+import { FieldData } from 'rc-field-form/es/interface';
 import { useRouter } from 'next/navigation';
+import 'reflect-metadata';
 
 import { NewClientDto } from 'validation/src/dto/new_client';
-import { useFetch } from '@/services/hooks/useFetch';
+import { useFetch } from '@/services/hooks';
 import { useUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
+import { createFieldDataErrorsPopulate } from '@/services/helpers/validation';
+import { useState } from 'react';
+
+const companiesFieldEmptyItem = {
+  companyName: '',
+  companyAddress: '',
+  companyLinkDefault: '',
+  companyLinkGoogle: '',
+  companyLinkTrustPilot: ''
+};
+
+const initialState = [
+  {
+    touched: false,
+    errors: [],
+    name: ['orgName']
+  },
+  {
+    touched: false,
+    errors: [],
+    name: ['clientEmail']
+  },
+  {
+    touched: false,
+    errors: [],
+    name: ['clientName']
+  },
+  {
+    touched: false,
+    errors: [],
+    name: ['clientPassword']
+  },
+  {
+    touched: false,
+    errors: [],
+    name: ['companies'],
+    value: [companiesFieldEmptyItem]
+  }
+];
+
+function addCompanySubfields(index: number, state: typeof initialState) {
+  const newState = [...state];
+  for (const subfield of Object.keys(companiesFieldEmptyItem)) {
+    newState.push({
+      touched: false,
+      errors: [],
+      // @ts-ignore
+      name: ['companies', index, subfield]
+    });
+  }
+  return newState;
+}
+
+const populateFdsErrors = createFieldDataErrorsPopulate(NewClientDto);
 
 export default function AddClient() {
+  const [formFDs, setFormFDs] = useState<FieldData[]>(
+    addCompanySubfields(0, initialState)
+  );
+  const [form] = Form.useForm<NewClientDto>();
+  const [validateOnlyTouched, setValidateOnlyTouched] = useState(true);
+
   const router = useRouter();
   const authToken = useUserStore((state) => state.authToken);
 
+  const onFieldsChange = (changedFields: FieldData[], allFields: FieldData[]) => {
+    const fds = populateFdsErrors(
+      form.getFieldsValue(),
+      [...allFields],
+      validateOnlyTouched
+    );
+    setFormFDs(fds);
+  };
+
+  const addEmptyCompany = () => {
+    let companiesPrevCnt: number;
+    const newFormFDs = formFDs.map((fd) => {
+      if (fd.name?.length === 1 && fd.name[0] === 'companies') {
+        companiesPrevCnt = fd.value?.length;
+        fd.value?.push(companiesFieldEmptyItem);
+      }
+      return fd;
+    });
+    // @ts-ignore
+    setFormFDs(addCompanySubfields(companiesPrevCnt, newFormFDs));
+  };
+
+  const removeCompany = (index: number | string) =>
+    setFormFDs(
+      formFDs
+        .filter((fd) => fd.name[0] !== 'companies' || fd.name?.[1] !== index)
+        .map((fd) => {
+          if (fd.name?.length === 1 && fd.name[0] === 'companies')
+            fd.value?.splice(index, 1);
+          else if (
+            fd.name?.length > 1 &&
+            fd.name[0] === 'companies' &&
+            fd.name?.[1] > index
+          )
+            fd.name[1]--;
+
+          return fd;
+        })
+    );
+
   const onFinish = async (values: NewClientDto) => {
+    form.setFields(populateFdsErrors(form.getFieldsValue(), [...formFDs]));
+    const errorsCnt = form.getFieldsError().filter((e) => e.errors.length).length;
+    setValidateOnlyTouched(false);
+    if (errorsCnt || !form.isFieldsTouched()) return;
+
     const fetch = useFetch(authToken, false);
     const res = await fetch.post(
       `${env('NEXT_PUBLIC_SERVER_URL')}/api/organization/new-client`,
@@ -38,33 +145,24 @@ export default function AddClient() {
       <Typography.Title level={4}>Создание нового клиента</Typography.Title>
 
       <Card>
-        <Form layout="vertical" onFinish={onFinish}>
-          <Form.Item
-            label="Название организации"
-            name="orgName"
-            rules={[{ required: true }]}
-          >
+        <Form
+          layout="vertical"
+          form={form}
+          fields={formFDs}
+          {...{ onFieldsChange }}
+          {...{ onFinish }}
+          scrollToFirstError={true}
+        >
+          <Form.Item label="Название организации" name="orgName">
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Email клиента"
-            name="clientEmail"
-            rules={[{ required: true, type: 'email' }]}
-          >
+          <Form.Item label="Email клиента" name="clientEmail">
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Имя клиента"
-            name="clientName"
-            rules={[{ required: true }]}
-          >
+          <Form.Item label="Имя клиента" name="clientName">
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Его пароль"
-            name="clientPassword"
-            rules={[{ required: true }]}
-          >
+          <Form.Item label="Его пароль" name="clientPassword">
             <Input />
           </Form.Item>
 
@@ -75,19 +173,8 @@ export default function AddClient() {
             </Typography.Title>
           </Divider>
 
-          <Form.List
-            name={['companies']}
-            initialValue={[
-              {
-                companyName: '',
-                companyAddress: '',
-                companyLinkDefault: '',
-                companyLinkGoogle: '',
-                companyLinkTrustPilot: ''
-              }
-            ]}
-          >
-            {(fields, { add, remove }) => (
+          <Form.List name={['companies']}>
+            {(fields) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
                   <div key={key}>
@@ -96,7 +183,6 @@ export default function AddClient() {
                         <Form.Item
                           {...restField}
                           name={[name, 'companyName']}
-                          rules={[{ required: true }]}
                           label="Название компании"
                         >
                           <Input />
@@ -106,7 +192,7 @@ export default function AddClient() {
                         <Button
                           style={{ width: '100%', margin: '5px 0 0 -11px' }}
                           type="link"
-                          onClick={() => remove(name)}
+                          onClick={() => removeCompany(name)}
                         >
                           ⌫&nbsp;Удалить
                         </Button>
@@ -115,7 +201,6 @@ export default function AddClient() {
                     <Form.Item
                       {...restField}
                       name={[name, 'companyAddress']}
-                      rules={[{ required: true }]}
                       label="Адрес компании"
                     >
                       <Input />
@@ -125,7 +210,6 @@ export default function AddClient() {
                         <Form.Item
                           {...restField}
                           name={[name, 'companyLinkDefault']}
-                          rules={[{ required: true }]}
                           label="Ссылка по умолчанию"
                         >
                           <Input />
@@ -155,7 +239,7 @@ export default function AddClient() {
                 <Form.Item>
                   <Button
                     type="dashed"
-                    onClick={() => add()}
+                    onClick={() => addEmptyCompany()}
                     icon="+"
                     block
                     size="large"

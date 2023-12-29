@@ -1,11 +1,9 @@
 'use client';
 
-import { notification, message } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { Formik } from 'formik';
-import { createValidator } from 'class-validator-formik';
 import { useRouter } from 'next/navigation';
 
 import { colors } from '@/app/_components/root-layout/styles';
@@ -14,12 +12,12 @@ import { FormErrorText } from '@/app/_components/common/forms';
 import { InputWrapper, TextInput } from '@/app/_components/common/forms';
 import { AuthButton, AuthCard, AuthFormLabel } from '@/app/auth/_components';
 import { LoginFormHeader } from '@/app/auth/login/_components';
-import { wrapValidate } from '@/services/helpers/wrapValidate';
 import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { useUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
+import { createFormikValidator } from '@/services/helpers/validation';
 
-const loginValidate = wrapValidate(createValidator(LocalLoginDto));
+const loginValidate = createFormikValidator(LocalLoginDto);
 
 const ForgotPasswordWrapper = styled.div`
   display: flex;
@@ -60,10 +58,6 @@ export default function Login() {
     dto: LocalLoginDto,
     { setErrors }: { setErrors: (errors: { [key: string]: string }) => void }
   ) => {
-    const errors = loginValidate(dto);
-    if (Object.keys(errors).length)
-      message.error('Ошибка формы! Обратитесь в техподдержку.');
-
     setIsLoading(true);
     try {
       await login(dto);

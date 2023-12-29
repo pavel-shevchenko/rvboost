@@ -10,7 +10,7 @@ import { LoadingOverlay } from '@/app/_components/common';
 import { FieldLabel, TextInput } from '@/app/_components/common/forms';
 import { AuthButton, AuthCard, AuthTitle } from '@/app/auth/_components';
 import { Routes } from '@/services/helpers/routes';
-import { useFetch } from '@/services/hooks/useFetch';
+import { useFetch } from '@/services/hooks';
 import { useSearchParams } from 'next/navigation';
 
 const Wrapper = styled.div`

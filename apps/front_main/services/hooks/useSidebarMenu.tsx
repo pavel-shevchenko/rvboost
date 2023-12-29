@@ -1,3 +1,5 @@
+'use client';
+
 import { useUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
 import {

@@ -4,7 +4,7 @@ import { env } from 'next-runtime-env';
 
 import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
-import { useFetch } from '@/services/hooks/useFetch';
+import { useFetch } from '@/services/hooks';
 import {
   getCookie,
   setCookie,

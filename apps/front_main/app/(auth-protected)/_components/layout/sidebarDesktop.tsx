@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { LargeLogo, SmallLogo } from '@/app/_components/common/svgs';
-import { useSidebarMenu } from '@/services/hooks/useSidebarMenu';
+import { useSidebarMenu } from '@/services/hooks';
 
 const StyledIcon = styled.div`
   display: flex;

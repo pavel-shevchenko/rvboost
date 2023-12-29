@@ -13,7 +13,7 @@ import {
   ForgotPassFormHeader,
   ResetSuccess
 } from '@/app/auth/forgot-password/_components';
-import { useFetch } from '@/services/hooks/useFetch';
+import { useFetch } from '@/services/hooks';
 
 const Wrapper = styled.div`
   background-color: ${colors.gray50};

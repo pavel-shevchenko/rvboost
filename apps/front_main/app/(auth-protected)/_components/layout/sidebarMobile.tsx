@@ -5,10 +5,9 @@ import styled, { keyframes } from 'styled-components';
 
 import { MobileSidebarItem } from './mobileSidebarItem';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
-import { useOutsideClick } from '@/services/hooks';
+import { useSidebarMenu, useOutsideClick } from '@/services/hooks';
 import { LargeLogo } from '@/app/_components/common/svgs';
 import { Cross } from '@/app/(auth-protected)/_components/svgs';
-import { useSidebarMenu } from '@/services/hooks/useSidebarMenu';
 
 const Wrapper = styled.div`
   position: fixed;
