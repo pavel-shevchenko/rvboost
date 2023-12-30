@@ -1,16 +1,14 @@
 import { AbilityBuilder, PureAbility, AbilityClass } from '@casl/ability';
-
 import {
-  PermissionSubjectType,
-  IUser,
+  PermissionAction,
   PermissionSubject,
-  PermissionAction
-} from 'typing';
+  PermissionSubjectType
+} from './legacy_typing';
 
 export type AppAbility = PureAbility<[string, PermissionSubjectType]>;
 const appAbility = PureAbility as AbilityClass<AppAbility>;
 
-export function defineUserAbility(user?: IUser) {
+export function defineUserAbility(user?: any) {
   const builder = new AbilityBuilder<AppAbility>(appAbility);
   switch (user?.isAdmin) {
     case true:

@@ -1,4 +1,5 @@
-import { IReview, PermissionSubject, RedirectPlatformType } from 'typing';
+import { IReview, RedirectPlatformType } from 'typing';
+import { PermissionSubject } from 'casl';
 import { BaseEntity } from '../../common/entities/base.entity';
 import {
   Entity,

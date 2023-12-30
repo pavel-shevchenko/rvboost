@@ -8,7 +8,8 @@ import {
 
 import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from '../../user/entity';
-import { IOrganization, PermissionSubject } from 'typing';
+import { IOrganization } from 'typing';
+import { PermissionSubject } from 'casl';
 import { Location } from '../../location/entity';
 import { CrudEntityFilter } from '../../common/permissions';
 

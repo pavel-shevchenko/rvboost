@@ -5,7 +5,8 @@ import {
   Property,
   Unique
 } from '@mikro-orm/core';
-import { IUser, PermissionSubject } from 'typing';
+import { IUser } from 'typing';
+import { PermissionSubject } from 'casl';
 
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Organization, UserRoleInOrganization } from '../../organization/entity';

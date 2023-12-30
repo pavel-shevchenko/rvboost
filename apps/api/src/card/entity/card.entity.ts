@@ -1,4 +1,5 @@
-import { ICard, PermissionSubject, RedirectPlatformType } from 'typing';
+import { PermissionSubject } from 'casl';
+import { ICard, RedirectPlatformType } from 'typing';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { Location } from '../../location/entity';

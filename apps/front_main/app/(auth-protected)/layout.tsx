@@ -25,7 +25,9 @@ export default async function PrivateCabinetLayout({
     <>
       <InitUserStoreAndCrudAuthOnClient state={userStoreInitState} />
 
-      <LayoutClientSide>{children}</LayoutClientSide>
+      <LayoutClientSide userInitState={userStoreInitState}>
+        {children}
+      </LayoutClientSide>
     </>
   );
 }

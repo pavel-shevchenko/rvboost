@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Refine } from '@refinedev/core';
 import { RefineThemes, notificationProvider } from '@refinedev/antd';
@@ -9,6 +9,7 @@ import routerProvider from '@refinedev/nextjs-router/app';
 import { ConfigProvider } from 'antd';
 import { env } from 'next-runtime-env';
 
+import { defineUserAbility } from 'casl/src/defineUserAbility';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { useWindowSize } from '@/services/hooks';
 import {
@@ -17,6 +18,8 @@ import {
   SidebarMobile
 } from '@/app/(auth-protected)/_components/layout';
 import { Routes } from '@/services/helpers/routes';
+import { CaslContext } from '@/services/casl/common';
+import { UserStoreState } from '@/services/stores/user';
 
 const Wrapper = styled.div`
   background-color: ${colors.gray100};
@@ -53,7 +56,17 @@ const ContentWrapper = styled.div`
   }
 `;
 
-export function LayoutClientSide({ children }: { children: React.ReactNode }) {
+export function LayoutClientSide({
+  children,
+  userInitState
+}: {
+  children: React.ReactNode;
+  userInitState: UserStoreState;
+}) {
+  const ability = useMemo(
+    () => defineUserAbility(userInitState),
+    [userInitState]
+  );
   //handle antd sidebar rerender issue
   const windowSize = useWindowSize();
   const breakpoint = breakpoints.medium.substring(
@@ -78,83 +91,85 @@ export function LayoutClientSide({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Wrapper>
-        {!isMobile && <SidebarDesktop collapsed={isDesktopMenuCollapsed} />}
-        <Content>
-          <PrivateCabinetHeader
-            collapsed={isDesktopMenuCollapsed}
-            onCollapseChange={handleCollapseChange}
-          />
-          {showMobileMenu && (
-            <SidebarMobile toggleMobileMenu={toggleShowMobileMenu} />
-          )}
-          <Main>
-            <ConfigProvider theme={RefineThemes.Blue}>
-              <ContentWrapper theme="dark" id="primaryLayout">
-                <Refine
-                  routerProvider={routerProvider}
-                  dataProvider={dataProvider(
-                    `${env('NEXT_PUBLIC_SERVER_URL')}/api`
-                  )}
-                  resources={[
-                    {
-                      name: 'user',
-                      list: Routes.users,
-                      create: `${Routes.users}/create`,
-                      edit: `${Routes.users}/edit/:id`,
-                      meta: {
-                        canDelete: true
+      <CaslContext.Provider value={ability}>
+        <Wrapper>
+          {!isMobile && <SidebarDesktop collapsed={isDesktopMenuCollapsed} />}
+          <Content>
+            <PrivateCabinetHeader
+              collapsed={isDesktopMenuCollapsed}
+              onCollapseChange={handleCollapseChange}
+            />
+            {showMobileMenu && (
+              <SidebarMobile toggleMobileMenu={toggleShowMobileMenu} />
+            )}
+            <Main>
+              <ConfigProvider theme={RefineThemes.Blue}>
+                <ContentWrapper id="primaryLayout">
+                  <Refine
+                    routerProvider={routerProvider}
+                    dataProvider={dataProvider(
+                      `${env('NEXT_PUBLIC_SERVER_URL')}/api`
+                    )}
+                    resources={[
+                      {
+                        name: 'user',
+                        list: Routes.users,
+                        create: `${Routes.users}/create`,
+                        edit: `${Routes.users}/edit/:id`,
+                        meta: {
+                          canDelete: true
+                        }
+                      },
+                      {
+                        name: 'organization',
+                        list: Routes.companies,
+                        create: `${Routes.companies}/create`,
+                        edit: `${Routes.companies}/edit/:id`,
+                        meta: {
+                          canDelete: true
+                        }
+                      },
+                      {
+                        name: 'location',
+                        list: Routes.locations,
+                        create: `${Routes.locations}/create`,
+                        edit: `${Routes.locations}/edit/:id`,
+                        meta: {
+                          canDelete: true
+                        }
+                      },
+                      {
+                        name: 'card',
+                        list: Routes.cards,
+                        create: `${Routes.cards}/create`,
+                        edit: `${Routes.cards}/edit/:id`,
+                        meta: {
+                          canDelete: true
+                        }
+                      },
+                      {
+                        name: 'review',
+                        list: Routes.reviews,
+                        create: `${Routes.reviews}/create`,
+                        edit: `${Routes.reviews}/edit/:id`,
+                        meta: {
+                          canDelete: true
+                        }
                       }
-                    },
-                    {
-                      name: 'organization',
-                      list: Routes.companies,
-                      create: `${Routes.companies}/create`,
-                      edit: `${Routes.companies}/edit/:id`,
-                      meta: {
-                        canDelete: true
-                      }
-                    },
-                    {
-                      name: 'location',
-                      list: Routes.locations,
-                      create: `${Routes.locations}/create`,
-                      edit: `${Routes.locations}/edit/:id`,
-                      meta: {
-                        canDelete: true
-                      }
-                    },
-                    {
-                      name: 'card',
-                      list: Routes.cards,
-                      create: `${Routes.cards}/create`,
-                      edit: `${Routes.cards}/edit/:id`,
-                      meta: {
-                        canDelete: true
-                      }
-                    },
-                    {
-                      name: 'review',
-                      list: Routes.reviews,
-                      create: `${Routes.reviews}/create`,
-                      edit: `${Routes.reviews}/edit/:id`,
-                      meta: {
-                        canDelete: true
-                      }
-                    }
-                  ]}
-                  options={{
-                    syncWithLocation: true
-                  }}
-                  notificationProvider={notificationProvider}
-                >
-                  {children}
-                </Refine>
-              </ContentWrapper>
-            </ConfigProvider>
-          </Main>
-        </Content>
-      </Wrapper>
+                    ]}
+                    options={{
+                      syncWithLocation: true
+                    }}
+                    notificationProvider={notificationProvider}
+                  >
+                    {children}
+                  </Refine>
+                </ContentWrapper>
+              </ConfigProvider>
+            </Main>
+          </Content>
+        </Wrapper>
+      </CaslContext.Provider>
     </>
   );
 }

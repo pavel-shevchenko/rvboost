@@ -1,4 +1,4 @@
-import { ObjectValuesTypesUnion } from '../utils';
+type ObjectValuesTypesUnion<TObj> = TObj[keyof TObj];
 
 export const PermissionSubject = {
   all: 'all',

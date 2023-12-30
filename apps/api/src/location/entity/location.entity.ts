@@ -1,4 +1,5 @@
-import { ILocation, PermissionSubject } from 'typing';
+import { ILocation } from 'typing';
+import { PermissionSubject } from 'casl';
 import { BaseEntity } from '../../common/entities/base.entity';
 import {
   Collection,
