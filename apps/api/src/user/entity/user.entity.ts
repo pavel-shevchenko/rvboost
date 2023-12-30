@@ -5,11 +5,13 @@ import {
   Property,
   Unique
 } from '@mikro-orm/core';
-import { IUser } from 'typing';
+import { IUser, PermissionSubject } from 'typing';
 
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Organization, UserRoleInOrganization } from '../../organization/entity';
+import { CrudEntityFilter } from '../../common/permissions';
 
+@CrudEntityFilter(PermissionSubject.entityUser)
 @Entity({
   tableName: 'users'
 })

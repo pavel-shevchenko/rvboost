@@ -72,7 +72,7 @@ export class MikroCrudServiceFactory<
       @Inject(ENTITY_FILTERS)
       readonly filters!: EntityFilters;
 
-      async list({
+      async query({
         limit,
         offset,
         filter = {} as FilterQuery<Entity>,

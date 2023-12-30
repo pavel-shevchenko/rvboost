@@ -2,18 +2,17 @@ import { EntityFilterContext } from './providers';
 import { DynamicModule, Module } from '@nestjs/common';
 
 import { MikroCrudModuleOptions } from './mikro-crud-module-options.interface';
-import { ENTITY_FILTERS } from './providers/entity-filters.token';
-import { QueryParser } from './providers/query-parser.service';
+import { ENTITY_FILTERS, QueryParser } from './providers';
 
 @Module({
   providers: [
     QueryParser,
     {
       provide: ENTITY_FILTERS,
-      useValue: ({ user }: EntityFilterContext) => ({ crud: { user } }),
-    },
+      useValue: ({ user }: EntityFilterContext) => ({ crud: { user } })
+    }
   ],
-  exports: [QueryParser, ENTITY_FILTERS],
+  exports: [QueryParser, ENTITY_FILTERS]
 })
 export class MikroCrudModule {
   static configure({ filters }: MikroCrudModuleOptions): DynamicModule {
@@ -23,10 +22,10 @@ export class MikroCrudModule {
         QueryParser,
         {
           provide: ENTITY_FILTERS,
-          useValue: filters,
-        },
+          useValue: filters
+        }
       ],
-      exports: [QueryParser, ENTITY_FILTERS],
+      exports: [QueryParser, ENTITY_FILTERS]
     };
   }
 }

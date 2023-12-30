@@ -12,7 +12,8 @@
     "dev": "npx swc src -d dist -w"
   },
   "dependencies": {
-    "@casl/ability": "6.5.0"
+    "@casl/ability": "6.5.0",
+    "typing": "workspace:*"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",

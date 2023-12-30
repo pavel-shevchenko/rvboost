@@ -1,8 +1,7 @@
 export type ActionName =
-  | 'list'
   | 'query'
-  | 'create'
   | 'retrieve'
+  | 'create'
   | 'replace'
   | 'update'
   | 'destroy';

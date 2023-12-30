@@ -20,7 +20,7 @@ export interface MikroCrudService<
   readonly parser: QueryParser<Entity>;
   readonly filters: EntityFilters;
 
-  list({
+  query({
     limit,
     offset,
     filter,

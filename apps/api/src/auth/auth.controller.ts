@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards';
 import { LocalRegistrationDto, ResetPasswordDto } from 'validation';
-import { RequestWithUser } from '../common/typing';
+import { AppRequest } from '../common/typing';
 
 @Controller('auth')
 export class AuthController {
@@ -24,7 +24,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('local-login')
-  async localLogin(@Request() req: RequestWithUser) {
+  async localLogin(@Request() req: AppRequest) {
     return this.authService.getAuthTokenWithUser(req.user);
   }
 

@@ -39,7 +39,7 @@ import { ReqUser } from '../decorators';
 import { QueryDto, QueryFactory, QueryParams } from '../dto';
 import { MikroCrudService, MikroCrudServiceFactory } from '../service';
 import { FACTORY, TS_TYPE } from '../symbols';
-import { LookupableField, PkType, RelationPath } from '../types';
+import { ActionName, LookupableField, PkType, RelationPath } from '../types';
 import { MikroCrudController } from './mikro-crud-controller.interface';
 import { MikroCrudControllerFactoryOptions } from './mikro-crud-controller-factory-options.interface';
 
@@ -117,7 +117,7 @@ export class MikroCrudControllerFactory<
   ) {
     const {
       lookup,
-      requestUser = { decorators: [ReqUser()] },
+      requestUser = { decorator: ReqUser() },
       validationPipeOptions = {}
     } = options;
 
@@ -157,7 +157,7 @@ export class MikroCrudControllerFactory<
     const {
       service,
       lookup: { field: lookupField, type: lookupType, name: lookupParamName },
-      requestUser: { type: reqUserType, decorators: reqUserDecorators }
+      requestUser: { type: reqUserType, decorator: reqUserDecorator }
     } = this.options;
     const { queryParams: queryParamsClass, queryDto: queryDtoClass } =
       this.queryFactory.products;
@@ -167,7 +167,7 @@ export class MikroCrudControllerFactory<
     } = this.serviceFactory.options;
     const path = `:${lookupParamName}`;
     const { entity: entityClass } = this.serviceFactory.options;
-    const ReqUser = reqUserDecorators[0];
+    const ReqUser = reqUserDecorator;
     const lookupInternalType = lookupType == 'number' ? Number : String;
     const Lookup = Param(
       lookupParamName,
@@ -206,7 +206,7 @@ export class MikroCrudControllerFactory<
       ): Promise<{ total: number; data: Array<Entity> }> {
         const { filterQueryParam, orderQueryParam } =
           this.standardizeQueryArrayParams(queryParam);
-        const { total, results } = await this.service.list({
+        const { total, results } = await this.service.query({
           limit: queryParam?.limit || queryDto?.limit || QUERY_DEFAULT_LIMIT,
           offset: queryParam?.offset || queryDto?.offset || QUERY_DEFAULT_OFFSET,
           filter: queryDto?.filter,
@@ -435,32 +435,14 @@ export class MikroCrudControllerFactory<
     return Controller;
   }
 
-  applyAuth(
-    decorator: (...args: any) => MethodDecorator,
-    group: string,
-    methods: MethodNames<
-      MikroCrudController<Entity, CreateDto, UpdateDto, LookupField, Service>
-    > = null
+  applyDecoratorToActions(
+    decorator: MethodDecorator,
+    actions: ActionName[] = null
   ) {
-    const methodList = methods || this.options.actions;
+    const actionsList = actions || this.options.actions;
 
-    const methodMap = {
-      list: 'read',
-      retrieve: 'read',
-      update: 'update',
-      destroy: 'delete'
-    };
-
-    for (const m of methodList) {
-      if (!methodMap.hasOwnProperty(m)) {
-        continue;
-      }
-
-      this.applyMethodDecorators(
-        // @ts-ignore: looks like type infer limitation
-        m,
-        decorator(`${group}:${methodMap[m]}`)
-      );
+    for (const method of actionsList) {
+      this.applyMethodDecorators(method, decorator);
     }
 
     return this;

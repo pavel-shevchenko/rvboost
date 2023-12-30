@@ -14,7 +14,7 @@ export interface MikroCrudControllerFactoryOptions<
     Entity,
     CreateDto,
     UpdateDto
-  > = MikroCrudService<Entity, CreateDto, UpdateDto>,
+  > = MikroCrudService<Entity, CreateDto, UpdateDto>
 > {
   /**
    * The service will be auto-injected for db CRUD actions.
@@ -43,7 +43,7 @@ export interface MikroCrudControllerFactoryOptions<
      */
     name?: string;
   };
-  requestUser?: { type?: Type; decorators: ParameterDecorator[] };
+  requestUser?: { type?: Type; decorator: ParameterDecorator };
   /**
    * - `transform` will be forced to be `true`
    * - `transformOptions.exposeDefaultValues` will be forced to be `true`

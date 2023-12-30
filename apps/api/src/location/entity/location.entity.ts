@@ -1,4 +1,4 @@
-import { ILocation } from 'typing';
+import { ILocation, PermissionSubject } from 'typing';
 import { BaseEntity } from '../../common/entities/base.entity';
 import {
   Collection,
@@ -9,7 +9,9 @@ import {
 } from '@mikro-orm/core';
 import { Organization } from '../../organization/entity';
 import { Card } from '../../card/entity';
+import { CrudEntityFilter } from '../../common/permissions';
 
+@CrudEntityFilter(PermissionSubject.entityLocation)
 @Entity({
   tableName: 'locations'
 })

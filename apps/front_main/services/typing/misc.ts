@@ -1,6 +1,6 @@
-export type ClassType<T> = new (...args: any[]) => T;
-
-export type AnyClass = { new (...args: any[]): any };
+export declare type AnyClass<ReturnType = any> = new (
+  ...args: any[]
+) => ReturnType;
 
 export type StringOrRetValsObject = {
   [key: string]: string | StringOrRetValsObject;

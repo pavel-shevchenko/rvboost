@@ -8,9 +8,11 @@ import {
 
 import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from '../../user/entity';
-import { IOrganization } from 'typing';
+import { IOrganization, PermissionSubject } from 'typing';
 import { Location } from '../../location/entity';
+import { CrudEntityFilter } from '../../common/permissions';
 
+@CrudEntityFilter(PermissionSubject.entityOrganization)
 @Entity({
   tableName: 'organizations'
 })

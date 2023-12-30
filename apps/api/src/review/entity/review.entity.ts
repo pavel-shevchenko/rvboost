@@ -1,4 +1,4 @@
-import { IReview, RedirectPlatformType } from 'typing';
+import { IReview, PermissionSubject, RedirectPlatformType } from 'typing';
 import { BaseEntity } from '../../common/entities/base.entity';
 import {
   Entity,
@@ -8,7 +8,9 @@ import {
   TextType
 } from '@mikro-orm/core';
 import { Location } from '../../location/entity';
+import { CrudEntityFilter } from '../../common/permissions';
 
+@CrudEntityFilter(PermissionSubject.entityReview)
 @Entity({
   tableName: 'reviews'
 })

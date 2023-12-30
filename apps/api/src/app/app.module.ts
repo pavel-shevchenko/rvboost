@@ -15,8 +15,8 @@ import { ReviewModule } from '../review/review.module';
     MikroOrmModule.forRoot(),
     {
       ...MikroCrudModule.configure({
-        filters: ({ user }: CrudEntityFilterContext) => {
-          return { roleScopes: { user } };
+        filters: (entityFilterContext: CrudEntityFilterContext) => {
+          return { crudEntityFilter: entityFilterContext }; // `efk` via filter parameters
         }
       }),
       global: true
