@@ -8,12 +8,12 @@ import {
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
+import { useContext } from 'react';
 import { Table, Space } from 'antd';
 
 import { Location, User } from '@/services/typing/entities';
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { Can, CaslContext } from '@/services/casl/common';
-import { useContext } from 'react';
 
 export default function LocationList() {
   const ctxCan = useContext(CaslContext);
