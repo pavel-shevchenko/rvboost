@@ -42,7 +42,7 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
       return [
         {
           id: 1,
-          name: 'Home',
+          name: 'Информация',
           route: Routes.dashboard,
           icon: <DashboardOutlined />
         }
@@ -97,9 +97,15 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
       return [
         {
           id: 1,
-          name: 'Dashboard',
+          name: 'Информация',
           route: Routes.dashboard,
           icon: <DashboardOutlined />
+        },
+        {
+          id: 2,
+          name: 'Компании',
+          route: Routes.locations,
+          icon: <ShoppingOutlined />
         }
       ];
   }, [isAdmin]);

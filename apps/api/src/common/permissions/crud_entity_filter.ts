@@ -64,6 +64,8 @@ async function getFilterOutsideCaslResponsibility(
       return { id: organizationsIds };
     case PermissionSubject.entityLocation:
       return { organization: organizationsIds };
+    case PermissionSubject.entityCard:
+      return { location: { organization: organizationsIds } };
     default:
       throw new ForbiddenException();
   }

@@ -1,4 +1,9 @@
-import { AbilityBuilder, PureAbility, AbilityClass } from '@casl/ability';
+import {
+  AbilityBuilder,
+  PureAbility,
+  AbilityClass,
+  FieldMatcher
+} from '@casl/ability';
 import {
   PermissionAction,
   PermissionSubject,
@@ -7,6 +12,7 @@ import {
 
 export type AppAbility = PureAbility<[string, PermissionSubjectType]>;
 const appAbility = PureAbility as AbilityClass<AppAbility>;
+const fieldMatcher: FieldMatcher = (fields) => (field) => fields.includes(field);
 
 export function defineUserAbility(user?: any) {
   const builder = new AbilityBuilder<AppAbility>(appAbility);
@@ -21,7 +27,7 @@ export function defineUserAbility(user?: any) {
       defineAnonymousRules(builder);
   }
 
-  return builder.build();
+  return builder.build({ fieldMatcher });
 }
 
 function defineAdminRules({ can }: AbilityBuilder<AppAbility>) {
@@ -35,6 +41,11 @@ function defineClientRules({ can, cannot }: AbilityBuilder<AppAbility>) {
   can('manage', PermissionSubject.entityLocation);
   cannot(PermissionAction.create, PermissionSubject.entityLocation);
   cannot(PermissionAction.delete, PermissionSubject.entityLocation);
+  cannot(PermissionAction.read, PermissionSubject.entityLocation, [
+    'organization'
+  ]);
+  // Rules for cards
+  can('manage', PermissionSubject.entityCard);
 }
 
 function defineAnonymousRules({ cannot }: AbilityBuilder<AppAbility>) {
