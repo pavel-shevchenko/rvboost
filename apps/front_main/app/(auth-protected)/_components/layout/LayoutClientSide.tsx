@@ -115,46 +115,31 @@ export function LayoutClientSide({
                         name: 'user',
                         list: Routes.users,
                         create: `${Routes.users}/create`,
-                        edit: `${Routes.users}/edit/:id`,
-                        meta: {
-                          canDelete: true
-                        }
+                        edit: `${Routes.users}/edit/:id`
                       },
                       {
                         name: 'organization',
                         list: Routes.companies,
                         create: `${Routes.companies}/create`,
-                        edit: `${Routes.companies}/edit/:id`,
-                        meta: {
-                          canDelete: true
-                        }
+                        edit: `${Routes.companies}/edit/:id`
                       },
                       {
                         name: 'location',
                         list: Routes.locations,
                         create: `${Routes.locations}/create`,
-                        edit: `${Routes.locations}/edit/:id`,
-                        meta: {
-                          canDelete: true
-                        }
+                        edit: `${Routes.locations}/edit/:id`
                       },
                       {
                         name: 'card',
                         list: Routes.cards,
                         create: `${Routes.cards}/create`,
-                        edit: `${Routes.cards}/edit/:id`,
-                        meta: {
-                          canDelete: true
-                        }
+                        edit: `${Routes.cards}/edit/:id`
                       },
                       {
                         name: 'review',
                         list: Routes.reviews,
                         create: `${Routes.reviews}/create`,
-                        edit: `${Routes.reviews}/edit/:id`,
-                        meta: {
-                          canDelete: true
-                        }
+                        edit: `${Routes.reviews}/edit/:id`
                       }
                     ]}
                     options={{

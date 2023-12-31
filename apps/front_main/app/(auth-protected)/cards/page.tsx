@@ -4,13 +4,12 @@ import {
   useTable,
   List,
   EditButton,
-  ShowButton,
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
 
-import { Card, User } from '@/services/typing/entities';
+import { Card } from '@/services/typing/entities';
 
 export default function CardList() {
   const { pageCount, tableProps } = useTable<Card>({
@@ -39,7 +38,7 @@ export default function CardList() {
         />
         <Table.Column dataIndex="linkCustom" title="Кастомная ссылка" />
         <Table.Column dataIndex="location" title="ID компании" />
-        <Table.Column<User>
+        <Table.Column<Card>
           title="Действия"
           dataIndex="actions"
           render={(_text, record): React.ReactNode => {

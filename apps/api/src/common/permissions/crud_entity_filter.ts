@@ -60,6 +60,8 @@ async function getFilterOutsideCaslResponsibility(
 
   const organizationsIds = pivots.map((pivot) => pivot.organization.id);
   switch (subject) {
+    case PermissionSubject.entityUser:
+      return { id: user.id };
     case PermissionSubject.entityOrganization:
       return { id: organizationsIds };
     case PermissionSubject.entityLocation:

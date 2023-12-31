@@ -1,16 +1,31 @@
 'use client';
 
-import { Location, User } from '@/services/typing/entities';
+import { Location, Organization } from '@/services/typing/entities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Form, Input, Select } from 'antd';
 
-export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
-  const { formProps, saveButtonProps, queryResult } = useForm<Location>();
+import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
+import { Can } from '@/services/casl/common';
 
-  const { selectProps: orgSelectProps } = useSelect<User>({
+function OrganizationSelect() {
+  const { selectProps: orgSelectProps } = useSelect<Organization>({
     resource: 'organization',
     optionLabel: 'id'
   });
+
+  return (
+    <Form.Item
+      label="ID организации"
+      name={['organization']}
+      rules={[{ required: true }]}
+    >
+      <Select {...orgSelectProps} />
+    </Form.Item>
+  );
+}
+
+export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
+  const { formProps, saveButtonProps, queryResult } = useForm<Location>();
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
@@ -33,13 +48,9 @@ export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       >
         <Input />
       </Form.Item>
-      <Form.Item
-        label="ID организации"
-        name={['organization']}
-        rules={[{ required: true }]}
-      >
-        <Select {...orgSelectProps} />
-      </Form.Item>
+      <Can do={PermissionAction.read} on={PermissionSubject.entityOrganization}>
+        <OrganizationSelect />
+      </Can>
     </Form>
   );
 

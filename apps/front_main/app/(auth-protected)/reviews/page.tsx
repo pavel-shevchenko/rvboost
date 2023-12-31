@@ -4,13 +4,12 @@ import {
   useTable,
   List,
   EditButton,
-  ShowButton,
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
 
-import { Review, User } from '@/services/typing/entities';
+import { Review } from '@/services/typing/entities';
 import moment from 'moment/moment';
 
 export default function ReviewList() {
@@ -43,7 +42,7 @@ export default function ReviewList() {
         />
         <Table.Column dataIndex="platform" title="Платформа" />
         <Table.Column dataIndex="location" title="ID компании" />
-        <Table.Column<User>
+        <Table.Column<Review>
           title="Действия"
           dataIndex="actions"
           render={(_text, record): React.ReactNode => {

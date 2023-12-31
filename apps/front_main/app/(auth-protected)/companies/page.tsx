@@ -4,13 +4,12 @@ import {
   useTable,
   List,
   EditButton,
-  ShowButton,
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
 
-import { Organization, User } from '@/services/typing/entities';
+import { Organization } from '@/services/typing/entities';
 
 export default function OrganizationList() {
   const { pageCount, tableProps } = useTable<Organization>({
@@ -29,7 +28,7 @@ export default function OrganizationList() {
           title="ID клиента"
           render={(v) => v?.pop()}
         />
-        <Table.Column<User>
+        <Table.Column<Organization>
           title="Действия"
           dataIndex="actions"
           render={(_text, record): React.ReactNode => {

@@ -35,8 +35,10 @@ function defineAdminRules({ can }: AbilityBuilder<AppAbility>) {
 }
 
 function defineClientRules({ can, cannot }: AbilityBuilder<AppAbility>) {
+  // Rules for users
+  // can(PermissionAction.read, PermissionSubject.entityUser);
   // Rules for organizations
-  can(PermissionAction.read, PermissionSubject.entityOrganization);
+  // can(PermissionAction.read, PermissionSubject.entityOrganization);
   // Rules for locations
   can('manage', PermissionSubject.entityLocation);
   cannot(PermissionAction.create, PermissionSubject.entityLocation);

@@ -4,14 +4,13 @@ import {
   useTable,
   List,
   EditButton,
-  ShowButton,
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
 import { useContext } from 'react';
 import { Table, Space } from 'antd';
 
-import { Location, User } from '@/services/typing/entities';
+import { Location } from '@/services/typing/entities';
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { Can, CaslContext } from '@/services/casl/common';
 
@@ -38,7 +37,7 @@ export default function LocationList() {
           PermissionSubject.entityLocation,
           'organization'
         ) && <Table.Column dataIndex="organization" title="ID организации" />}
-        <Table.Column<User>
+        <Table.Column<Location>
           title="Действия"
           dataIndex="actions"
           render={(_text, record): React.ReactNode => {
