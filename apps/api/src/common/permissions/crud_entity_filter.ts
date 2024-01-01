@@ -67,7 +67,6 @@ async function getFilterOutsideCaslResponsibility(
     case PermissionSubject.entityLocation:
       return { organization: organizationsIds };
     case PermissionSubject.entityCard:
-      return { location: { organization: organizationsIds } };
     case PermissionSubject.entityReview:
       return { location: { organization: organizationsIds } };
     default:
