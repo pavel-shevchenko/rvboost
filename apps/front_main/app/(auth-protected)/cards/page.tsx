@@ -24,7 +24,7 @@ export default function CardList() {
     <List
       title="Карточки QR"
       headerButtons={
-        <Can do={PermissionAction.create} on={PermissionSubject.entityLocation}>
+        <Can do={PermissionAction.create} on={PermissionSubject.entityCard}>
           <CreateButton>Новая карточка QR</CreateButton>
         </Can>
       }

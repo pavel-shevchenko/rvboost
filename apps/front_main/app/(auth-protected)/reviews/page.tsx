@@ -8,9 +8,11 @@ import {
   CreateButton
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
-
-import { Review } from '@/services/typing/entities';
 import moment from 'moment/moment';
+
+import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
+import { Review } from '@/services/typing/entities';
+import { Can } from '@/services/casl/common';
 
 export default function ReviewList() {
   const { pageCount, tableProps } = useTable<Review>({
@@ -20,7 +22,11 @@ export default function ReviewList() {
   return (
     <List
       title="Список отзывов"
-      headerButtons={<CreateButton>Новый отзыв</CreateButton>}
+      headerButtons={
+        <Can do={PermissionAction.create} on={PermissionSubject.entityReview}>
+          <CreateButton>Новый отзыв</CreateButton>
+        </Can>
+      }
     >
       <Table {...tableProps} rowKey="id">
         <Table.Column
@@ -49,7 +55,12 @@ export default function ReviewList() {
             return (
               <Space>
                 <EditButton hideText size="small" recordItemId={record.id} />
-                <DeleteButton hideText size="small" recordItemId={record.id} />
+                <Can
+                  do={PermissionAction.delete}
+                  on={PermissionSubject.entityReview}
+                >
+                  <DeleteButton hideText size="small" recordItemId={record.id} />
+                </Can>
               </Space>
             );
           }}
