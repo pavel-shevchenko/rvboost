@@ -1,9 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
+
 import { UserService } from '../user';
-import { OrganizationDbService } from './organization_db.service';
 import { User } from '../user/entity';
+import { OrganizationDbService } from './organization_db.service';
 import { NewClientDto } from 'validation';
-import { LocationDbService } from '../location/location_db.service';
+import { LocationDbService } from '../location';
 
 @Injectable()
 export class OrganizationService {

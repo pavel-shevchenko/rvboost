@@ -6,6 +6,7 @@ import {
   BankOutlined,
   CreditCardOutlined,
   DashboardOutlined,
+  ShoppingCartOutlined,
   MessageOutlined,
   ShoppingOutlined,
   PlusCircleOutlined,
@@ -76,12 +77,18 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
         },
         {
           id: 5,
+          name: 'Подписки',
+          route: Routes.subscriptions,
+          icon: <ShoppingCartOutlined />
+        },
+        {
+          id: 6,
           name: 'Компании',
           route: Routes.locations,
           icon: <ShoppingOutlined />
         },
         {
-          id: 6,
+          id: 7,
           name: 'Карточки QR',
           route: Routes.cards,
           icon: <CreditCardOutlined />

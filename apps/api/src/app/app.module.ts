@@ -6,9 +6,10 @@ import { AppController } from './add.controller';
 import { MikroCrudModule } from '../nestjs-crud';
 import { CrudEntityFilterContext } from '../common/typing';
 import { OrganizationModule } from '../organization';
+import { SubscriptionModule } from '../subscription';
 import { LocationModule } from '../location';
 import { CardModule } from '../card';
-import { ReviewModule } from '../review/review.module';
+import { ReviewModule } from '../review';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReviewModule } from '../review/review.module';
     UserModule,
     AuthModule,
     OrganizationModule,
+    SubscriptionModule,
     LocationModule,
     CardModule,
     ReviewModule

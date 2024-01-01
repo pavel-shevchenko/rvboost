@@ -124,6 +124,12 @@ export function LayoutClientSide({
                         edit: `${Routes.companies}/edit/:id`
                       },
                       {
+                        name: 'subscription',
+                        list: Routes.subscriptions,
+                        create: `${Routes.subscriptions}/create`,
+                        edit: `${Routes.subscriptions}/edit/:id`
+                      },
+                      {
                         name: 'location',
                         list: Routes.locations,
                         create: `${Routes.locations}/create`,

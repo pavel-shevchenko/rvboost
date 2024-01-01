@@ -7,6 +7,7 @@ export const Routes = {
   newclient: '/newclient',
   users: '/users',
   companies: '/companies',
+  subscriptions: '/subscriptions',
   locations: '/locations',
   cards: '/cards',
   reviews: '/reviews'
