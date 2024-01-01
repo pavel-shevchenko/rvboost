@@ -7,11 +7,15 @@ import {
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
+import { useContext } from 'react';
 import { Table, Space } from 'antd';
 
 import { Card } from '@/services/typing/entities';
+import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
+import { Can, CaslContext } from '@/services/casl/common';
 
 export default function CardList() {
+  const ctxCan = useContext(CaslContext);
   const { pageCount, tableProps } = useTable<Card>({
     pagination: { pageSize: 50 }
   });
@@ -19,7 +23,11 @@ export default function CardList() {
   return (
     <List
       title="Карточки QR"
-      headerButtons={<CreateButton>Новая карточка QR</CreateButton>}
+      headerButtons={
+        <Can do={PermissionAction.create} on={PermissionSubject.entityLocation}>
+          <CreateButton>Новая карточка QR</CreateButton>
+        </Can>
+      }
     >
       <Table {...tableProps} rowKey="id">
         <Table.Column
@@ -27,16 +35,23 @@ export default function CardList() {
           title="Перехват отзыва"
           render={(v) => (v ? 'Да' : '–')}
         />
-        <Table.Column
-          dataIndex="redirectPlatform"
-          title="Платформа переадресации"
-        />
-        <Table.Column
-          dataIndex="isCustomLinkRedirect"
-          title="Переадресация по кастомной ссылке"
-          render={(v) => (v ? 'Да' : '–')}
-        />
-        <Table.Column dataIndex="linkCustom" title="Кастомная ссылка" />
+        {ctxCan.can(
+          PermissionAction.viewDetailsOnList,
+          PermissionSubject.entityCard
+        ) && (
+          <>
+            <Table.Column
+              dataIndex="redirectPlatform"
+              title="Платформа переадресации"
+            />
+            <Table.Column
+              dataIndex="isCustomLinkRedirect"
+              title="Переадресация по кастомной ссылке"
+              render={(v) => (v ? 'Да' : '–')}
+            />
+            <Table.Column dataIndex="linkCustom" title="Кастомная ссылка" />
+          </>
+        )}
         <Table.Column dataIndex="location" title="ID компании" />
         <Table.Column<Card>
           title="Действия"
@@ -45,7 +60,12 @@ export default function CardList() {
             return (
               <Space>
                 <EditButton hideText size="small" recordItemId={record.id} />
-                <DeleteButton hideText size="small" recordItemId={record.id} />
+                <Can
+                  do={PermissionAction.delete}
+                  on={PermissionSubject.entityCard}
+                >
+                  <DeleteButton hideText size="small" recordItemId={record.id} />
+                </Can>
               </Space>
             );
           }}

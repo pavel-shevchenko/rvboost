@@ -48,6 +48,9 @@ function defineClientRules({ can, cannot }: AbilityBuilder<AppAbility>) {
   ]);
   // Rules for cards
   can('manage', PermissionSubject.entityCard);
+  cannot(PermissionAction.create, PermissionSubject.entityCard);
+  cannot(PermissionAction.delete, PermissionSubject.entityCard);
+  cannot(PermissionAction.viewDetailsOnList, PermissionSubject.entityCard);
 }
 
 function defineAnonymousRules({ cannot }: AbilityBuilder<AppAbility>) {

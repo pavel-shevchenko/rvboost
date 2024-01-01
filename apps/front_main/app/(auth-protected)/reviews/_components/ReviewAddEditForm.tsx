@@ -1,10 +1,11 @@
 'use client';
 
-import { Review, User } from '@/services/typing/entities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Checkbox, Form, Input, Select } from 'antd';
-import { RedirectPlatformEnum } from 'typing/src/enums';
 import moment from 'moment';
+
+import { Review, Location } from '@/services/typing/entities';
+import { RedirectPlatformEnum } from 'typing/src/enums';
 
 const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
   label: platform,
@@ -14,7 +15,7 @@ const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
 export const ReviewAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   const { formProps, saveButtonProps, queryResult } = useForm<Review>();
 
-  const { selectProps: locSelectProps } = useSelect<User>({
+  const { selectProps: locSelectProps } = useSelect<Location>({
     resource: 'location',
     optionLabel: 'id'
   });

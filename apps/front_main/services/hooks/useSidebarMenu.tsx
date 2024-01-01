@@ -106,6 +106,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
           name: 'Компании',
           route: Routes.locations,
           icon: <ShoppingOutlined />
+        },
+        {
+          id: 3,
+          name: 'Карточки QR',
+          route: Routes.cards,
+          icon: <CreditCardOutlined />
         }
       ];
   }, [isAdmin]);

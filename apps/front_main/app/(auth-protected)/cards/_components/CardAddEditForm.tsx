@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, User } from '@/services/typing/entities';
+import { Card, Location } from '@/services/typing/entities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Checkbox, Form, Input, Select } from 'antd';
 import { RedirectPlatformEnum } from 'typing/src/enums';
@@ -13,7 +13,7 @@ const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
 export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   const { formProps, saveButtonProps, queryResult } = useForm<Card>();
 
-  const { selectProps: locSelectProps } = useSelect<User>({
+  const { selectProps: locSelectProps } = useSelect<Location>({
     resource: 'location',
     optionLabel: 'id'
   });
