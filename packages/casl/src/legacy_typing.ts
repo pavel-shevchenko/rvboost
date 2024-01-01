@@ -21,7 +21,8 @@ export const PermissionAction = {
   read: 'read',
   update: 'update',
   delete: 'delete',
-  viewDetailsOnList: 'viewDetailsOnList'
+  viewDetailsOnList: 'viewDetailsOnList',
+  reviewInterception: 'reviewInterception'
 } as const;
 
 export type PermissionActionType = ObjectValuesTypesUnion<

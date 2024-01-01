@@ -10,6 +10,7 @@ import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from '../../user/entity';
 import { IOrganization } from 'typing';
 import { PermissionSubject } from 'casl';
+import { Subscription } from '../../subscription/entity';
 import { Location } from '../../location/entity';
 import { CrudEntityFilter } from '../../common/permissions';
 
@@ -24,13 +25,20 @@ export class Organization
   @Property({ nullable: false })
   name: string;
 
-  @ManyToMany({ entity: () => User, mappedBy: (user) => user.organizations })
+  @ManyToMany({
+    hidden: true,
+    entity: () => User,
+    mappedBy: (user) => user.organizations
+  })
   users = new Collection<User>(this);
 
   @Property({ persist: false })
   get user() {
-    return { id: this.users?.getItems()?.pop()?.id };
+    return { id: this?.users?.getItems()?.pop()?.id };
   }
+
+  @OneToMany(() => Subscription, (subscr) => subscr.organization)
+  subscriptions = new Collection<Subscription>(this);
 
   @OneToMany(() => Location, (loc) => loc.organization)
   locations = new Collection<Location>(this);

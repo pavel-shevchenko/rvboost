@@ -18,10 +18,10 @@ export function defineUserAbility(user?: any) {
   const builder = new AbilityBuilder<AppAbility>(appAbility);
   switch (user?.isAdmin) {
     case true:
-      defineAdminRules(builder);
+      defineAdminRules(user, builder);
       break;
     case false:
-      defineClientRules(builder);
+      defineClientRules(user, builder);
       break;
     default:
       defineAnonymousRules(builder);
@@ -30,15 +30,19 @@ export function defineUserAbility(user?: any) {
   return builder.build({ fieldMatcher });
 }
 
-function defineAdminRules({ can }: AbilityBuilder<AppAbility>) {
+function defineAdminRules(user: any, { can }: AbilityBuilder<AppAbility>) {
   can('manage', 'all');
 }
 
-function defineClientRules({ can, cannot }: AbilityBuilder<AppAbility>) {
+function defineClientRules(
+  user: any,
+  { can, cannot }: AbilityBuilder<AppAbility>
+) {
   // Rules for users
   // can(PermissionAction.read, PermissionSubject.entityUser);
   // Rules for organizations
   // can(PermissionAction.read, PermissionSubject.entityOrganization);
+
   // Rules for locations
   can('manage', PermissionSubject.entityLocation);
   cannot(PermissionAction.create, PermissionSubject.entityLocation);
@@ -46,15 +50,30 @@ function defineClientRules({ can, cannot }: AbilityBuilder<AppAbility>) {
   cannot(PermissionAction.read, PermissionSubject.entityLocation, [
     'organization'
   ]);
+
   // Rules for cards
   can('manage', PermissionSubject.entityCard);
   cannot(PermissionAction.create, PermissionSubject.entityCard);
   cannot(PermissionAction.delete, PermissionSubject.entityCard);
   cannot(PermissionAction.viewDetailsOnList, PermissionSubject.entityCard);
+
   // Rules for reviews
   can('manage', PermissionSubject.entityReview);
   cannot(PermissionAction.create, PermissionSubject.entityReview);
   cannot(PermissionAction.delete, PermissionSubject.entityReview);
+  cannot(PermissionAction.reviewInterception, PermissionSubject.entityReview);
+  // Possible thanks to putClientToOrg->delClientsFromOrg in OrganizationCrudService
+  const curDatetime = new Date();
+  user?.organizations?.map(
+    (organization) =>
+      organization?.subscriptions?.map((subscr) => {
+        if (new Date(subscr?.validUntil) > curDatetime)
+          can(
+            PermissionAction.reviewInterception,
+            PermissionSubject.entityReview
+          );
+      })
+  );
 }
 
 function defineAnonymousRules({ cannot }: AbilityBuilder<AppAbility>) {

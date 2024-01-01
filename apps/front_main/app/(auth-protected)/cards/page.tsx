@@ -33,7 +33,15 @@ export default function CardList() {
         <Table.Column
           dataIndex="isReviewInterception"
           title="Перехват отзыва"
-          render={(v) => (v ? 'Да' : '–')}
+          render={(fieldValue) =>
+            fieldValue &&
+            ctxCan.can(
+              PermissionAction.reviewInterception,
+              PermissionSubject.entityReview
+            )
+              ? 'Да'
+              : '–'
+          }
         />
         {ctxCan.can(
           PermissionAction.viewDetailsOnList,

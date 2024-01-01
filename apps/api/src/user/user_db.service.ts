@@ -21,15 +21,15 @@ export class UserDbService {
   }
 
   async retrieveUser(id: number): Promise<User> {
+    return this.em.findOne(User, id);
+  }
+
+  getPassportUserById(id: number): Promise<User> {
     return this.em.findOne(
       User,
       { id },
       { populate: this.getPassportUserPopulates() }
     );
-  }
-
-  getPassportUserById(id: number): Promise<User> {
-    return this.retrieveUser(id);
   }
 
   async getPassportUserByEmail(email: string): Promise<User> {
@@ -40,5 +40,6 @@ export class UserDbService {
     );
   }
 
-  getPassportUserPopulates = () => [];
+  getPassportUserPopulates = () =>
+    ['organizations.users', 'organizations.subscriptions'] as const;
 }

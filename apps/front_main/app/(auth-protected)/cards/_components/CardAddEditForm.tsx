@@ -3,7 +3,11 @@
 import { Card, Location } from '@/services/typing/entities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Checkbox, Form, Input, Select } from 'antd';
+import { useContext } from 'react';
+
+import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { RedirectPlatformEnum } from 'typing/src/enums';
+import { CaslContext } from '@/services/casl/common';
 
 const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
   label: platform,
@@ -11,6 +15,7 @@ const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
 }));
 
 export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
+  const ctxCan = useContext(CaslContext);
   const { formProps, saveButtonProps, queryResult } = useForm<Card>();
 
   const { selectProps: locSelectProps } = useSelect<Location>({
@@ -20,13 +25,22 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
-      <Form.Item
-        label="Опция перехвата отзыва"
-        name="isReviewInterception"
-        valuePropName="checked"
-      >
-        <Checkbox />
-      </Form.Item>
+      {ctxCan.can(
+        PermissionAction.reviewInterception,
+        PermissionSubject.entityReview
+      ) ? (
+        <Form.Item
+          label="Опция перехвата отзыва"
+          name="isReviewInterception"
+          valuePropName="checked"
+        >
+          <Checkbox />
+        </Form.Item>
+      ) : (
+        <Form.Item label="Опция перехвата отзыва" valuePropName="checked">
+          <Checkbox disabled checked={false} />
+        </Form.Item>
+      )}
       <Form.Item
         label="Выбор платформы на которую будет переадресация"
         name="redirectPlatform"
