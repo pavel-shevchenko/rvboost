@@ -23,11 +23,7 @@ export default function OrganizationList() {
     >
       <Table {...tableProps} rowKey="id">
         <Table.Column dataIndex="name" title="Название" />
-        <Table.Column
-          dataIndex="users"
-          title="ID клиента"
-          render={(v) => v?.pop()}
-        />
+        <Table.Column dataIndex="user" title="ID клиента" render={(v) => v?.id} />
         <Table.Column<Organization>
           title="Действия"
           dataIndex="actions"

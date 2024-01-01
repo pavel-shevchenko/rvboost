@@ -195,14 +195,12 @@ export class MikroCrudControllerFactory<
       @HttpCode(200)
       @Get(QUERY_URL_PATH)
       async query(
-        // @TODO: Remove `typeof` to enable defaults and validations
-        @Query() queryParam: typeof queryParamsClass,
-        @Body()
-        queryDto: // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        queryDtoClass,
-        @ReqUser
-        user: typeof reqUserType
+        // @ts-ignore: Maybe needs `typeof`
+        @Query() queryParam: queryParamsClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @Body() queryDto: queryDtoClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @ReqUser user: reqUserType
       ): Promise<{ total: number; data: Array<Entity> }> {
         const { filterQueryParam, orderQueryParam } =
           this.standardizeQueryArrayParams(queryParam);
@@ -251,14 +249,12 @@ export class MikroCrudControllerFactory<
       @ApiCreatedResponse({ type: entityClass })
       @Post()
       async create(
-        // @TODO: Remove `typeof` to enable defaults and validations
-        @Query() queryParam: typeof queryParamsClass,
-        @Body()
-        data: // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        createDtoClass,
-        @ReqUser
-        user: typeof reqUserType
+        // @ts-ignore: Maybe needs `typeof`
+        @Query() queryParam: queryParamsClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @Body() data: createDtoClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @ReqUser user: reqUserType
       ): Promise<unknown> {
         let entity = await this.service.create({ data, user });
         await this.service.save();
@@ -282,12 +278,12 @@ export class MikroCrudControllerFactory<
       @ApiOkResponse({ type: entityClass })
       @Get(path)
       async retrieve(
-        @Lookup
-        lookup: typeof lookupInternalType,
-        // @TODO: Remove `typeof` to enable defaults and validations
-        @Query() queryParam: typeof queryParamsClass,
-        @ReqUser
-        user: typeof reqUserType
+        // @ts-ignore: Maybe needs `typeof`
+        @Lookup lookup: lookupInternalType,
+        // @ts-ignore: Maybe needs `typeof`
+        @Query() queryParam: queryParamsClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @ReqUser user: reqUserType
       ): Promise<unknown> {
         const conditions = {
           [this.lookupField]: lookup
@@ -315,16 +311,14 @@ export class MikroCrudControllerFactory<
       @ApiOkResponse({ type: entityClass })
       @Put(path)
       async replace(
-        @Lookup
-        lookup: typeof lookupInternalType,
-        // @TODO: Remove `typeof` to enable defaults and validations
-        @Query() queryParam: typeof queryParamsClass,
-        @Body()
-        data: // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        createDtoClass,
-        @ReqUser
-        user: typeof reqUserType
+        // @ts-ignore: Maybe needs `typeof`
+        @Lookup lookup: lookupInternalType,
+        // @ts-ignore: Maybe needs `typeof`
+        @Query() queryParam: queryParamsClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @Body() data: createDtoClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @ReqUser user: reqUserType
       ): Promise<unknown> {
         const conditions = {
           [this.lookupField]: lookup
@@ -360,16 +354,14 @@ export class MikroCrudControllerFactory<
       @ApiOkResponse({ type: entityClass })
       @Patch(path)
       async update(
-        @Lookup
-        lookup: typeof lookupInternalType,
-        // @TODO: Remove `typeof` to enable defaults and validations
-        @Query() queryParam: typeof queryParamsClass,
-        @Body()
-        data: // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        updateDtoClass,
-        @ReqUser
-        user: typeof reqUserType
+        // @ts-ignore: Maybe needs `typeof`
+        @Lookup lookup: lookupInternalType,
+        // @ts-ignore: Maybe needs `typeof`
+        @Query() queryParam: queryParamsClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @Body() data: updateDtoClass,
+        // @ts-ignore: Maybe needs `typeof`
+        @ReqUser user: reqUserType
       ): Promise<unknown> {
         const conditions = {
           [this.lookupField]: lookup
@@ -408,10 +400,10 @@ export class MikroCrudControllerFactory<
       })
       @Delete(path)
       async destroy(
-        @Lookup
-        lookup: typeof lookupInternalType,
-        @ReqUser
-        user: typeof reqUserType
+        // @ts-ignore: Maybe needs `typeof`
+        @Lookup lookup: lookupInternalType,
+        // @ts-ignore: Maybe needs `typeof`
+        @ReqUser user: reqUserType
       ): Promise<unknown> {
         const conditions = {
           [this.lookupField]: lookup

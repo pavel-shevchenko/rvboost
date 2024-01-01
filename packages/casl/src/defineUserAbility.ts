@@ -62,7 +62,7 @@ function defineClientRules(
   cannot(PermissionAction.create, PermissionSubject.entityReview);
   cannot(PermissionAction.delete, PermissionSubject.entityReview);
   cannot(PermissionAction.reviewInterception, PermissionSubject.entityReview);
-  // Possible thanks to putClientToOrg->delClientsFromOrg in OrganizationCrudService
+  // Possible thanks to putClientToOrg->client.organizations.length err in OrganizationCrudService
   const curDatetime = new Date();
   user?.organizations?.map(
     (organization) =>

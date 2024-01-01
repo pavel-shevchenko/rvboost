@@ -21,7 +21,11 @@ const CRUDController = new MikroCrudControllerFactory<OrganizationCrudService>({
   lookup: { field: 'id' },
   query: {
     limit: { max: 200, default: 50 },
-    offset: { max: 10_000 }
+    offset: { max: 10_000 },
+    expand: {
+      in: ['users'],
+      default: ['users']
+    }
   }
 }).applyDecoratorToActions(UseGuards(JwtAuthGuard)).product;
 

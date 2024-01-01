@@ -36,6 +36,7 @@ export class OrganizationCrudService extends CRUDService {
   async putClientToOrg(org: Organization, clientId: number) {
     const client = await this.userDbService.retrieveUser(clientId);
     if (!client) throw new ForbiddenException();
+    if (client.organizations.length) throw new ForbiddenException();
 
     await this.orgDbService.delClientsFromOrg(org);
     return this.orgDbService.addClientToOrg(client, org);
