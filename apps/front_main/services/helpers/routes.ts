@@ -10,5 +10,6 @@ export const Routes = {
   subscriptions: '/subscriptions',
   locations: '/locations',
   cards: '/cards',
-  reviews: '/reviews'
+  reviews: '/reviews',
+  negativeFeedback: '/feedback'
 };

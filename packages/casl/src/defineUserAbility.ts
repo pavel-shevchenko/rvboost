@@ -57,23 +57,22 @@ function defineClientRules(
   cannot(PermissionAction.delete, PermissionSubject.entityCard);
   cannot(PermissionAction.viewDetailsOnList, PermissionSubject.entityCard);
 
-  // Rules for reviews
-  can('manage', PermissionSubject.entityReview);
-  cannot(PermissionAction.create, PermissionSubject.entityReview);
-  cannot(PermissionAction.delete, PermissionSubject.entityReview);
-  cannot(PermissionAction.reviewInterception, PermissionSubject.entityReview);
-  // Possible thanks to putClientToOrg->client.organizations.length err in OrganizationCrudService
+  // Checking subscription
   const curDatetime = new Date();
-  user?.organizations?.map(
-    (organization) =>
-      organization?.subscriptions?.map((subscr) => {
-        if (new Date(subscr?.validUntil) > curDatetime)
-          can(
-            PermissionAction.reviewInterception,
-            PermissionSubject.entityReview
-          );
-      })
-  );
+  // Possible thanks to putClientToOrg->client.organizations.length err in OrganizationCrudService
+  organizationsLoop: for (const organization of user?.organizations || []) {
+    for (const subscription of organization?.subscriptions || []) {
+      if (new Date(subscription?.validUntil) > curDatetime) {
+        // Rules for reviews
+        can('manage', PermissionSubject.entityReview);
+        cannot(PermissionAction.create, PermissionSubject.entityReview);
+        cannot(PermissionAction.delete, PermissionSubject.entityReview);
+        can(PermissionAction.reviewInterception, PermissionSubject.entityReview);
+
+        break organizationsLoop;
+      }
+    }
+  }
 }
 
 function defineAnonymousRules({ cannot }: AbilityBuilder<AppAbility>) {
