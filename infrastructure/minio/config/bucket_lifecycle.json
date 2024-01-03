@@ -1,0 +1,11 @@
+{
+    "Rules": [
+        {
+            "ID": "Removing all delete markers",
+            "Status": "Enabled",
+            "Expiration": {
+                "ExpiredObjectDeleteMarker": true
+            }
+        }
+    ]
+}

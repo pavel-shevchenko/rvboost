@@ -68,6 +68,7 @@ function defineClientRules(
         cannot(PermissionAction.create, PermissionSubject.entityReview);
         cannot(PermissionAction.delete, PermissionSubject.entityReview);
         can(PermissionAction.reviewInterception, PermissionSubject.entityReview);
+        can(PermissionAction.negativeFbManage, PermissionSubject.entityReview);
 
         break organizationsLoop;
       }

@@ -61,53 +61,45 @@ services:
     networks:
       - app_network
 
-#  minio:
-#    image: minio/minio:RELEASE.2021-10-10T16-53-30Z
-#    container_name: bizdata_saas__minio
-#    restart: unless-stopped
-#    #    ports:
-#    #      - "9000:9000"
-#    environment:
-#      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-#      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-#    command: minio server --address 0.0.0.0:9000 /data
-#    volumes:
-#      - ./infrastructure/s3minio/data:/data
-#    networks:
-#      - app_network
-#      # aliases:
-#      # For localhost access, add the following to your /etc/hosts
-#      # 127.0.0.1       my-minio-localhost-alias
-#      # When accessing the minio container on a server with an accessible dns, use the following
-#      # - ${HOSTNAME}
-#
-#  minio_mc:
-#    image: minio/mc:RELEASE.2021-10-07T04-19-58Z
-#    container_name: bizdata_saas__minio_mc
-#    depends_on:
-#      - minio
-#    entrypoint: >
-#      /bin/sh -c "
-#        /usr/bin/mc config host add myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-#        /usr/bin/mc mb --p myminio/${MINIO_DEFAULT_BUCKET};
-#        /usr/bin/mc policy set download myminio/${MINIO_DEFAULT_BUCKET};
-#        /usr/bin/mc ilm import myminio/${MINIO_DEFAULT_BUCKET} <<EOF
-#        {
-#          "\""Rules"\"": [
-#            {
-#              "\""ID"\"": "\""Removing all delete markers"\"",
-#              "\""Expiration"\"": {
-#                "\""DeleteMarker"\"": true
-#              },
-#              "\""Status"\"": "\""Enabled"\""
-#            }
-#          ]
-#        }
-#        EOF;
-#        exit 0;
-#      "
-#    networks:
-#      - app_network
+  minio:
+    image: minio/minio:RELEASE.2024-01-01T16-36-33Z
+    container_name: bizdata_saas__minio
+    restart: unless-stopped
+    ports:
+      - "9001:9001"
+    env_file:
+      - .env
+    command: minio server /data --address :9000 --console-address :9001
+    volumes:
+      - ./infrastructure/minio/data:/data
+    networks:
+      - app_network
+      # aliases:
+      # For localhost access, add the following to your /etc/hosts
+      # 127.0.0.1       my-minio-localhost-alias
+      # When accessing the minio container on a server with an accessible dns, use the following
+      # - ${HOSTNAME}
+
+  minio_mc:
+    image: minio/mc:RELEASE.2023-12-29T20-15-29Z
+    container_name: bizdata_saas__minio_mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        until (/usr/bin/mc config host add myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}) do echo '...waiting...' &&
+        sleep 1;
+        done;
+        /usr/bin/mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+        /usr/bin/mc mb --ignore-existing myminio/${MINIO_DEFAULT_BUCKET};
+        /usr/bin/mc anonymous set download myminio/${MINIO_DEFAULT_BUCKET};
+        /usr/bin/mc ilm import myminio/${MINIO_DEFAULT_BUCKET} < /config/bucket_lifecycle.json;
+        sleep inf;
+      "
+    volumes:
+      - ./infrastructure/minio/config:/config
+    networks:
+      - app_network
 
   front_main:
     container_name: bizdata_saas__front_main__prod

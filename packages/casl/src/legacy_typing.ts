@@ -22,7 +22,8 @@ export const PermissionAction = {
   update: 'update',
   delete: 'delete',
   viewDetailsOnList: 'viewDetailsOnList',
-  reviewInterception: 'reviewInterception'
+  reviewInterception: 'reviewInterception',
+  negativeFbManage: 'negativeFbManage'
 } as const;
 
 export type PermissionActionType = ObjectValuesTypesUnion<
