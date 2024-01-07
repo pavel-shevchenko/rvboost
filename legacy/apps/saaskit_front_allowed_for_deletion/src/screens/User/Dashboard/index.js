@@ -100,7 +100,7 @@ const Dashboard = () => {
     };
 
     const result = await axios
-      .get(`/api/organization/get-owned-organization`, { params, headers })
+      .get(`/api/organization/get-owned-organizations`, { params, headers })
       .catch((err) => {
         fetchFailure(err);
       });

@@ -11,5 +11,5 @@ export const Routes = {
   locations: '/locations',
   cards: '/cards',
   reviews: '/reviews',
-  negativeFeedback: '/feedback'
+  feedbackSettings: '/feedback'
 };

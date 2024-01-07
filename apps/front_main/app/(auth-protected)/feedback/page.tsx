@@ -1,10 +1,36 @@
 'use client';
 
-import { useContext } from 'react';
-import { Alert, Card, Form, Typography } from 'antd';
+import { useContext, useState } from 'react';
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Switch,
+  Col,
+  Form,
+  Input,
+  Row,
+  Typography,
+  Upload,
+  UploadProps,
+  message
+} from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import type { UploadChangeParam } from 'antd/es/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 
 import { CaslContext } from '@/services/casl/common';
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
+import { RedirectPlatformEnum } from 'typing/src/enums';
+import { env } from 'next-runtime-env';
+import { useUserStore } from '@/services/stores/user';
+import { useFetch } from '@/services/hooks';
+
+const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
+  label: platform,
+  value: platform
+}));
 
 export default function FeedbackPage() {
   const ctxCan = useContext(CaslContext);
@@ -25,16 +51,187 @@ export default function FeedbackPage() {
       </Card>
     );
 
-  return <NegativeFeedback />;
+  return <FeedbackSettings />;
 }
 
-function NegativeFeedback() {
+const logoSizeLimitMb = 10;
+
+const isLogoValid = (info: UploadChangeParam<UploadFile>) => {
+  const isSizeAccept = (info.file.size as number) / 1024 / 1024 < logoSizeLimitMb;
+  if (!isSizeAccept) {
+    message.error(`Логотип должен быть не более ${logoSizeLimitMb} мегабайт!`);
+    return false;
+  }
+  return true;
+};
+
+function FeedbackSettings() {
+  const [logoUploadProps, setLogoUploadProps] = useState<UploadProps>({
+    action: '',
+    maxCount: 1,
+    multiple: false,
+    accept: 'image/*',
+    listType: 'picture',
+    beforeUpload: () => {
+      return false;
+    },
+    onChange: isLogoValid
+  });
+
+  const authToken = useUserStore((state) => state.authToken);
+  const onFinish = async (values: any) => {
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(values)) {
+      if (key === 'logo') continue;
+      if (Array.isArray(value))
+        value.map((item) => formData.append(key + '[]', item));
+      else if (value) formData.append(key, value as string);
+    }
+    if (values.logo) {
+      if (!isLogoValid(values.logo as UploadChangeParam)) return;
+
+      const file = values.logo.file as File;
+      formData.append('logo', file);
+    }
+
+    const fetch = useFetch(authToken, false);
+    const res = await fetch.post(
+      `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`,
+      formData
+    );
+    message.success('Настройки успешно сохранены!');
+  };
+
   return (
     <>
       <Typography.Title level={4}>Управление сбором отзывов</Typography.Title>
 
       <Card>
-        <Form></Form>
+        <Form onFinish={onFinish}>
+          <Form.Item
+            label="Заголовок вопроса"
+            name="questionTitle"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Текст разъясняющий вопрос"
+            name="questionDescr"
+            labelCol={{ span: 24 }}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item
+            name="logo"
+            label="Загрузить лого"
+            extra={`Изображение не более ${logoSizeLimitMb}Мб`}
+            valuePropName="file"
+          >
+            <Upload {...logoUploadProps}>
+              <Button icon={<UploadOutlined />}>Загрузить лого</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item
+            label="Порог оценки"
+            name="ratingThreshold"
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="Куда ведёт редирект" name="redirectPlatform">
+            <Checkbox.Group options={redirectPlatforms} />
+          </Form.Item>
+          <Form.Item
+            label="Текст с просьбой оставить отзыв на внешнем ресурсе"
+            name="externalResourceAskingText"
+            labelCol={{ span: 24 }}
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item
+            label="Текст для запроса плохого отзыва"
+            name="badReviewRequestText"
+            labelCol={{ span: 24 }}
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item
+            label="Текст после сабмита плохого отзыва"
+            name="badReviewOnSubmitText"
+            labelCol={{ span: 24 }}
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Row gutter={10} align="middle">
+            <Col md={15} xs={24}>
+              <Form.Item
+                label="Запрашивать имя пользователя"
+                name="whetherRequestUsername"
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col md={9} xs={24}>
+              <Form.Item
+                label="Обязательно"
+                name="requestUsernameRequired"
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={10} align="middle">
+            <Col md={15} xs={24}>
+              <Form.Item
+                label="Запрашивать телефон пользователя"
+                name="whetherRequestPhone"
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col md={9} xs={24}>
+              <Form.Item
+                label="Обязательно"
+                name="requestPhoneRequired"
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={10} align="middle">
+            <Col md={15} xs={24}>
+              <Form.Item
+                label="Запрашивать E-mail пользователя"
+                name="whetherRequestEmail"
+                valuePropName="checked"
+              >
+                <Checkbox />
+              </Form.Item>
+            </Col>
+            <Col md={9} xs={24}>
+              <Form.Item
+                label="Обязательно"
+                name="requestEmailRequired"
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Сохранить
+            </Button>
+          </Form.Item>
+        </Form>
       </Card>
     </>
   );

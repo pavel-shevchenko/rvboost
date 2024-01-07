@@ -4,7 +4,7 @@ import {
   TransformValidationOptions
 } from 'class-transformer-validator';
 
-import { AnyClass, StringOrRetValsObject } from '@/services/typing/misc';
+import { AnyClass, StringOrRetValsObject } from 'typing/src/utils';
 import { FieldData } from 'rc-field-form/es/interface';
 
 export const createFormikValidator = (

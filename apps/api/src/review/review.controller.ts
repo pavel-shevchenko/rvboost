@@ -1,7 +1,11 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+
+import { FeedbackSettingsDto } from 'validation';
 import { MikroCrudControllerFactory } from '../nestjs-crud';
 import { ReviewCrudService } from './review_crud.service';
 import { JwtAuthGuard } from '../auth/guards';
+import { ReviewService } from './review.service';
+import { AppRequest } from '../common/typing';
 
 const CRUDController = new MikroCrudControllerFactory<ReviewCrudService>({
   service: ReviewCrudService,
@@ -15,7 +19,16 @@ const CRUDController = new MikroCrudControllerFactory<ReviewCrudService>({
 
 @Controller('review')
 export class ReviewController extends CRUDController {
-  constructor() {
+  constructor(private readonly reviewService: ReviewService) {
     super();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('feedback-settings')
+  async saveFeedbackSettings(@Request() req: AppRequest) {
+    return this.reviewService.saveFeedbackSettings(
+      req.user,
+      req.parts({ limits: { fileSize: 10 * 1024 * 1024 } })
+    );
   }
 }

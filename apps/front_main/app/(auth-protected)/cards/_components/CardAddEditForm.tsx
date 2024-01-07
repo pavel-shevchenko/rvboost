@@ -9,10 +9,12 @@ import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { RedirectPlatformEnum } from 'typing/src/enums';
 import { CaslContext } from '@/services/casl/common';
 
-const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({
-  label: platform,
-  value: platform
-}));
+const redirectPlatforms = Object.keys(RedirectPlatformEnum)
+  .filter((platform) => platform !== RedirectPlatformEnum.default)
+  .map((platform) => ({
+    label: platform,
+    value: platform
+  }));
 
 export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   const ctxCan = useContext(CaslContext);

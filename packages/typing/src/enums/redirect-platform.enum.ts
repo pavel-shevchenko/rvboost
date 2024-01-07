@@ -1,6 +1,7 @@
 import { ObjectValuesTypesUnion } from '../utils';
 
 export const RedirectPlatformEnum = {
+  default: 'default',
   google: 'google',
   trustpilot: 'trustpilot'
 } as const;

@@ -49,9 +49,9 @@ export class OrganizationController extends CRUDController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('get-owned-organization')
+  @Get('get-owned-organizations')
   getOwnedOrganizations(@Request() req: AppRequest) {
-    return this.orgDbService.getOwnedOrganizations(req.user);
+    return this.orgDbService.getOrganizationsByOwner(req.user);
   }
 
   @UseGuards(JwtAuthGuard)

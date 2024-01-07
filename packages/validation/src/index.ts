@@ -8,3 +8,4 @@ export * from './dto/crud_subscription';
 export * from './dto/crud_card';
 export * from './dto/crud_review';
 export * from './dto/new_client';
+export * from './dto/feedback_settings';

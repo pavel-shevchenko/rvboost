@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { UserRoleInOrgEnum } from 'typing';
+import { UserRoleInOrgEnum, UserRoleInOrgType } from 'typing';
 import { Organization, UserRoleInOrganization } from './entity';
 import { User } from '../user/entity';
 
@@ -36,10 +36,18 @@ export class OrganizationDbService {
     return organization;
   }
 
-  async getOwnedOrganizations(user: User) {
+  async getOrganizationsByOwner(user: User) {
+    return this.getOrganizationsByUserAndRole(user, UserRoleInOrgEnum.owner);
+  }
+
+  async getOrganizationsByClient(user: User) {
+    return this.getOrganizationsByUserAndRole(user, UserRoleInOrgEnum.client);
+  }
+
+  async getOrganizationsByUserAndRole(user: User, role: UserRoleInOrgType) {
     const pivots = await this.em.find<UserRoleInOrganization>(
       UserRoleInOrganization,
-      { user, role: UserRoleInOrgEnum.owner }
+      { user, role }
     );
     if (!pivots.length) return [];
 

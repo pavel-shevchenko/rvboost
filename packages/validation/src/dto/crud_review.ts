@@ -5,7 +5,6 @@ import {
   IsISO8601,
   IsNotEmpty,
   IsNumber,
-  IsNumberString,
   IsOptional,
   IsString,
   Length,
@@ -13,8 +12,9 @@ import {
   Min,
   ValidateIf
 } from 'class-validator';
-import * as typing from 'typing';
 import { Transform } from 'class-transformer';
+
+import * as typing from 'typing';
 
 export class CrudReviewDto implements typing.IReview {
   @IsOptional()
@@ -48,9 +48,10 @@ export class CrudReviewDto implements typing.IReview {
   reviewText: string;
 
   @IsOptional()
-  @IsNumberString()
-  @ValidateIf((object, value) => !!value)
-  @Transform(({ value }) => value?.trim())
+  @Min(0)
+  @Max(9.99)
+  @ValidateIf((object, value) => value !== null)
+  @Transform(({ value }) => (value ? parseFloat(value) : null))
   reviewRating: string;
 
   @IsNotEmpty()

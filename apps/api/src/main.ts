@@ -4,6 +4,7 @@ import { AppModule } from './app/app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import passport from '@fastify/passport';
 import fastifySecureSession from '@fastify/secure-session';
+import fastifyMultipart from '@fastify/multipart';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -17,6 +18,18 @@ async function bootstrap() {
   });
   await app.register(passport.initialize());
   await app.register(passport.secureSession());
+
+  await app.register(fastifyMultipart, {
+    limits: {
+      fieldNameSize: 1024, // Max field name size in bytes
+      fieldSize: 65535, // Max field value size in bytes
+      fields: 100, // Max number of non-file fields
+      fileSize: 2 * 1024 * 1024, // For multipart forms, the max file size
+      files: 100, // Max number of file fields
+      headerPairs: 2000, // Max number of header key=>value pairs
+      parts: 1000 // For multipart forms, the max number of parts (fields + files)
+    }
+  });
 
   app.setGlobalPrefix('api');
   // CORS: Allow `*`

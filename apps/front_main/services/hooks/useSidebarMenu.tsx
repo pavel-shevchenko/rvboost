@@ -123,13 +123,13 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
         },
         {
           id: 4,
-          name: 'Плохой отзыв',
-          route: Routes.negativeFeedback,
+          name: 'Сбор отзывов',
+          route: Routes.feedbackSettings,
           icon: <StopOutlined />
         },
         {
           id: 5,
-          name: 'Отзывы',
+          name: 'Все отзывы',
           route: Routes.reviews,
           icon: <MessageOutlined />
         }
