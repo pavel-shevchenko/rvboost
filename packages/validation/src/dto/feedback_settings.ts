@@ -18,7 +18,7 @@ import * as typing from 'typing';
 export class FeedbackSettingsDto implements typing.IFeedbackSettings {
   @IsNotEmpty()
   @IsString({ message: 'Must be a string' })
-  @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @Length(2, 200, { message: 'Заголовок вопроса от 2 до 200 символов' })
   @Transform(({ value }) => value?.trim())
   questionTitle: string;
 
@@ -30,8 +30,8 @@ export class FeedbackSettingsDto implements typing.IFeedbackSettings {
   questionDescr: string;
 
   @IsNotEmpty()
-  @Min(0)
-  @Max(9.99)
+  @Min(1, { message: 'Порог оценки не меньше чем 1' })
+  @Max(10, { message: 'Порог оценки не больше чем 10' })
   @Transform(({ value }) => parseFloat(value?.trim()))
   ratingThreshold: string;
 

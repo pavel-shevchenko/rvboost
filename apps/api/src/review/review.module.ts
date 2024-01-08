@@ -8,10 +8,12 @@ import { ReviewController } from './review.controller';
 import { ReviewService } from './review.service';
 import { ReviewDbService } from './review_db.service';
 import { OrganizationModule } from '../organization';
+import { MinioModule } from '../minio';
 
 @Module({
   imports: [
     MikroCrudModule,
+    MinioModule,
     OrganizationModule,
     MikroOrmModule.forFeature([Review, FeedbackSettings])
   ],

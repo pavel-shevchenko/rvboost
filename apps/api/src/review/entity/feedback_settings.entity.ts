@@ -23,6 +23,9 @@ export class FeedbackSettings
   @Property({ type: TextType, nullable: true })
   questionDescr: string;
 
+  @Property({ nullable: true })
+  logoS3Key: string;
+
   @Property({ type: DecimalType, precision: 3, scale: 2, nullable: true })
   ratingThreshold: string;
 

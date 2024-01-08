@@ -13,12 +13,16 @@ import {
   createDtoValidator
 } from '../common/helpers';
 import { OrganizationDbService } from '../organization';
+import { MinioService } from '../minio';
+import { UploadedObjectInfo } from 'minio';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 
 const fbSettingsDtoValidate = createDtoValidator(FeedbackSettingsDto);
 
 @Injectable()
 export class ReviewService {
   constructor(
+    private readonly minioService: MinioService,
     private readonly reviewDbService: ReviewDbService,
     private readonly organizationDbService: OrganizationDbService
   ) {}
@@ -28,6 +32,7 @@ export class ReviewService {
     mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
   ) {
     const feedbackSettingsDto = {
+      redirectPlatform: [],
       whetherRequestUsername: false,
       requestUsernameRequired: false,
       whetherRequestPhone: false,
@@ -36,25 +41,6 @@ export class ReviewService {
       requestEmailRequired: false
     } as FeedbackSettingsDto;
 
-    let logoUploadRes;
-    for await (const part of mpAsyncIterator) {
-      if (part.type === 'file' && part.fieldname === 'logo') {
-        // logoUploadRes = await part.file.pipe()
-      } else if (part.type === 'field' && part.fieldname !== 'logo') {
-        addFastifyMultipartFieldToDto(
-          part.fieldname,
-          part.value,
-          feedbackSettingsDto
-        );
-      }
-    }
-    const errors = fbSettingsDtoValidate(feedbackSettingsDto);
-    if (Object.keys(errors).length) {
-      if (!logoUploadRes) {
-      }
-      throw new BadRequestException(errors);
-    }
-
     const organizations =
       await this.organizationDbService.getOrganizationsByClient(user);
     if (!organizations.length) throw new ForbiddenException();
@@ -62,6 +48,41 @@ export class ReviewService {
 
     const feedbackSettings =
       await this.reviewDbService.getFeedbackSettingsByOrg(assignedOrg);
+    const newLogoS3Key = 'fb_settings_logo__' + randomStringGenerator();
+    let logoUploadRes: UploadedObjectInfo;
+
+    for await (const part of mpAsyncIterator) {
+      if (part.type === 'file' && part.fieldname === 'logo') {
+        feedbackSettingsDto['logoS3Key'] = newLogoS3Key;
+        logoUploadRes = await this.minioService.putObject(
+          newLogoS3Key,
+          part.file
+        );
+      } else if (part.type === 'field' && part.fieldname !== 'logo') {
+        addFastifyMultipartFieldToDto(
+          part.fieldname,
+          part.value,
+          feedbackSettingsDto
+        );
+      } else if (
+        part.fieldname === 'logo' &&
+        part['value'] === 'removed' &&
+        feedbackSettings.logoS3Key
+      ) {
+        feedbackSettingsDto['logoS3Key'] = null;
+        await this.minioService.removeObjects([feedbackSettings.logoS3Key]);
+      }
+    }
+    const errors = fbSettingsDtoValidate(feedbackSettingsDto);
+    if (Object.keys(errors).length) {
+      if (logoUploadRes) {
+        await this.minioService.removeObjects([newLogoS3Key]);
+      }
+      throw new BadRequestException(errors);
+    } else if (logoUploadRes) {
+      await this.minioService.removeObjects([feedbackSettings.logoS3Key]);
+    }
+
     if (feedbackSettings) {
       await this.reviewDbService.saveFeedbackSettings(
         Object.assign(feedbackSettings, feedbackSettingsDto)

@@ -10,6 +10,7 @@ import { SubscriptionModule } from '../subscription';
 import { LocationModule } from '../location';
 import { CardModule } from '../card';
 import { ReviewModule } from '../review';
+import { MinioModule } from '../minio';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ReviewModule } from '../review';
     SubscriptionModule,
     LocationModule,
     CardModule,
+    MinioModule,
     ReviewModule
   ],
   controllers: [AppController]

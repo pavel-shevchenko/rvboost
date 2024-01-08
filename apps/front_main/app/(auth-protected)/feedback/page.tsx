@@ -91,15 +91,21 @@ function FeedbackSettings() {
       if (!isLogoValid(values.logo as UploadChangeParam)) return;
 
       const file = values.logo.file as File;
-      formData.append('logo', file);
+      // @ts-ignore
+      if (file.status !== 'removed') formData.append('logo', file);
+      else formData.append('logo', 'removed');
     }
 
     const fetch = useFetch(authToken, false);
-    const res = await fetch.post(
-      `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`,
-      formData
-    );
-    message.success('Настройки успешно сохранены!');
+    try {
+      const res = await fetch.post(
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`,
+        formData
+      );
+      message.success('Настройки успешно сохранены!');
+    } catch (e) {
+      message.error(Object.values(e as []).join('; '));
+    }
   };
 
   return (
@@ -136,6 +142,7 @@ function FeedbackSettings() {
             label="Порог оценки"
             name="ratingThreshold"
             rules={[{ required: true }]}
+            extra="От 1 до 10, разделитель дроби - точка"
           >
             <Input />
           </Form.Item>

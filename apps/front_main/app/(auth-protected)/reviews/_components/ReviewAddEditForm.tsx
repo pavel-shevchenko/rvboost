@@ -38,7 +38,11 @@ export const ReviewAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       <Form.Item label="Номер телефона автора" name="authorPhone">
         <Input />
       </Form.Item>
-      <Form.Item label="Рейтинг отзыва" name="reviewRating">
+      <Form.Item
+        label="Рейтинг отзыва"
+        name="reviewRating"
+        extra="От 1 до 10, разделитель дроби - точка"
+      >
         <Input />
       </Form.Item>
       <Form.Item label="Текст отзыва" name="reviewText">

@@ -48,8 +48,8 @@ export class CrudReviewDto implements typing.IReview {
   reviewText: string;
 
   @IsOptional()
-  @Min(0)
-  @Max(9.99)
+  @Min(1)
+  @Max(10)
   @ValidateIf((object, value) => value !== null)
   @Transform(({ value }) => (value ? parseFloat(value) : null))
   reviewRating: string;
