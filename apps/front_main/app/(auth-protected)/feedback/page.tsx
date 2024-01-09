@@ -68,7 +68,7 @@ const isLogoValid = (info: UploadChangeParam<UploadFile>) => {
 function FeedbackSettings() {
   const [formValues, setFormValues] = useState();
   const authToken = useUserStore((state) => state.authToken);
-  const fetch = useFetch(authToken, false);
+  const fetch = useFetch(authToken);
 
   const [logoUploadProps, setLogoUploadProps] = useState<UploadProps>({
     action: '',

@@ -34,6 +34,7 @@ type UserStoreActions = {
   login: (dto: LocalLoginDto) => Promise<void>;
   register: (dto: LocalRegistrationDto) => Promise<void>;
   logout: () => void;
+  changeUsername: (username: string) => void;
 };
 
 type UserStore = UserStoreState & UserStoreActions;
@@ -70,6 +71,7 @@ export const useUserStore = create<UserStore>()(
       setCookie(AuthCookieName, authToken);
       set({ authToken, ...currentUser });
     },
-    logout: () => delCookie(AuthCookieName)
+    logout: () => delCookie(AuthCookieName),
+    changeUsername: (username: string) => set({ username })
   }))
 );

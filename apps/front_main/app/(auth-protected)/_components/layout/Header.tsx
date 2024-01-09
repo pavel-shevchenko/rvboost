@@ -210,17 +210,17 @@ export const PrivateCabinetHeader = ({
                 key: 'submenu',
                 children: [
                   {
-                    label: <a>Logged in as {username}</a>,
+                    label: <a>Вы: {username}</a>,
                     disabled: true,
                     key: 'Loggedin'
                   },
                   {
-                    label: <a href="/user/dashboard">Профиль</a>,
+                    label: <a href={Routes.accountSettings}>Профиль</a>,
                     icon: <UserOutlined />,
                     key: 'user'
                   },
                   {
-                    label: <a onClick={logout}>Sign Out</a>,
+                    label: <a onClick={logout}>Выход</a>,
                     icon: <LogoutOutlined />,
                     key: 'SignOut'
                   }

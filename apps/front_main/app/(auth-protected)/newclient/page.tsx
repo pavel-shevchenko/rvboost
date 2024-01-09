@@ -131,7 +131,7 @@ export default function AddClient() {
     setValidateOnlyTouched(false);
     if (errorsCnt || !form.isFieldsTouched()) return;
 
-    const fetch = useFetch(authToken, false);
+    const fetch = useFetch(authToken);
     const res = await fetch.post(
       `${env('NEXT_PUBLIC_SERVER_URL')}/api/organization/new-client`,
       values

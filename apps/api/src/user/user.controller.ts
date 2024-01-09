@@ -1,4 +1,12 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDbService } from './user_db.service';
 import { JwtAuthGuard } from '../auth/guards';
@@ -29,5 +37,17 @@ export class UserController extends CRUDController {
   @Get('current-user-info')
   jwtUserInfo(@Request() req: AppRequest) {
     return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('change-username/:username')
+  async changeUsername(
+    @Request() req: AppRequest,
+    @Param('username') username: string
+  ) {
+    if (!username) throw new ForbiddenException();
+
+    req.user.username = username;
+    return this.userDbService.saveUser(req.user);
   }
 }
