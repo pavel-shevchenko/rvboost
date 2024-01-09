@@ -32,7 +32,7 @@ export function useFetch(authToken?: string, redirectOn401 = true) {
     const isJson = response.headers
       ?.get('content-type')
       ?.includes('application/json');
-    const data = isJson ? await response.json() : null;
+    const data = isJson ? await response.json() : response;
     // check for error response
     if (!response.ok) {
       if (response.status === 401) {

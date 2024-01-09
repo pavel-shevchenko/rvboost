@@ -26,4 +26,8 @@ export class ReviewDbService {
   saveFeedbackSettings(feedbackSettings: FeedbackSettings) {
     return this.em.persistAndFlush(feedbackSettings);
   }
+
+  async isLogoS3keyExists(logoS3Key: string) {
+    return !!(await this.em.findOne(FeedbackSettings, { logoS3Key }));
+  }
 }

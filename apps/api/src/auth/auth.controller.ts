@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @Get('reset-password/:email')
-  async resetPassword(@Param('email') email: string): Promise<any> {
+  async resetPassword(@Param('email') email: string) {
     return this.authService.resetPassword(email);
   }
 

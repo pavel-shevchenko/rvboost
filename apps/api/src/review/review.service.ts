@@ -27,6 +27,15 @@ export class ReviewService {
     private readonly organizationDbService: OrganizationDbService
   ) {}
 
+  async getFeedbackSettings(user: User) {
+    const organizations =
+      await this.organizationDbService.getOrganizationsByClient(user);
+    if (!organizations.length) throw new ForbiddenException();
+    const assignedOrg = organizations[0];
+
+    return this.reviewDbService.getFeedbackSettingsByOrg(assignedOrg);
+  }
+
   async saveFeedbackSettings(
     user: User,
     mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>

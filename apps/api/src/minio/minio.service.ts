@@ -8,6 +8,9 @@ import { MINIO_CLIENT } from './minio_client.token';
 export class MinioService {
   constructor(@Inject(MINIO_CLIENT) private readonly minioClient: Client) {}
 
+  getObject = (objectName: string) =>
+    this.minioClient.getObject(process.env?.MINIO_DEFAULT_BUCKET, objectName);
+
   putObject = (objectName: string, stream: string | Readable) =>
     this.minioClient.putObject(
       process.env?.MINIO_DEFAULT_BUCKET,

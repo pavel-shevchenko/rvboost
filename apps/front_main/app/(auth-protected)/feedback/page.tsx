@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -58,7 +58,7 @@ const logoSizeLimitMb = 10;
 
 const isLogoValid = (info: UploadChangeParam<UploadFile>) => {
   const isSizeAccept = (info.file.size as number) / 1024 / 1024 < logoSizeLimitMb;
-  if (!isSizeAccept) {
+  if (!isSizeAccept && info.file.size) {
     message.error(`Логотип должен быть не более ${logoSizeLimitMb} мегабайт!`);
     return false;
   }
@@ -66,6 +66,10 @@ const isLogoValid = (info: UploadChangeParam<UploadFile>) => {
 };
 
 function FeedbackSettings() {
+  const [formValues, setFormValues] = useState();
+  const authToken = useUserStore((state) => state.authToken);
+  const fetch = useFetch(authToken, false);
+
   const [logoUploadProps, setLogoUploadProps] = useState<UploadProps>({
     action: '',
     maxCount: 1,
@@ -75,10 +79,62 @@ function FeedbackSettings() {
     beforeUpload: () => {
       return false;
     },
-    onChange: isLogoValid
+    onChange: (info) => {
+      if (!isLogoValid(info)) return false;
+      setLogoUploadProps({
+        ...logoUploadProps,
+        fileList:
+          info.file.status === 'removed'
+            ? []
+            : [
+                {
+                  uid: '1',
+                  name: info.file.name,
+                  status: 'done',
+                  url: URL.createObjectURL(info.file)
+                }
+              ],
+        listType: info.file.status === 'removed' ? undefined : 'picture',
+        showUploadList: info.file.status !== 'removed'
+      });
+    }
   });
 
-  const authToken = useUserStore((state) => state.authToken);
+  useEffect(() => {
+    const init = async () => {
+      if (!authToken) return;
+      const initValues = await fetch.get(
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`
+      );
+      setFormValues(initValues);
+
+      if (!initValues?.logoS3Key) return;
+      const logo = await fetch.get(
+        `${env(
+          'NEXT_PUBLIC_SERVER_URL'
+        )}/api/review/logo-by-s3key/${initValues?.logoS3Key}`
+      );
+
+      if (logo.body instanceof ReadableStream) {
+        const logoDataUrl = URL.createObjectURL(
+          new Blob([(await logo.body.getReader().read()).value])
+        );
+        setLogoUploadProps({
+          ...logoUploadProps,
+          fileList: [
+            {
+              uid: '1',
+              name: 'Ранее загруженный логотип',
+              status: 'done',
+              url: logoDataUrl
+            }
+          ]
+        });
+      }
+    };
+    init();
+  }, [authToken]);
+
   const onFinish = async (values: any) => {
     const formData = new FormData();
     for (const [key, value] of Object.entries(values)) {
@@ -96,7 +152,6 @@ function FeedbackSettings() {
       else formData.append('logo', 'removed');
     }
 
-    const fetch = useFetch(authToken, false);
     try {
       const res = await fetch.post(
         `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`,
@@ -108,12 +163,13 @@ function FeedbackSettings() {
     }
   };
 
+  if (!formValues) return <></>;
   return (
     <>
       <Typography.Title level={4}>Управление сбором отзывов</Typography.Title>
 
       <Card>
-        <Form onFinish={onFinish}>
+        <Form onFinish={onFinish} initialValues={formValues}>
           <Form.Item
             label="Заголовок вопроса"
             name="questionTitle"
@@ -146,7 +202,11 @@ function FeedbackSettings() {
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Куда ведёт редирект" name="redirectPlatform">
+          <Form.Item
+            label="Куда ведёт редирект"
+            name="redirectPlatform"
+            labelCol={{ span: 24 }}
+          >
             <Checkbox.Group options={redirectPlatforms} />
           </Form.Item>
           <Form.Item
@@ -233,7 +293,8 @@ function FeedbackSettings() {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item>
+          <br />
+          <Form.Item style={{ display: 'flex', justifyContent: 'center' }}>
             <Button type="primary" htmlType="submit">
               Сохранить
             </Button>
