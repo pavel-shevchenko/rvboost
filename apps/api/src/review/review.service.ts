@@ -55,10 +55,11 @@ export class ReviewService {
     if (!organizations.length) throw new ForbiddenException();
     const assignedOrg = organizations[0];
 
+    let logoUploadRes: UploadedObjectInfo;
+    let isLogoRemovingRequested = false;
+    const newLogoS3Key = 'fb_settings_logo__' + randomStringGenerator();
     const feedbackSettings =
       await this.reviewDbService.getFeedbackSettingsByOrg(assignedOrg);
-    const newLogoS3Key = 'fb_settings_logo__' + randomStringGenerator();
-    let logoUploadRes: UploadedObjectInfo;
 
     for await (const part of mpAsyncIterator) {
       if (part.type === 'file' && part.fieldname === 'logo') {
@@ -76,10 +77,10 @@ export class ReviewService {
       } else if (
         part.fieldname === 'logo' &&
         part['value'] === 'removed' &&
-        feedbackSettings.logoS3Key
+        feedbackSettings?.logoS3Key
       ) {
         feedbackSettingsDto['logoS3Key'] = null;
-        await this.minioService.removeObjects([feedbackSettings.logoS3Key]);
+        isLogoRemovingRequested = true;
       }
     }
     const errors = fbSettingsDtoValidate(feedbackSettingsDto);
@@ -88,7 +89,10 @@ export class ReviewService {
         await this.minioService.removeObjects([newLogoS3Key]);
       }
       throw new BadRequestException(errors);
-    } else if (logoUploadRes) {
+    } else if (
+      isLogoRemovingRequested ||
+      (logoUploadRes && feedbackSettings?.logoS3Key)
+    ) {
       await this.minioService.removeObjects([feedbackSettings.logoS3Key]);
     }
 
