@@ -91,6 +91,7 @@ function FeedbackSettings() {
                   uid: '1',
                   name: info.file.name,
                   status: 'done',
+                  // @ts-ignore
                   url: URL.createObjectURL(info.file)
                 }
               ],
@@ -106,9 +107,12 @@ function FeedbackSettings() {
       const initValues = await fetch.get(
         `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`
       );
-      setFormValues(initValues);
 
+      if (initValues) setFormValues(initValues);
+      // @ts-ignore
+      else setFormValues({ formInitializedMarker: true });
       if (!initValues?.logoS3Key) return;
+
       const logo = await fetch.get(
         `${env(
           'NEXT_PUBLIC_SERVER_URL'

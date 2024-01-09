@@ -59,7 +59,7 @@ function defineClientRules(
 
   // Checking subscription
   const curDatetime = new Date();
-  // Possible thanks to putClientToOrg->client.organizations.length err in OrganizationCrudService
+  // Possible thanks to putClientToOrg->ForbiddenException('Client already assigned with other organization') in OrganizationCrudService
   organizationsLoop: for (const organization of user?.organizations || []) {
     for (const subscription of organization?.subscriptions || []) {
       if (new Date(subscription?.validUntil) > curDatetime) {

@@ -36,7 +36,10 @@ export class OrganizationCrudService extends CRUDService {
   async putClientToOrg(org: Organization, clientId: number) {
     const client = await this.userDbService.retrieveUser(clientId);
     if (!client) throw new ForbiddenException();
-    if (client.organizations.length) throw new ForbiddenException();
+    if (client.organizations.filter((org2) => org.id !== org2.id).length)
+      throw new ForbiddenException(
+        'Client already assigned with other organization'
+      );
 
     await this.orgDbService.delClientsFromOrg(org);
     return this.orgDbService.addClientToOrg(client, org);
