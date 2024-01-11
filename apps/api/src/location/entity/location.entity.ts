@@ -5,7 +5,7 @@ import {
   Collection,
   Entity,
   ManyToOne,
-  OneToMany,
+  OneToOne,
   Property
 } from '@mikro-orm/core';
 import { Organization } from '../../organization/entity';
@@ -35,6 +35,6 @@ export class Location extends BaseEntity<Location> implements ILocation {
   @ManyToOne(() => Organization)
   organization: Organization;
 
-  @OneToMany(() => Card, (card) => card.location)
-  cards = new Collection<Card>(this);
+  @OneToOne(() => Card)
+  card: Card;
 }

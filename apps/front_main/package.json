@@ -20,6 +20,7 @@
     "class-transformer": "^0.5.1",
     "class-transformer-validator": "^0.9.1",
     "class-validator": "^0.14.0",
+    "client-zip": "^2.4.4",
     "formik": "^2.2.6",
     "immer": "^10.0.3",
     "lottie-react": "^2.1.0",

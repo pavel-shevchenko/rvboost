@@ -3,6 +3,7 @@ import {
   Entity,
   ManyToMany,
   OneToMany,
+  OneToOne,
   Property
 } from '@mikro-orm/core';
 
@@ -13,6 +14,7 @@ import { PermissionSubject } from 'casl';
 import { Subscription } from '../../subscription/entity';
 import { Location } from '../../location/entity';
 import { CrudEntityFilter } from '../../common/permissions';
+import { FeedbackSettings } from '../../review/entity';
 
 @CrudEntityFilter(PermissionSubject.entityOrganization)
 @Entity({
@@ -42,4 +44,7 @@ export class Organization
 
   @OneToMany(() => Location, (loc) => loc.organization)
   locations = new Collection<Location>(this);
+
+  @OneToOne(() => FeedbackSettings)
+  feedbackSettings: FeedbackSettings;
 }

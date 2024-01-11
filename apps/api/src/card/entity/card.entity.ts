@@ -1,7 +1,7 @@
 import { PermissionSubject } from 'casl';
 import { ICard, RedirectPlatformType } from 'typing';
 import { BaseEntity } from '../../common/entities/base.entity';
-import { Entity, ManyToOne, Property } from '@mikro-orm/core';
+import { Entity, OneToOne, Property } from '@mikro-orm/core';
 import { Location } from '../../location/entity';
 import { CrudEntityFilter } from '../../common/permissions';
 
@@ -22,6 +22,6 @@ export class Card extends BaseEntity<Card> implements ICard {
   @Property({ nullable: true })
   redirectPlatform: RedirectPlatformType;
 
-  @ManyToOne(() => Location)
+  @OneToOne(() => Location, { owner: true })
   location: Location;
 }
