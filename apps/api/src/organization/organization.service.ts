@@ -16,11 +16,11 @@ export class OrganizationService {
   ) {}
 
   async newClient(admin: User, newClientDto: NewClientDto) {
-    const client = await this.userService.createUser(
-      newClientDto.clientEmail,
-      newClientDto.clientPassword,
-      newClientDto.clientName
-    );
+    const client = await this.userService.createUser({
+      email: newClientDto.clientEmail,
+      password: newClientDto.clientPassword,
+      username: newClientDto.clientName
+    });
     const organization = await this.orgDbService.newOrganizationForClient(
       client,
       newClientDto.orgName

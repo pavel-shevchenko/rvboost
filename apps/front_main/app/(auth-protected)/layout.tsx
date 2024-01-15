@@ -1,12 +1,7 @@
-import { redirect } from 'next/navigation';
 import { initUserStore } from '@/services/stores/user';
-import { Routes } from '@/services/helpers/routes';
-import {
-  InitUserStoreAndCrudAuthOnClient,
-  LayoutClientSide
-} from '@/app/(auth-protected)/_components/layout';
+import { LayoutClientSide } from '@/app/(auth-protected)/_components/layout';
 
-// Important for separating zustand-state of users
+// Important for separating zustand-state of users at calling initUserStore()
 export const revalidate = 0;
 
 export default async function PrivateCabinetLayout({
@@ -14,18 +9,9 @@ export default async function PrivateCabinetLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let userStoreInitState; // Check auth and init user store on server
-  try {
-    userStoreInitState = await initUserStore();
-  } catch (e) {
-    redirect(Routes.login);
-  }
-
   return (
     <>
-      <InitUserStoreAndCrudAuthOnClient state={userStoreInitState} />
-
-      <LayoutClientSide userInitState={userStoreInitState}>
+      <LayoutClientSide userInitState={await initUserStore()}>
         {children}
       </LayoutClientSide>
     </>

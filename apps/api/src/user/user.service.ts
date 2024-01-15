@@ -10,11 +10,11 @@ export class UserService {
     private userDbService: UserDbService
   ) {}
 
-  async createUser(email: string, password: string, username: string) {
+  async createUser(dto: { email: string; password: string; username: string }) {
     return this.userDbService.createUserByRequiredEntityDto({
-      email,
-      passwordHash: await this.authService.hashPassword(password),
-      username
+      email: dto.email,
+      passwordHash: await this.authService.hashPassword(dto.password),
+      username: dto.username
     });
   }
 }

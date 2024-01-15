@@ -6,15 +6,15 @@ import { axiosInstance } from '@refinedev/nestjsx-crud';
 import { UserStoreState, useUserStore } from '@/services/stores/user';
 
 export function InitUserStoreAndCrudAuthOnClient({
-  state
+  userInitState
 }: {
-  state: UserStoreState;
+  userInitState: UserStoreState;
 }) {
   useLayoutEffect(() => {
-    useUserStore.setState({ ...state });
+    useUserStore.setState({ ...userInitState });
 
     axiosInstance.defaults.headers.common['Authorization'] =
-      `Bearer ${state.authToken}`;
+      `Bearer ${userInitState.authToken}`;
   }, []);
 
   return <></>;

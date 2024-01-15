@@ -13,6 +13,7 @@ import { defineUserAbility } from 'casl/src/defineUserAbility';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 import { useWindowSize } from '@/services/hooks';
 import {
+  InitUserStoreAndCrudAuthOnClient,
   PrivateCabinetHeader,
   SidebarDesktop,
   SidebarMobile
@@ -91,6 +92,8 @@ export function LayoutClientSide({
 
   return (
     <>
+      <InitUserStoreAndCrudAuthOnClient userInitState={userInitState} />
+
       <CaslContext.Provider value={ability}>
         <Wrapper>
           {!isMobile && <SidebarDesktop collapsed={isDesktopMenuCollapsed} />}

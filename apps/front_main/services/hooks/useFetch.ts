@@ -1,4 +1,5 @@
 import { Routes } from '@/services/helpers/routes';
+import { redirect } from 'next/navigation';
 
 export function useFetch(authToken?: string, redirectOn401 = true) {
   const request = (method: string) => {
@@ -32,16 +33,13 @@ export function useFetch(authToken?: string, redirectOn401 = true) {
     const isJson = response.headers
       ?.get('content-type')
       ?.includes('application/json');
+
     const data = isJson ? await response.json() : response;
     // check for error response
     if (!response.ok) {
-      if (response.status === 401) {
-        // api auto logs out on 401 Unauthorized, so redirect to login page
-        if (typeof location !== 'undefined' && redirectOn401) {
-          location.href = Routes.login;
-        }
+      if (response.status === 401 && redirectOn401) {
+        redirect(Routes.login);
       }
-
       // get errors array from body or default message from response status
       const error = data || response.statusText;
       return Promise.reject(error);

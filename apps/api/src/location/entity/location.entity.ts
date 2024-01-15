@@ -35,6 +35,6 @@ export class Location extends BaseEntity<Location> implements ILocation {
   @ManyToOne(() => Organization)
   organization: Organization;
 
-  @OneToOne(() => Card)
+  @OneToOne(() => Card, (card) => card.location, { owner: false })
   card: Card;
 }

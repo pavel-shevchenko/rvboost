@@ -45,6 +45,8 @@ export class Organization
   @OneToMany(() => Location, (loc) => loc.organization)
   locations = new Collection<Location>(this);
 
-  @OneToOne(() => FeedbackSettings)
+  @OneToOne(() => FeedbackSettings, (fbSettings) => fbSettings.organization, {
+    owner: false
+  })
   feedbackSettings: FeedbackSettings;
 }
