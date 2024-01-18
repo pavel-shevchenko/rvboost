@@ -5,11 +5,14 @@ import { MikroCrudModule } from '../nestjs-crud';
 import { Card } from './entity';
 import { CardCrudService } from './card_crud.service';
 import { CardController } from './card.controller';
+import { CardService } from './card.service';
+import { MinioModule } from '../minio';
+import { CardDbService } from './card_db.service';
 
 @Module({
-  imports: [MikroCrudModule, MikroOrmModule.forFeature([Card])],
+  imports: [MinioModule, MikroCrudModule, MikroOrmModule.forFeature([Card])],
   controllers: [CardController],
-  providers: [CardCrudService],
-  exports: []
+  providers: [CardCrudService, CardService, CardDbService],
+  exports: [CardCrudService]
 })
 export class CardModule {}

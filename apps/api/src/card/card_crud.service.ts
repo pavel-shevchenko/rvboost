@@ -4,8 +4,16 @@ import { PartialType } from '@nestjs/swagger';
 import { MikroCrudServiceFactory } from '../nestjs-crud';
 import { CrudCardDto } from 'validation';
 import { Card } from './entity';
+import { User } from '../user/entity';
+import { CardService } from './card.service';
+import {
+  generateShortLinkCode,
+  getShortLink
+} from '../common/helpers/domainLogic';
 
-class CrudCardDbDto extends CrudCardDto {}
+class CrudCardDbDto extends CrudCardDto {
+  shortLinkCode?: string;
+}
 
 const CRUDService = new MikroCrudServiceFactory({
   entity: Card,
@@ -16,4 +24,17 @@ const CRUDService = new MikroCrudServiceFactory({
 }).product;
 
 @Injectable()
-export class CardCrudService extends CRUDService {}
+export class CardCrudService extends CRUDService {
+  constructor(private readonly cardService: CardService) {
+    super();
+  }
+
+  async create({ data, user }: { data: CrudCardDbDto; user: User }) {
+    const shortLinkCode = generateShortLinkCode();
+    const card = await super.create({ data: { ...data, shortLinkCode }, user });
+
+    this.cardService.generateQR(shortLinkCode, getShortLink(shortLinkCode));
+
+    return card;
+  }
+}

@@ -1,7 +1,10 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
+
 import { MikroCrudControllerFactory } from '../nestjs-crud';
 import { CardCrudService } from './card_crud.service';
 import { JwtAuthGuard } from '../auth/guards';
+import { CardService } from './card.service';
 
 const CRUDController = new MikroCrudControllerFactory<CardCrudService>({
   service: CardCrudService,
@@ -15,7 +18,15 @@ const CRUDController = new MikroCrudControllerFactory<CardCrudService>({
 
 @Controller('card')
 export class CardController extends CRUDController {
-  constructor() {
+  constructor(private readonly cardService: CardService) {
     super();
+  }
+
+  @Get('get-qr-code-image/:shortLinkCode')
+  async getQrCodeImage(
+    @Res() response: FastifyReply,
+    @Param('shortLinkCode') shortLinkCode: string
+  ) {
+    return this.cardService.getQrCodeImage(response, shortLinkCode);
   }
 }

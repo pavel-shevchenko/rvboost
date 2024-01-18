@@ -24,4 +24,7 @@ export class Card extends BaseEntity<Card> implements ICard {
 
   @OneToOne(() => Location, { owner: true })
   location: Location;
+
+  @Property({ nullable: false })
+  shortLinkCode: string;
 }

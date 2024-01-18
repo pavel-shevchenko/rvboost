@@ -57,6 +57,7 @@ export class ReviewController extends CRUDController {
   async getLogoByS3Key(@Param('logoS3Key') logoS3Key: string) {
     if (!(await this.reviewDbService.isLogoS3keyExists(logoS3Key)))
       throw new ForbiddenException();
+
     return this.minioService.getObject(logoS3Key);
   }
 }

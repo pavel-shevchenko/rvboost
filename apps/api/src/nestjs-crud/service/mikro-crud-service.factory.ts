@@ -118,7 +118,7 @@ export class MikroCrudServiceFactory<
 
       async create({ data }: { data: CreateDto; user?: any }): Promise<Entity> {
         const entity = this.repository.create(data);
-        this.repository.persist(entity);
+        await this.repository.persistAndFlush(entity);
         return entity;
       }
 

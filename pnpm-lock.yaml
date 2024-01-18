@@ -74,6 +74,9 @@ importers:
       class-validator:
         specifier: ^0.14.0
         version: 0.14.0
+      content-disposition:
+        specifier: ^0.5.4
+        version: 0.5.4
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
@@ -3712,7 +3715,6 @@ packages:
     engines: {node: '>= 0.6'}
     dependencies:
       safe-buffer: 5.2.1
-    dev: true
 
   /convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}

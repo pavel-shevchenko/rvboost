@@ -5,12 +5,12 @@ import { MikroCrudModule } from '../nestjs-crud';
 import { Location } from './entity';
 import { LocationCrudService } from './location_crud.service';
 import { LocationController } from './location.controller';
-import { LocationDbService } from './location_db.service';
+import { CardModule } from '../card';
 
 @Module({
-  imports: [MikroCrudModule, MikroOrmModule.forFeature([Location])],
+  imports: [CardModule, MikroCrudModule, MikroOrmModule.forFeature([Location])],
   controllers: [LocationController],
-  providers: [LocationCrudService, LocationDbService],
-  exports: [LocationDbService]
+  providers: [LocationCrudService],
+  exports: [LocationCrudService]
 })
 export class LocationModule {}

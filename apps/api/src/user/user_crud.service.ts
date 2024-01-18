@@ -28,18 +28,15 @@ export class UserCrudService extends CRUDService {
   }
 
   async create({ data, user }: { data: CrudUserDbDto; user: User }) {
-    const passwordHash = await this.authService.hashPassword(data.password);
+    data.passwordHash = await this.authService.hashPassword(data.password);
 
-    return await super.create({
-      data: { ...data, passwordHash },
-      user
-    });
+    return super.create({ data, user });
   }
 
   async update({ entity, data }: { entity: User; data: Partial<CrudUserDbDto> }) {
     if (data.password)
       data.passwordHash = await this.authService.hashPassword(data.password);
 
-    return await super.update({ entity, data });
+    return super.update({ entity, data });
   }
 }
