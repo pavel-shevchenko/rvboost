@@ -2,12 +2,13 @@
 
 import { Card, Location } from '@/services/typing/entities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
-import { Checkbox, Form, Input, Select } from 'antd';
-import { useContext } from 'react';
+import { Typography, Checkbox, Col, Form, Input, Row, Select, Space } from 'antd';
+import { useContext, useEffect, useState } from 'react';
 
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { RedirectPlatformEnum } from 'typing/src/enums';
 import { CaslContext } from '@/services/casl/common';
+import { getQrImageLink } from 'business/src/index';
 
 const redirectPlatforms = Object.keys(RedirectPlatformEnum)
   .filter((platform) => platform !== RedirectPlatformEnum.default)
@@ -19,11 +20,18 @@ const redirectPlatforms = Object.keys(RedirectPlatformEnum)
 export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   const ctxCan = useContext(CaslContext);
   const { formProps, saveButtonProps, queryResult } = useForm<Card>();
+  const [qrImageLink, setQrImageLink] = useState('');
 
   const { selectProps: locSelectProps } = useSelect<Location>({
     resource: 'location',
     optionLabel: 'id'
   });
+
+  useEffect(() => {
+    if (queryResult?.data?.data?.shortLinkCode) {
+      setQrImageLink(getQrImageLink(queryResult?.data?.data?.shortLinkCode));
+    }
+  }, [queryResult?.data?.data?.shortLinkCode]);
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
@@ -91,7 +99,25 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
           title="Редактирование карточки QR"
           saveButtonProps={saveButtonProps}
         >
-          {commonForm}
+          <Row gutter={20} align="top">
+            <Col md={17} xs={24}>
+              {commonForm}
+            </Col>
+            {qrImageLink && (
+              <Col md={7} xs={24}>
+                <img src={qrImageLink} width="100%" />
+                <Space
+                  style={{
+                    marginTop: '10px',
+                    width: '100%',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Typography.Link href={qrImageLink}>Скачать</Typography.Link>
+                </Space>
+              </Col>
+            )}
+          </Row>
         </Edit>
       )}
     </>

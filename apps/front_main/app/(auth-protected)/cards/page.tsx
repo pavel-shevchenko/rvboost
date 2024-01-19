@@ -13,6 +13,7 @@ import { Table, Space } from 'antd';
 import { Card } from '@/services/typing/entities';
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { Can, CaslContext } from '@/services/casl/common';
+import { getQrImageLink, getShortLink } from 'business/src/index';
 
 export default function CardList() {
   const ctxCan = useContext(CaslContext);
@@ -30,6 +31,27 @@ export default function CardList() {
       }
     >
       <Table {...tableProps} rowKey="id">
+        <Table.Column
+          dataIndex="shortLinkCode"
+          title="QR"
+          render={(code) => (
+            <a href={getQrImageLink(code)}>
+              <img style={{ width: '30px' }} src={getQrImageLink(code)} />
+            </a>
+          )}
+        />
+        {ctxCan.can(
+          PermissionAction.viewDetailsOnList,
+          PermissionSubject.entityCard
+        ) && (
+          <Table.Column
+            dataIndex="shortLinkCode"
+            title="Link-shorter"
+            render={(code) => (
+              <div style={{ width: '100px' }}>{getShortLink(code)}</div>
+            )}
+          />
+        )}
         <Table.Column
           dataIndex="isReviewInterception"
           title="Перехват отзыва"
