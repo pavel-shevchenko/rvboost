@@ -6,10 +6,8 @@ import { CrudCardDto } from 'validation';
 import { Card } from './entity';
 import { User } from '../user/entity';
 import { CardService } from './card.service';
-import {
-  generateShortLinkCode,
-  getShortLink
-} from '../common/helpers/domainLogic';
+import { generateShortLinkCode } from '../common/helpers/common';
+import { getShortLink } from 'business';
 
 class CrudCardDbDto extends CrudCardDto {
   shortLinkCode?: string;

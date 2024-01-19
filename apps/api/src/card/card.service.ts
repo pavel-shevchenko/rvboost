@@ -3,7 +3,7 @@ import { Transform } from 'stream';
 import * as qrcode from 'qrcode';
 import * as contentDisposition from 'content-disposition';
 import { MinioService } from '../minio';
-import { getS3qrCodeFullKey } from '../common/helpers/domainLogic';
+import { getS3qrCodeFullKey } from '../common/helpers/common';
 import { CardDbService } from './card_db.service';
 import { FastifyReply } from 'fastify';
 
