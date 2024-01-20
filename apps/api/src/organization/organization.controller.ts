@@ -23,8 +23,8 @@ const CRUDController = new MikroCrudControllerFactory<OrganizationCrudService>({
     limit: { max: 200, default: 50 },
     offset: { max: 10_000 },
     expand: {
-      in: ['users'],
-      default: ['users']
+      in: ['users', 'locations.card'],
+      default: ['users', 'locations.card']
     }
   }
 }).applyDecoratorToActions(UseGuards(JwtAuthGuard)).product;
