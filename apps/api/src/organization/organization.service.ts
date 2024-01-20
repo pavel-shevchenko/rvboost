@@ -5,14 +5,15 @@ import { User } from '../user/entity';
 import { OrganizationDbService } from './organization_db.service';
 import { NewClientDto } from 'validation';
 import { LocationCrudService } from '../location';
+import { Location } from '../location/entity';
 
 @Injectable()
 export class OrganizationService {
   constructor(
     @Inject(forwardRef(() => UserService))
-    private userService: UserService,
-    private orgDbService: OrganizationDbService,
-    private locationCrudService: LocationCrudService
+    private readonly userService: UserService,
+    private readonly orgDbService: OrganizationDbService,
+    private readonly locationCrudService: LocationCrudService
   ) {}
 
   async newClient(admin: User, newClientDto: NewClientDto) {
@@ -25,18 +26,23 @@ export class OrganizationService {
       client,
       newClientDto.orgName
     );
+
+    const locationsPromises: Array<Promise<Location>> = [];
     for (const companyData of newClientDto.companies) {
-      this.locationCrudService.create({
-        user: admin,
-        data: {
-          organization: organization.id,
-          name: companyData.companyName,
-          address: companyData.companyAddress,
-          linkDefault: companyData.companyLinkDefault,
-          linkGoogle: companyData.companyLinkGoogle,
-          linkTrustPilot: companyData.companyLinkTrustPilot
-        }
-      });
+      locationsPromises.push(
+        this.locationCrudService.create({
+          user: admin,
+          data: {
+            organization: organization.id,
+            name: companyData.companyName,
+            address: companyData.companyAddress,
+            linkDefault: companyData.companyLinkDefault,
+            linkGoogle: companyData.companyLinkGoogle,
+            linkTrustPilot: companyData.companyLinkTrustPilot
+          }
+        })
+      );
     }
+    return await Promise.all(locationsPromises);
   }
 }

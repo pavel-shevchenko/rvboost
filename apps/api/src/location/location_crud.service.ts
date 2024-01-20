@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PartialType } from '@nestjs/swagger';
+import { EntityManager } from '@mikro-orm/postgresql';
 
 import { MikroCrudServiceFactory } from '../nestjs-crud';
 import { CrudLocationDto } from 'validation';
@@ -19,18 +20,18 @@ const CRUDService = new MikroCrudServiceFactory({
 
 @Injectable()
 export class LocationCrudService extends CRUDService {
-  constructor(private readonly cardCrudService: CardCrudService) {
+  constructor(
+    private readonly cardCrudService: CardCrudService,
+    private readonly em: EntityManager
+  ) {
     super();
   }
 
   async create({ data, user }: { data: CrudLocationDbDto; user: User }) {
     const location = await super.create({ data, user });
 
-    location.card = await this.cardCrudService.create({
-      user,
-      data: { location: location.id }
-    });
+    await this.cardCrudService.create({ user, data: { location: location.id } });
 
-    return location;
+    return this.em.refresh(location, { populate: ['card'] });
   }
 }
