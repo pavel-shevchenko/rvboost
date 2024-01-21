@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 
 import { OrganizationDbService } from '../organization';
@@ -10,9 +10,11 @@ export class LinkShorterService {
   constructor(private readonly organizationDbService: OrganizationDbService) {}
 
   async redirect(response: FastifyReply, shortLinkCode: string) {
+    if (!shortLinkCode) throw new ForbiddenException();
     const organization =
       await this.organizationDbService.populatedOrgByShortLinkCode(shortLinkCode);
-    const location = organization.locations[0];
+    const location = organization?.locations[0];
+    if (!location) throw new ForbiddenException();
 
     // Если у QR кода включена опция перехвата отзывов - переадресуем пользователя на сервис перехвата отзывов
     const curDatetime = new Date();
