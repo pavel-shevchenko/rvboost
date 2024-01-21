@@ -13,6 +13,7 @@ export class LinkShorterService {
     if (!shortLinkCode) throw new ForbiddenException();
     const organization =
       await this.organizationDbService.populatedOrgByShortLinkCode(shortLinkCode);
+
     const location = organization?.locations[0];
     if (!location) throw new ForbiddenException();
 
