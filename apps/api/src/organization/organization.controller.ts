@@ -59,4 +59,9 @@ export class OrganizationController extends CRUDController {
   newClient(@Request() req: AppRequest, @Body() newClientDto: NewClientDto) {
     return this.orgService.newClient(req.user, newClientDto);
   }
+
+  @Get('get-populated-org-for-review-interception-secured52735/:shortLinkCode')
+  getOrgForReviewInterception(@Param('shortLinkCode') shortLinkCode: string) {
+    return this.orgDbService.populatedOrgByShortLinkCode(shortLinkCode);
+  }
 }

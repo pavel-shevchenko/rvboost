@@ -7,12 +7,12 @@ import { RedirectPlatformEnum } from 'typing';
 
 @Injectable()
 export class LinkShorterService {
-  constructor(private readonly organizationDbService: OrganizationDbService) {}
+  constructor(private readonly orgDbService: OrganizationDbService) {}
 
   async redirect(response: FastifyReply, shortLinkCode: string) {
     if (!shortLinkCode) throw new ForbiddenException();
     const organization =
-      await this.organizationDbService.populatedOrgByShortLinkCode(shortLinkCode);
+      await this.orgDbService.populatedOrgByShortLinkCode(shortLinkCode);
 
     const location = organization?.locations[0];
     if (!location) throw new ForbiddenException();
