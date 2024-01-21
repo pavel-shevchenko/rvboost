@@ -1,3 +1,6 @@
+export const getReviewFormLink = (code: string) =>
+  `https://form.rvboost.me/${code}`;
+
 export const getShortLink = (code: string) => `https://link.rvboost.me/${code}`;
 
 export const getQrImageLink = (code: string) =>

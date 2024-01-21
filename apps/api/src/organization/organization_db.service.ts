@@ -3,6 +3,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { UserRoleInOrgEnum, UserRoleInOrgType } from 'typing';
 import { Organization, UserRoleInOrganization } from './entity';
 import { User } from '../user/entity';
+import { PopulateHint } from '@mikro-orm/core';
 
 @Injectable()
 export class OrganizationDbService {
@@ -74,5 +75,27 @@ export class OrganizationDbService {
       role: UserRoleInOrgEnum.client
     });
     return this.em.remove(pivots);
+  }
+
+  populatedOrgByShortLinkCode(shortLinkCode: string) {
+    return this.em.findOne(
+      Organization,
+      {
+        locations: {
+          card: {
+            shortLinkCode
+          }
+        }
+      },
+      {
+        populate: [
+          'users',
+          'locations.card',
+          'feedbackSettings',
+          'subscriptions'
+        ],
+        populateWhere: PopulateHint.INFER
+      }
+    );
   }
 }
