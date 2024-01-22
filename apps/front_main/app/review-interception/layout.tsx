@@ -8,6 +8,8 @@ const Wrapper = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  max-width: 300px;
+  margin: 0 auto;
 
   @media (min-width: ${breakpoints.small}) {
     padding-left: 1.5rem;

@@ -4,12 +4,13 @@ import {
   ForbiddenException,
   Get,
   Param,
+  ParseIntPipe,
   Post,
+  Put,
   Request,
   UseGuards
 } from '@nestjs/common';
 
-import { FeedbackSettingsDto } from 'validation';
 import { MikroCrudControllerFactory } from '../nestjs-crud';
 import { ReviewCrudService } from './review_crud.service';
 import { JwtAuthGuard } from '../auth/guards';
@@ -17,6 +18,7 @@ import { ReviewService } from './review.service';
 import { AppRequest } from '../common/typing';
 import { MinioService } from '../minio';
 import { ReviewDbService } from './review_db.service';
+import { CrudReviewDto } from 'validation';
 
 const CRUDController = new MikroCrudControllerFactory<ReviewCrudService>({
   service: ReviewCrudService,
@@ -59,5 +61,23 @@ export class ReviewController extends CRUDController {
       throw new ForbiddenException();
 
     return this.minioService.getObject(logoS3Key);
+  }
+
+  @Post('new-review-interception-evaluation')
+  async newReviewInterceptionEvaluation(@Body() reviewDto: CrudReviewDto) {
+    return this.reviewService.newReviewInterceptionEvaluation(reviewDto);
+  }
+
+  @Put('put-review-interception/:shortLinkCode/:reviewId')
+  async putReviewInterception(
+    @Body() reviewDto: CrudReviewDto,
+    @Param('shortLinkCode') shortLinkCode: string,
+    @Param('reviewId', new ParseIntPipe()) reviewId: number
+  ) {
+    return this.reviewService.putReviewInterceptionBadText(
+      shortLinkCode,
+      reviewId,
+      reviewDto.reviewText
+    );
   }
 }

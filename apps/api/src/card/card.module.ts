@@ -13,6 +13,6 @@ import { CardDbService } from './card_db.service';
   imports: [MinioModule, MikroCrudModule, MikroOrmModule.forFeature([Card])],
   controllers: [CardController],
   providers: [CardCrudService, CardService, CardDbService],
-  exports: [CardCrudService]
+  exports: [CardCrudService, CardDbService]
 })
 export class CardModule {}

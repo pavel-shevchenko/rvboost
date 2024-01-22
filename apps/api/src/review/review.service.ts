@@ -7,7 +7,7 @@ import type { MultipartValue, MultipartFile } from '@fastify/multipart';
 
 import { ReviewDbService } from './review_db.service';
 import { User } from '../user/entity';
-import { FeedbackSettingsDto } from 'validation';
+import { CrudReviewDto, FeedbackSettingsDto } from 'validation';
 import {
   addFastifyMultipartFieldToDto,
   createDtoValidator
@@ -16,6 +16,8 @@ import { OrganizationDbService } from '../organization';
 import { MinioService } from '../minio';
 import { UploadedObjectInfo } from 'minio';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { ReviewCrudService } from './review_crud.service';
+import { CardDbService } from '../card';
 
 const fbSettingsDtoValidate = createDtoValidator(FeedbackSettingsDto);
 
@@ -23,13 +25,14 @@ const fbSettingsDtoValidate = createDtoValidator(FeedbackSettingsDto);
 export class ReviewService {
   constructor(
     private readonly minioService: MinioService,
+    private readonly reviewCrudService: ReviewCrudService,
     private readonly reviewDbService: ReviewDbService,
-    private readonly organizationDbService: OrganizationDbService
+    private readonly cardDbService: CardDbService,
+    private readonly orgDbService: OrganizationDbService
   ) {}
 
   async getFeedbackSettings(user: User) {
-    const organizations =
-      await this.organizationDbService.getOrganizationsByClient(user);
+    const organizations = await this.orgDbService.getOrganizationsByClient(user);
     if (!organizations.length) throw new ForbiddenException();
     const assignedOrg = organizations[0];
 
@@ -50,8 +53,7 @@ export class ReviewService {
       requestEmailRequired: false
     } as FeedbackSettingsDto;
 
-    const organizations =
-      await this.organizationDbService.getOrganizationsByClient(user);
+    const organizations = await this.orgDbService.getOrganizationsByClient(user);
     if (!organizations.length) throw new ForbiddenException();
     const assignedOrg = organizations[0];
 
@@ -106,5 +108,28 @@ export class ReviewService {
         organization: assignedOrg
       });
     }
+  }
+
+  async newReviewInterceptionEvaluation(reviewDto: CrudReviewDto) {
+    const review = await this.reviewCrudService.create({ data: reviewDto });
+
+    return review;
+  }
+
+  async putReviewInterceptionBadText(
+    shortLinkCode: string,
+    reviewId: number,
+    reviewText: string
+  ) {
+    if (!shortLinkCode || !reviewId || !reviewText)
+      throw new ForbiddenException();
+
+    const card = await this.cardDbService.getByShortLinkCode(shortLinkCode);
+    const review = await this.reviewDbService.getById(reviewId);
+    if (card.location.id !== review.location.id) throw new ForbiddenException();
+
+    review.reviewText = reviewText;
+    review.isBadFormCollected = true;
+    this.reviewDbService.saveReview(review);
   }
 }

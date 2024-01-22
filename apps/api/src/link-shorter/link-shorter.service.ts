@@ -31,7 +31,9 @@ export class LinkShorterService {
 
     // Если у QR кода включена опция переадресации по кастомной ссылке - то переадресуем пользователя на кастомную ссылку из QR
     if (location.card.isCustomLinkRedirect) {
-      const customLink = location.card.linkCustom || location.linkDefault;
+      let customLink = location.linkDefault;
+      if (location.card.linkCustom && location.card.isCustomLinkRedirect)
+        customLink = location.card.linkCustom;
 
       return response.redirect(307, customLink);
     }

@@ -24,14 +24,33 @@ export default async function FormPage({ params }: { params: { code: string } })
   if (!org || !fbSettings || !location || !card?.isReviewInterception) {
     return notFound();
   }
+  let linkDefault = location.linkDefault;
+  if (card.linkCustom && card.isCustomLinkRedirect) linkDefault = card.linkCustom;
 
   const data: ReviewInterceptionHydration = {
+    locationId: location.id,
     shortLinkCode: params.code,
+    ratingThreshold: fbSettings?.ratingThreshold || 0,
     logo: fbSettings.logoS3Key
       ? `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/logo-by-s3key/${
           fbSettings.logoS3Key
         }`
-      : undefined
+      : undefined,
+    whetherRequestUsername: fbSettings.whetherRequestUsername,
+    requestUsernameRequired: fbSettings.requestUsernameRequired,
+    whetherRequestPhone: fbSettings.whetherRequestPhone,
+    requestPhoneRequired: fbSettings.requestPhoneRequired,
+    whetherRequestEmail: fbSettings.whetherRequestEmail,
+    requestEmailRequired: fbSettings.requestEmailRequired,
+    questionTitle: fbSettings.questionTitle,
+    questionDescr: fbSettings.questionDescr,
+    badReviewRequestText: fbSettings.badReviewRequestText,
+    badReviewOnSubmitText: fbSettings.badReviewOnSubmitText,
+    externalResourceAskingText: fbSettings.externalResourceAskingText,
+    redirectPlatform: fbSettings.redirectPlatform || [],
+    linkDefault,
+    linkGoogle: location.linkGoogle,
+    linkTrustPilot: location.linkTrustPilot
   };
 
   return <ClientSideForm {...{ data }} />;
