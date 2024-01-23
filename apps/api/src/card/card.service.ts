@@ -21,7 +21,7 @@ export class CardService {
         callback();
       }
     });
-    qrcode.toFileStream(stream, link);
+    qrcode.toFileStream(stream, link, { width: 1024 });
     this.minioService.putObject(getS3qrCodeFullKey(s3shortKey), stream);
   }
 
