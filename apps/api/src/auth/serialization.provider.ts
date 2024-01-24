@@ -16,6 +16,6 @@ export class AuthSerializer extends PassportSerializer {
   serializeUser = (user: User, request: Request) => ({ id: +user.id });
 
   async deserializeUser(payload: { id: number }, request: Request) {
-    return await this.userDbService.getPassportUserById(payload.id);
+    return this.userDbService.getPassportUserById(payload.id);
   }
 }
