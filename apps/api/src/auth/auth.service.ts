@@ -14,6 +14,10 @@ import { User } from '../user/entity';
 import { UserService, UserDbService } from '../user';
 import { MailService } from '../mail';
 import * as process from 'process';
+import { UserSocialAuth } from './entity';
+import { EntityManager } from '@mikro-orm/postgresql';
+import { SocialAuthProvider } from '../common/typing/social_auth.types';
+import { FastifyReply } from 'fastify';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +27,7 @@ export class AuthService {
     @Inject(forwardRef(() => UserDbService))
     private readonly userDbService: UserDbService,
     private readonly jwtService: JwtService,
+    private readonly em: EntityManager,
     private readonly mailService: MailService
   ) {}
 
@@ -73,6 +78,43 @@ export class AuthService {
 
     if (user && oldAndNewPasswordsEquals) return user;
     throw new UnauthorizedException({ password: 'Пароль не подходит' });
+  }
+
+  async addSocialAuth(
+    user: User,
+    provider: SocialAuthProvider,
+    socialId: string
+  ) {
+    const socialAuth = this.em.create(UserSocialAuth, {
+      user,
+      provider,
+      socialId
+    });
+    await this.em.persistAndFlush(socialAuth);
+
+    return socialAuth;
+  }
+
+  showSocialAuthSuccess(user: User, res: FastifyReply) {
+    const { access_token } = this.getAuthTokenWithUser(user);
+
+    res.header('Content-Type', 'text/html');
+    res.send(`
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Authenticated</title>
+  </head>
+  <body>
+    <h2>Authenticated successful!</h2>
+
+    <script type="text/javascript">
+      window.opener.socialsAuthCallback('${access_token}');
+      window.close();
+    </script>
+  </body>
+</html>
+    `);
   }
 
   async resetPassword(email: string) {

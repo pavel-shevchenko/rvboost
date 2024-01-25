@@ -34,6 +34,7 @@ type UserStoreActions = {
   login: (dto: LocalLoginDto) => Promise<void>;
   register: (dto: LocalRegistrationDto) => Promise<void>;
   logout: () => void;
+  loadUserAndPersistToken: (authToken: string) => Promise<void>;
   changeUsername: (username: string) => void;
 };
 
@@ -68,10 +69,23 @@ export const useUserStore = create<UserStore>()(
       const authToken = res?.access_token;
       const currentUser = res?.user;
 
-      setCookie(AuthCookieName, authToken);
+      // Important await before redirect to have actual state after redirect
+      await setCookie(AuthCookieName, authToken);
       set({ authToken, ...currentUser });
     },
     logout: () => delCookie(AuthCookieName),
+    loadUserAndPersistToken: async (authToken: string) => {
+      if (!authToken) return;
+
+      const fetch = useFetch(authToken);
+      const currentUser = await fetch.get(
+        `${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`
+      );
+
+      // Important await before redirect to have actual state after redirect
+      await setCookie(AuthCookieName, authToken);
+      set({ authToken, ...currentUser });
+    },
     changeUsername: (username: string) => set({ username })
   }))
 );

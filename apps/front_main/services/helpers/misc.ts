@@ -1,5 +1,5 @@
 export function prefixUrlWithHttp(url: string) {
-  if (url.indexOf("http") !== 0) return "http://" + url;
+  if (url.indexOf('http') !== 0) return 'http://' + url;
   else return url;
 }
 
@@ -10,7 +10,7 @@ export function getFormData(data: Record<string, any>) {
       fd.append(key, data[key]);
     } else {
       for (const dataEl of data[key]) {
-        fd.append(key + "[]", dataEl);
+        fd.append(key + '[]', dataEl);
       }
     }
   }
@@ -30,3 +30,5 @@ export const declOfNum = (
   if (num == 1) return words[0];
   return words[2];
 };
+
+export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);

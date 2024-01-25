@@ -16,6 +16,7 @@
     "@refinedev/nestjsx-crud": "^5.0.0",
     "@refinedev/nextjs-router": "^5.5.4",
     "antd": "5.12.1",
+    "business": "workspace:*",
     "casl": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-transformer-validator": "^0.9.1",
@@ -29,6 +30,7 @@
     "next-runtime-env": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-google-button": "^0.7.2",
     "react-headroom": "^3.1.0",
     "react-icons": "4.12.0",
     "react-perfect-scrollbar": "^1.5.8",
@@ -36,7 +38,6 @@
     "styled-components": "^5.3.1",
     "typing": "workspace:*",
     "validation": "workspace:*",
-    "business": "workspace:*",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

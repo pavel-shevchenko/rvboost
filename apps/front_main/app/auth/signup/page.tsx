@@ -6,13 +6,21 @@ import { Formik } from 'formik';
 import { LoadingOverlay } from '@/app/_components/common';
 import { FormErrorText } from '@/app/_components/common/forms';
 import { InputWrapper, TextInput } from '@/app/_components/common/forms';
-import { AuthButton, AuthCard, AuthFormLabel } from '@/app/auth/_components';
+import {
+  AuthButton,
+  AuthCard,
+  AuthFormLabel,
+  ContinueWith,
+  GoogleStyledButton
+} from '@/app/auth/_components';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
 import { SignupFormHeader } from '@/app/auth/signup/_components';
 import { useUserStore } from '@/services/stores/user';
 import { useRouter } from 'next/navigation';
 import { Routes } from '@/services/helpers/routes';
 import { createFormikValidator } from '@/services/helpers/validation';
+import { useSocialsAuth } from '@/services/hooks';
+import { SocialAuthProvider } from '@/services/typing/misc';
 
 const registerValidate = createFormikValidator(LocalRegistrationDto, {
   validator: {
@@ -24,6 +32,7 @@ export default function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const register = useUserStore((state) => state.register);
   const router = useRouter();
+  const { openSocialAuth } = useSocialsAuth();
 
   const registerSubmit = async (
     dto: LocalRegistrationDto,
@@ -111,10 +120,10 @@ export default function Signup() {
           )}
         </Formik>
 
-        {/*
-          <ContinueWith />
-          <GoogleButton GoogleSignin={GoogleSignin} />
-          */}
+        <ContinueWith />
+        <GoogleStyledButton
+          onClick={() => openSocialAuth(SocialAuthProvider.google)}
+        />
       </AuthCard>
     </>
   );

@@ -1,7 +1,9 @@
 import {
+  Cascade,
   Collection,
   Entity,
   ManyToMany,
+  OneToMany,
   Property,
   Unique
 } from '@mikro-orm/core';
@@ -11,6 +13,7 @@ import { PermissionSubject } from 'casl';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Organization, UserRoleInOrganization } from '../../organization/entity';
 import { CrudEntityFilter } from '../../common/permissions';
+import { UserSocialAuth } from '../../auth/entity';
 
 @CrudEntityFilter(PermissionSubject.entityUser)
 @Entity({
@@ -21,11 +24,16 @@ export class User extends BaseEntity<User> implements IUser {
   @Property()
   email: string;
 
-  @Property({ hidden: true })
-  passwordHash: string;
+  @Property({ hidden: true, nullable: true })
+  passwordHash?: string;
 
   @Property({ hidden: true, nullable: true })
   passwordResetToken: string;
+
+  @OneToMany(() => UserSocialAuth, (socAuth) => socAuth.user, {
+    cascade: [Cascade.REMOVE]
+  })
+  socialAuths: UserSocialAuth[];
 
   @Property({ nullable: true })
   username: string;

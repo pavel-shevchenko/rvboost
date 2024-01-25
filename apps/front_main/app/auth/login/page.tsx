@@ -10,12 +10,20 @@ import { colors } from '@/app/_components/root-layout/styles';
 import { LoadingOverlay } from '@/app/_components/common';
 import { FormErrorText } from '@/app/_components/common/forms';
 import { InputWrapper, TextInput } from '@/app/_components/common/forms';
-import { AuthButton, AuthCard, AuthFormLabel } from '@/app/auth/_components';
+import {
+  AuthButton,
+  AuthCard,
+  AuthFormLabel,
+  ContinueWith,
+  GoogleStyledButton
+} from '@/app/auth/_components';
 import { LoginFormHeader } from '@/app/auth/login/_components';
 import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { useUserStore } from '@/services/stores/user';
 import { Routes } from '@/services/helpers/routes';
 import { createFormikValidator } from '@/services/helpers/validation';
+import { useSocialsAuth } from '@/services/hooks';
+import { SocialAuthProvider } from '@/services/typing/misc';
 
 const loginValidate = createFormikValidator(LocalLoginDto);
 
@@ -53,6 +61,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const login = useUserStore((state) => state.login);
   const router = useRouter();
+  const { openSocialAuth } = useSocialsAuth();
 
   const loginSubmit = async (
     dto: LocalLoginDto,
@@ -136,10 +145,10 @@ export default function Login() {
           </ForgotPassword>
         </ForgotPasswordWrapper>
 
-        {/*
-          <ContinueWith />
-          <GoogleButton GoogleSignin={GoogleSignin} />
-          */}
+        <ContinueWith />
+        <GoogleStyledButton
+          onClick={() => openSocialAuth(SocialAuthProvider.google)}
+        />
       </AuthCard>
     </>
   );

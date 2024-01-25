@@ -8,7 +8,7 @@ export class UserDbService {
   constructor(private readonly em: EntityManager) {}
 
   async createUserByRequiredEntityDto(data: RequiredEntityData<User>) {
-    const user: User = this.em.create<User>(User, data);
+    const user = this.em.create(User, data);
     await this.em.persistAndFlush(user);
 
     return user;
@@ -39,5 +39,9 @@ export class UserDbService {
   }
 
   getPassportUserPopulates = () =>
-    ['organizations.users', 'organizations.subscriptions'] as const;
+    [
+      'socialAuths',
+      'organizations.users',
+      'organizations.subscriptions'
+    ] as const;
 }
