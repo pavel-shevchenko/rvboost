@@ -22,8 +22,8 @@ export type UserStoreState = User & {
 type UserStoreActions = {
   login: (dto: LocalLoginDto) => Promise<void>;
   register: (dto: LocalRegistrationDto) => Promise<void>;
-  logout: () => void;
   loadUserAndPersistToken: (authToken: string) => Promise<void>;
+  logout: () => void;
   changeUsername: (username: string) => void;
 };
 
@@ -36,6 +36,7 @@ export const useUserStore = create<UserStore>()(
     email: '',
     username: '',
     isAdmin: null,
+
     login: async (dto: LocalLoginDto) => {
       const fetch = useFetch('_STUB', false);
       const res = await fetch.post(
@@ -62,7 +63,6 @@ export const useUserStore = create<UserStore>()(
       // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
     },
-    logout: () => delCookie(AuthCookieName),
     loadUserAndPersistToken: async (authToken: string) => {
       const currentUser = await loadCurUserOrRedirectToLogin(authToken);
 
@@ -70,6 +70,7 @@ export const useUserStore = create<UserStore>()(
       // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
     },
+    logout: () => delCookie(AuthCookieName),
     changeUsername: (username: string) => set({ username })
   }))
 );
