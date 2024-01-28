@@ -52,7 +52,7 @@ async function getFilterOutsideCaslResponsibility(
   if (isAnonymous) throw new ForbiddenException();
 
   // Next to the end is getting the filter for the client in the current business-logic:
-  const pivots = await em.find<UserRoleInOrganization>(UserRoleInOrganization, {
+  const pivots = await em.find(UserRoleInOrganization, {
     user,
     role: UserRoleInOrgEnum.client
   });
