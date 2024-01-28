@@ -1,7 +1,7 @@
 'use client';
 
 import { useLayoutEffect } from 'react';
-import { axiosInstance } from '@refinedev/nestjsx-crud';
+import { axiosInstance as refineCrudAxios } from '@refinedev/nestjsx-crud';
 
 import { UserStoreState, useUserStore } from '@/services/stores/user';
 
@@ -15,7 +15,7 @@ export function InitUserStoreAndCrudAuthOnClient({
 
     useUserStore.setState({ ...userInitState });
 
-    axiosInstance.defaults.headers.common['Authorization'] =
+    refineCrudAxios.defaults.headers.common['Authorization'] =
       `Bearer ${userInitState.authToken}`;
   }, [userInitState]);
 
