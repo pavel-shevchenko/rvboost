@@ -1,4 +1,4 @@
-import { initUserStore } from '@/services/stores/user';
+import { initUserStoreByAuthCookie } from '@/services/stores/user';
 import { LayoutClientSide } from '@/app/(auth-protected)/_components/layout';
 
 export default async function PrivateCabinetLayout({
@@ -8,7 +8,7 @@ export default async function PrivateCabinetLayout({
 }) {
   return (
     <>
-      <LayoutClientSide userInitState={await initUserStore()}>
+      <LayoutClientSide userInitState={await initUserStoreByAuthCookie()}>
         {children}
       </LayoutClientSide>
     </>

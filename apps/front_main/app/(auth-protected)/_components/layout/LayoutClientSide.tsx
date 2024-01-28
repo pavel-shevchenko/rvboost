@@ -62,10 +62,10 @@ export function LayoutClientSide({
   userInitState
 }: {
   children: React.ReactNode;
-  userInitState: UserStoreState;
+  userInitState: UserStoreState | undefined;
 }) {
   const ability = useMemo(
-    () => defineUserAbility(userInitState),
+    () => userInitState && defineUserAbility(userInitState),
     [userInitState]
   );
   //handle antd sidebar rerender issue
@@ -94,76 +94,78 @@ export function LayoutClientSide({
     <>
       <InitUserStoreAndCrudAuthOnClient userInitState={userInitState} />
 
-      <CaslContext.Provider value={ability}>
-        <Wrapper>
-          {!isMobile && <SidebarDesktop collapsed={isDesktopMenuCollapsed} />}
-          <Content>
-            <PrivateCabinetHeader
-              collapsed={isDesktopMenuCollapsed}
-              onCollapseChange={handleCollapseChange}
-            />
-            {showMobileMenu && (
-              <SidebarMobile toggleMobileMenu={toggleShowMobileMenu} />
-            )}
-            <Main>
-              <ConfigProvider theme={RefineThemes.Blue}>
-                <ContentWrapper id="primaryLayout">
-                  <Refine
-                    routerProvider={routerProvider}
-                    dataProvider={dataProvider(
-                      `${env('NEXT_PUBLIC_SERVER_URL')}/api`
-                    )}
-                    resources={[
-                      {
-                        name: 'user',
-                        list: Routes.users,
-                        create: `${Routes.users}/create`,
-                        edit: `${Routes.users}/edit/:id`
-                      },
-                      {
-                        name: 'organization',
-                        list: Routes.companies,
-                        create: `${Routes.companies}/create`,
-                        edit: `${Routes.companies}/edit/:id`
-                      },
-                      {
-                        name: 'subscription',
-                        list: Routes.subscriptions,
-                        create: `${Routes.subscriptions}/create`,
-                        edit: `${Routes.subscriptions}/edit/:id`
-                      },
-                      {
-                        name: 'location',
-                        list: Routes.locations,
-                        create: `${Routes.locations}/create`,
-                        edit: `${Routes.locations}/edit/:id`
-                      },
-                      {
-                        name: 'card',
-                        list: Routes.cards,
-                        create: `${Routes.cards}/create`,
-                        edit: `${Routes.cards}/edit/:id`
-                      },
-                      {
-                        name: 'review',
-                        list: Routes.reviews,
-                        create: `${Routes.reviews}/create`,
-                        edit: `${Routes.reviews}/edit/:id`
-                      }
-                    ]}
-                    options={{
-                      syncWithLocation: true
-                    }}
-                    notificationProvider={notificationProvider}
-                  >
-                    {children}
-                  </Refine>
-                </ContentWrapper>
-              </ConfigProvider>
-            </Main>
-          </Content>
-        </Wrapper>
-      </CaslContext.Provider>
+      {ability && (
+        <CaslContext.Provider value={ability}>
+          <Wrapper>
+            {!isMobile && <SidebarDesktop collapsed={isDesktopMenuCollapsed} />}
+            <Content>
+              <PrivateCabinetHeader
+                collapsed={isDesktopMenuCollapsed}
+                onCollapseChange={handleCollapseChange}
+              />
+              {showMobileMenu && (
+                <SidebarMobile toggleMobileMenu={toggleShowMobileMenu} />
+              )}
+              <Main>
+                <ConfigProvider theme={RefineThemes.Blue}>
+                  <ContentWrapper id="primaryLayout">
+                    <Refine
+                      routerProvider={routerProvider}
+                      dataProvider={dataProvider(
+                        `${env('NEXT_PUBLIC_SERVER_URL')}/api`
+                      )}
+                      resources={[
+                        {
+                          name: 'user',
+                          list: Routes.users,
+                          create: `${Routes.users}/create`,
+                          edit: `${Routes.users}/edit/:id`
+                        },
+                        {
+                          name: 'organization',
+                          list: Routes.companies,
+                          create: `${Routes.companies}/create`,
+                          edit: `${Routes.companies}/edit/:id`
+                        },
+                        {
+                          name: 'subscription',
+                          list: Routes.subscriptions,
+                          create: `${Routes.subscriptions}/create`,
+                          edit: `${Routes.subscriptions}/edit/:id`
+                        },
+                        {
+                          name: 'location',
+                          list: Routes.locations,
+                          create: `${Routes.locations}/create`,
+                          edit: `${Routes.locations}/edit/:id`
+                        },
+                        {
+                          name: 'card',
+                          list: Routes.cards,
+                          create: `${Routes.cards}/create`,
+                          edit: `${Routes.cards}/edit/:id`
+                        },
+                        {
+                          name: 'review',
+                          list: Routes.reviews,
+                          create: `${Routes.reviews}/create`,
+                          edit: `${Routes.reviews}/edit/:id`
+                        }
+                      ]}
+                      options={{
+                        syncWithLocation: true
+                      }}
+                      notificationProvider={notificationProvider}
+                    >
+                      {children}
+                    </Refine>
+                  </ContentWrapper>
+                </ConfigProvider>
+              </Main>
+            </Content>
+          </Wrapper>
+        </CaslContext.Provider>
+      )}
     </>
   );
 }

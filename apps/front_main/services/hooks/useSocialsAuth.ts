@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { env } from 'next-runtime-env';
 
@@ -20,9 +20,11 @@ export const useSocialsAuth = () => {
   const router = useRouter();
   const lUaPt = useUserStore((state) => state.loadUserAndPersistToken);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // @ts-ignore
     window.socialsAuthCallback = async (authToken: string) => {
+      if (!authToken) throw new Error('Empty authToken!');
+
       await lUaPt(authToken);
       router.push(Routes.dashboard);
     };

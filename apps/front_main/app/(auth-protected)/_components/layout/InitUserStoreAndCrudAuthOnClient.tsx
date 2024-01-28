@@ -8,14 +8,16 @@ import { UserStoreState, useUserStore } from '@/services/stores/user';
 export function InitUserStoreAndCrudAuthOnClient({
   userInitState
 }: {
-  userInitState: UserStoreState;
+  userInitState: UserStoreState | undefined;
 }) {
   useLayoutEffect(() => {
+    if (!userInitState) return;
+
     useUserStore.setState({ ...userInitState });
 
     axiosInstance.defaults.headers.common['Authorization'] =
       `Bearer ${userInitState.authToken}`;
-  }, []);
+  }, [userInitState]);
 
   return <></>;
 }

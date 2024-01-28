@@ -14,12 +14,16 @@ import { User } from '@/services/typing/entities';
 
 const AuthCookieName = 'auth_token';
 
-export const initUserStore = async () => {
-  const authToken = await getCookie(AuthCookieName);
+const loadCurrentUser = async (authToken: string) => {
   const fetch = useFetch(authToken);
-  const currentUser = await fetch.get(
-    `${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`
-  );
+  return fetch.get(`${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`);
+};
+
+export const initUserStoreByAuthCookie = async () => {
+  const authToken = await getCookie(AuthCookieName);
+  if (!authToken) return;
+
+  const currentUser = await loadCurrentUser(authToken);
 
   const state: UserStoreState = { authToken, ...currentUser };
   useUserStore.setState(state);
@@ -75,13 +79,7 @@ export const useUserStore = create<UserStore>()(
     },
     logout: () => delCookie(AuthCookieName),
     loadUserAndPersistToken: async (authToken: string) => {
-      if (!authToken) return;
-
-      const fetch = useFetch(authToken);
-      const currentUser = await fetch.get(
-        `${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`
-      );
-
+      const currentUser = await loadCurrentUser(authToken);
       // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
       set({ authToken, ...currentUser });
