@@ -33,18 +33,6 @@ export class OrganizationCrudService extends CRUDService {
     super();
   }
 
-  async putClientToOrg(org: Organization, clientId: number) {
-    const client = await this.userDbService.retrieveUser(clientId);
-    if (!client) throw new ForbiddenException();
-    if (client.organizations.filter((org2) => org.id !== org2.id).length)
-      throw new ForbiddenException(
-        'Client already assigned with other organization'
-      );
-
-    await this.orgDbService.delClientsFromOrg(org);
-    return this.orgDbService.addClientToOrg(client, org);
-  }
-
   async create({ data, user }: { data: CrudOrganizationDbDto; user: User }) {
     const newEntity = await super.create({
       data: { ...data },
@@ -65,5 +53,17 @@ export class OrganizationCrudService extends CRUDService {
     await this.putClientToOrg(entity, data.user.id);
 
     return super.update({ entity, data });
+  }
+
+  async putClientToOrg(org: Organization, clientId: number) {
+    const client = await this.userDbService.retrieveUser(clientId);
+    if (!client) throw new ForbiddenException();
+    if (client.organizations.filter((org2) => org.id !== org2.id).length)
+      throw new ForbiddenException(
+        'Client already assigned with other organization'
+      );
+
+    await this.orgDbService.delClientsFromOrg(org);
+    return this.orgDbService.addClientToOrg(client, org);
   }
 }
