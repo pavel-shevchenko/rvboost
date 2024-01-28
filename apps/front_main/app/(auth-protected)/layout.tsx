@@ -1,5 +1,5 @@
-import { initUserStoreByAuthCookie } from '@/services/stores/user';
 import { LayoutClientSide } from '@/app/(auth-protected)/_components/layout';
+import { initUserStoreByAuthCookie } from '@/services/server-actions';
 
 export default async function PrivateCabinetLayout({
   children

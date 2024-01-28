@@ -5,29 +5,14 @@ import { env } from 'next-runtime-env';
 import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
 import { useFetch } from '@/services/hooks';
-import {
-  getCookie,
-  setCookie,
-  delCookie
-} from '@/services/server-actions/cookie';
+import { setCookie, delCookie } from '@/services/server-actions/cookie';
 import { User } from '@/services/typing/entities';
 
-const AuthCookieName = 'auth_token';
+export const AuthCookieName = 'auth_token';
 
-const loadCurrentUser = async (authToken: string) => {
+export const loadCurrentUser = async (authToken: string) => {
   const fetch = useFetch(authToken);
   return fetch.get(`${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`);
-};
-
-export const initUserStoreByAuthCookie = async () => {
-  const authToken = await getCookie(AuthCookieName);
-  if (!authToken) return;
-
-  const currentUser = await loadCurrentUser(authToken);
-
-  const state: UserStoreState = { authToken, ...currentUser };
-  useUserStore.setState(state);
-  return state;
 };
 
 export type UserStoreState = User & {
