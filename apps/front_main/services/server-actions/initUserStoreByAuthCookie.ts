@@ -12,9 +12,8 @@ export const initUserStoreByAuthCookie = async () => {
   'use server';
 
   const authToken = await getCookie(AuthCookieName);
-  if (!authToken) return;
 
-  const currentUser = await loadCurrentUser(authToken);
+  const currentUser = await loadCurrentUser(String(authToken));
 
   const state: UserStoreState = { authToken, ...currentUser };
   useUserStore.setState(state);
