@@ -5,7 +5,7 @@ import { env } from 'next-runtime-env';
 import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
 import { useFetch } from '@/services/hooks';
-import { setCookie, delCookie } from '@/services/server-actions/cookie';
+import { setCookie, delCookie } from '@/services/helpers/cookie';
 import { User } from '@/services/typing/entities';
 
 export const AuthCookieName = 'auth_token';

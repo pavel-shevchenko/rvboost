@@ -1,6 +1,6 @@
 'use server';
 
-import { getCookie } from '@/services/server-actions/cookie';
+import { getCookie } from '@/services/helpers/cookie';
 import {
   AuthCookieName,
   loadCurrentUser,
