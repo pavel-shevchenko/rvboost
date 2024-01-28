@@ -73,16 +73,17 @@ export const useUserStore = create<UserStore>()(
       const authToken = res?.access_token;
       const currentUser = res?.user;
 
+      set({ authToken, ...currentUser });
       // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
-      set({ authToken, ...currentUser });
     },
     logout: () => delCookie(AuthCookieName),
     loadUserAndPersistToken: async (authToken: string) => {
       const currentUser = await loadCurrentUser(authToken);
+
+      set({ authToken, ...currentUser });
       // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
-      set({ authToken, ...currentUser });
     },
     changeUsername: (username: string) => set({ username })
   }))
