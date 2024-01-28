@@ -3,7 +3,7 @@
 import { getCookie } from '@/services/helpers/cookie';
 import {
   AuthCookieName,
-  loadCurrentUser,
+  loadCurUserOrRedirectToLogin,
   UserStoreState,
   useUserStore
 } from '@/services/stores/user';
@@ -13,7 +13,7 @@ export const initUserStoreByAuthCookie = async () => {
 
   const authToken = await getCookie(AuthCookieName);
 
-  const currentUser = await loadCurrentUser(String(authToken));
+  const currentUser = await loadCurUserOrRedirectToLogin(String(authToken));
 
   const state: UserStoreState = { authToken, ...currentUser };
   useUserStore.setState(state);

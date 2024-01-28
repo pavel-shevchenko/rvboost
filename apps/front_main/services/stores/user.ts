@@ -10,7 +10,7 @@ import { User } from '@/services/typing/entities';
 
 export const AuthCookieName = 'auth_token';
 
-export const loadCurrentUser = async (authToken: string) => {
+export const loadCurUserOrRedirectToLogin = async (authToken: string) => {
   const fetch = useFetch(authToken);
   return fetch.get(`${env('NEXT_PUBLIC_SERVER_URL')}/api/user/current-user-info`);
 };
@@ -64,7 +64,7 @@ export const useUserStore = create<UserStore>()(
     },
     logout: () => delCookie(AuthCookieName),
     loadUserAndPersistToken: async (authToken: string) => {
-      const currentUser = await loadCurrentUser(authToken);
+      const currentUser = await loadCurUserOrRedirectToLogin(authToken);
 
       set({ authToken, ...currentUser });
       // Important await before redirect to have actual state after redirect
