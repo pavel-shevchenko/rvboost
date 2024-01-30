@@ -1,6 +1,6 @@
 'use client';
 
-import { Location, Organization } from '@/services/typing/entities';
+import { Location, Organization } from '@/services/typing/apiEntities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Form, Input, Select } from 'antd';
 

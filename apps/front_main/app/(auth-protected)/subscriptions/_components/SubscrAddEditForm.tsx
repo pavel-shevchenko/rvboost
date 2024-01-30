@@ -1,6 +1,6 @@
 'use client';
 
-import { Subscription, Organization } from '@/services/typing/entities';
+import { Subscription, Organization } from '@/services/typing/apiEntities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Form, Input, Select } from 'antd';
 import moment from 'moment/moment';

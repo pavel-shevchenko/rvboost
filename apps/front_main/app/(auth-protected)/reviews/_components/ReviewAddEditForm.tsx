@@ -4,7 +4,7 @@ import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Checkbox, Form, Input, Select } from 'antd';
 import moment from 'moment';
 
-import { Review, Location } from '@/services/typing/entities';
+import { Review, Location } from '@/services/typing/apiEntities';
 import { RedirectPlatformEnum } from 'typing/src/enums';
 
 const redirectPlatforms = Object.keys(RedirectPlatformEnum).map((platform) => ({

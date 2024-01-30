@@ -7,6 +7,7 @@ import {
   IUser
 } from 'typing';
 
+// Справочник ответов от API:
 export type User = IUser & { id: number; password?: string };
 export type Organization = IOrganization & {
   id: number;

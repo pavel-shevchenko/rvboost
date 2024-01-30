@@ -12,7 +12,7 @@ import { useContext } from 'react';
 import moment from 'moment/moment';
 
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
-import { Review } from '@/services/typing/entities';
+import { Review } from '@/services/typing/apiEntities';
 import { Can, CaslContext } from '@/services/casl/common';
 
 export default function ReviewsPage() {

@@ -1,4 +1,4 @@
-import { Location } from '@/services/typing/entities';
+import { Location } from '@/services/typing/apiEntities';
 import { downloadZip, InputWithoutMeta } from 'client-zip';
 import { getQrImageLink } from 'business/src/index';
 

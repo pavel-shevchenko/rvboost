@@ -1,9 +1,9 @@
 'use client';
 
-import { Location } from '@/services/typing/entities';
+import { Location } from '@/services/typing/apiEntities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Button, Form, Input, Select } from 'antd';
-import { Organization, User } from '@/services/typing/entities';
+import { Organization, User } from '@/services/typing/apiEntities';
 import { downloadOrganizationQR } from '@/services/helpers/downloadOrganizationQR';
 
 export const OrgAddEditForm = ({ isEdit }: { isEdit: boolean }) => {

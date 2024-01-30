@@ -22,7 +22,7 @@ import { useFetch } from '@/services/hooks';
 import { useUserStore } from '@/services/stores/user';
 import { createFieldDataErrorsPopulate } from '@/services/helpers/validation';
 import { useState } from 'react';
-import { Location } from '@/services/typing/entities';
+import { Location } from '@/services/typing/apiEntities';
 import { downloadOrganizationQR } from '@/services/helpers/downloadOrganizationQR';
 
 const companiesFieldEmptyItem = {

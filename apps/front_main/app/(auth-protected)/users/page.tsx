@@ -10,7 +10,7 @@ import {
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
 
-import { User } from '@/services/typing/entities';
+import { User } from '@/services/typing/apiEntities';
 
 export default function UserList() {
   const { pageCount, tableProps } = useTable<User>({

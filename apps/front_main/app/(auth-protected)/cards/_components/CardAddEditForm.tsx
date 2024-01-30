@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Location } from '@/services/typing/entities';
+import { Card, Location } from '@/services/typing/apiEntities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Typography, Checkbox, Col, Form, Input, Row, Select, Space } from 'antd';
 import { useContext, useEffect, useState } from 'react';

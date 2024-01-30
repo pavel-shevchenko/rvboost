@@ -10,7 +10,7 @@ import {
 import { useContext } from 'react';
 import { Table, Space } from 'antd';
 
-import { Location } from '@/services/typing/entities';
+import { Location } from '@/services/typing/apiEntities';
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { Can, CaslContext } from '@/services/casl/common';
 

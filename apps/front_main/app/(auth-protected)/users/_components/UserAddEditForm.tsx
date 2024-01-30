@@ -3,7 +3,7 @@
 import { useForm, Edit, Create } from '@refinedev/antd';
 import { Form, Input, Checkbox } from 'antd';
 
-import { User } from '@/services/typing/entities';
+import { User } from '@/services/typing/apiEntities';
 
 export const UserAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   const { formProps, saveButtonProps, queryResult } = useForm<User>();

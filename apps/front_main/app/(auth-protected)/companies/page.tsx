@@ -9,7 +9,7 @@ import {
 } from '@refinedev/antd';
 import { Table, Space } from 'antd';
 
-import { Organization } from '@/services/typing/entities';
+import { Organization } from '@/services/typing/apiEntities';
 
 export default function OrganizationList() {
   const { pageCount, tableProps } = useTable<Organization>({

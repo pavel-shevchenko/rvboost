@@ -6,7 +6,7 @@ import { LocalLoginDto } from 'validation/src/dto/local_login';
 import { LocalRegistrationDto } from 'validation/src/dto/local_registration';
 import { useFetch } from '@/services/hooks';
 import { setCookie, delCookie } from '@/services/helpers/cookie';
-import { User } from '@/services/typing/entities';
+import { User } from '@/services/typing/apiEntities';
 
 export const AuthCookieName = 'auth_token';
 

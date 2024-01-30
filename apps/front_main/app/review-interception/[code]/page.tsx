@@ -6,7 +6,7 @@ import { env } from 'next-runtime-env';
 import { useFetch } from '@/services/hooks';
 import ClientSideForm from '@/app/review-interception/[code]/_components/ClientSideForm';
 import { ReviewInterceptionHydration } from '@/services/typing';
-import { Card, Location, Organization } from '@/services/typing/entities';
+import { Card, Location, Organization } from '@/services/typing/apiEntities';
 
 export default async function FormPage({ params }: { params: { code: string } }) {
   const fetch = useFetch();

@@ -10,7 +10,7 @@ import {
 import { Table, Space } from 'antd';
 import moment from 'moment/moment';
 
-import { Subscription } from '@/services/typing/entities';
+import { Subscription } from '@/services/typing/apiEntities';
 
 export default function SubscriptionList() {
   const { pageCount, tableProps } = useTable<Subscription>({
