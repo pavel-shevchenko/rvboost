@@ -4,13 +4,12 @@ import * as minio from 'minio';
 import { MinioService } from './minio.service';
 import { MINIO_CLIENT } from './minio_client.token';
 
-let minioConnection: minio.Client;
-
 const minioClientFactory = {
   provide: MINIO_CLIENT,
-  useFactory: () => {
-    if (!minioConnection) {
-      minioConnection = new minio.Client({
+  useFactory: function () {
+    // На свойстве обработчика инстанс клиента потому что он должен оказаться в old_space области Node.js
+    if (!this.minioConnection) {
+      this.minioConnection = new minio.Client({
         endPoint: 'minio',
         port: 9000,
         useSSL: false,
@@ -18,7 +17,8 @@ const minioClientFactory = {
         secretKey: process.env?.MINIO_ROOT_PASSWORD
       });
     }
-    return minioConnection;
+
+    return this.minioConnection;
   }
 };
 
