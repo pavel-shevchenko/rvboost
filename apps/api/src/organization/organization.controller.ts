@@ -22,6 +22,7 @@ const CRUDController = new MikroCrudControllerFactory<OrganizationCrudService>({
   query: {
     limit: { max: 200, default: 50 },
     offset: { max: 10_000 },
+    order: { in: ['id:desc'], default: ['id:desc'] },
     expand: {
       in: ['users', 'locations.card'],
       default: ['users', 'locations.card']

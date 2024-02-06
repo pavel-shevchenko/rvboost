@@ -198,20 +198,20 @@ export class MikroCrudControllerFactory<
         // @ts-ignore: Maybe needs `typeof`
         @Query() queryParam: queryParamsClass,
         // @ts-ignore: Maybe needs `typeof`
-        @Body() queryDto: queryDtoClass,
+        // @Body() queryDto: queryDtoClass,
         // @ts-ignore: Maybe needs `typeof`
         @ReqUser user: reqUserType
       ): Promise<{ total: number; data: Array<Entity> }> {
         const { filterQueryParam, orderQueryParam } =
           this.standardizeQueryArrayParams(queryParam);
         const { total, results } = await this.service.query({
-          limit: queryParam?.limit || queryDto?.limit || QUERY_DEFAULT_LIMIT,
-          offset: queryParam?.offset || queryDto?.offset || QUERY_DEFAULT_OFFSET,
-          filter: queryDto?.filter,
+          limit: queryParam?.limit || QUERY_DEFAULT_LIMIT,
+          offset: queryParam?.offset || QUERY_DEFAULT_OFFSET,
+          filter: {}, // queryDto?.filter
           filterQueryParam,
-          order: queryDto?.order,
+          order: {}, // queryDto?.order
           orderQueryParam,
-          expand: queryDto?.expand || queryParam?.expand,
+          expand: queryParam?.expand,
           user
         });
         await Promise.all(
@@ -219,7 +219,7 @@ export class MikroCrudControllerFactory<
             async (entity) =>
               await this.service.adjustPopulationStatus({
                 entity,
-                expand: queryDto?.expand || queryParam?.expand
+                expand: queryParam?.expand
               })
           )
         );
@@ -234,11 +234,20 @@ export class MikroCrudControllerFactory<
           filterQueryParam = queryArgs['filter[]'];
         else if (queryArgs['filter[]'] && String(queryArgs['filter[]']).length)
           filterQueryParam = [queryArgs['filter[]']];
+        else if (Array.isArray(queryArgs['filter']))
+          filterQueryParam = queryArgs['filter'];
+        else if (queryArgs['filter'] && String(queryArgs['filter']).length)
+          filterQueryParam = [queryArgs['filter']];
+
         let orderQueryParam = [];
         if (Array.isArray(queryArgs['order[]']))
           orderQueryParam = queryArgs['order[]'];
         else if (queryArgs['order[]'] && String(queryArgs['order[]']).length)
           orderQueryParam = [queryArgs['order[]']];
+        else if (Array.isArray(queryArgs['order']))
+          orderQueryParam = queryArgs['order'];
+        else if (queryArgs['order'] && String(queryArgs['order']).length)
+          orderQueryParam = [queryArgs['order']];
 
         return { filterQueryParam, orderQueryParam };
       }

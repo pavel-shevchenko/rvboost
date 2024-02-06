@@ -12,7 +12,8 @@ const CRUDController = new MikroCrudControllerFactory<CardCrudService>({
   lookup: { field: 'id' },
   query: {
     limit: { max: 200, default: 50 },
-    offset: { max: 10_000 }
+    offset: { max: 10_000 },
+    order: { in: ['id:desc'], default: ['id:desc'] }
   }
 }).applyDecoratorToActions(UseGuards(JwtAuthGuard)).product;
 
