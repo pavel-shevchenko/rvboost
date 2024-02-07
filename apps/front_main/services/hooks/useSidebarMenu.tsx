@@ -11,7 +11,8 @@ import {
   ShoppingOutlined,
   PlusCircleOutlined,
   UserOutlined,
-  StopOutlined
+  StopOutlined,
+  LinkOutlined
 } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -96,6 +97,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
         },
         {
           id: 8,
+          name: 'Шортссылки',
+          route: Routes.links,
+          icon: <LinkOutlined />
+        },
+        {
+          id: 9,
           name: 'Отзывы',
           route: Routes.reviews,
           icon: <MessageOutlined />

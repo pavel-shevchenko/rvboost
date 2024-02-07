@@ -11,6 +11,7 @@ export const Routes = {
   subscriptions: '/subscriptions',
   locations: '/locations',
   cards: '/cards',
+  links: '/links',
   reviews: '/reviews',
   feedbackSettings: '/feedback'
 };
