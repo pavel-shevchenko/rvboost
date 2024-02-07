@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Radio,
   Switch,
   Col,
   Form,
@@ -108,7 +109,13 @@ function FeedbackSettings() {
         `${env('NEXT_PUBLIC_SERVER_URL')}/api/review/feedback-settings`
       );
 
-      if (initValues) setFormValues(initValues);
+      if (initValues) {
+        if (initValues?.redirectPlatform?.length)
+          initValues.redirectPlatform = initValues.redirectPlatform.pop();
+        if (initValues?.ratingThreshold)
+          initValues.ratingThreshold = initValues.ratingThreshold / 2;
+        setFormValues(initValues);
+      }
       // @ts-ignore
       else setFormValues({ formInitializedMarker: true });
       if (!initValues?.logoS3Key) return;
@@ -145,6 +152,10 @@ function FeedbackSettings() {
       if (key === 'logo') continue;
       if (Array.isArray(value))
         value.map((item) => formData.append(key + '[]', item));
+      else if (key === 'ratingThreshold')
+        formData.append(key, String(parseFloat(value as string) * 2));
+      else if (key === 'redirectPlatform')
+        formData.append(key + '[]', String(value));
       else if (value) formData.append(key, value as string);
     }
     if (values.logo) {
@@ -202,7 +213,7 @@ function FeedbackSettings() {
             label="Порог оценки"
             name="ratingThreshold"
             rules={[{ required: true }]}
-            extra="От 1 до 10, разделитель дроби - точка"
+            extra="От 1 до 5, разделитель дроби - точка"
           >
             <Input />
           </Form.Item>
@@ -211,7 +222,7 @@ function FeedbackSettings() {
             name="redirectPlatform"
             labelCol={{ span: 24 }}
           >
-            <Checkbox.Group options={redirectPlatforms} />
+            <Radio.Group options={redirectPlatforms} />
           </Form.Item>
           <Form.Item
             label="Текст с просьбой оставить отзыв на внешнем ресурсе"
