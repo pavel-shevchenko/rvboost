@@ -43,14 +43,14 @@ export class ReviewController extends CRUDController {
 
   @UseGuards(JwtAuthGuard)
   @Get('feedback-settings')
-  async getFeedbackSettings(@Request() req: AppRequest) {
-    return this.reviewService.getFeedbackSettings(req.user);
+  async getFeedbackSettingsForClient(@Request() req: AppRequest) {
+    return this.reviewService.getFeedbackSettingsForClient(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('feedback-settings')
-  async saveFeedbackSettings(@Request() req: AppRequest) {
-    return this.reviewService.saveFeedbackSettings(
+  async saveFeedbackSettingsForClient(@Request() req: AppRequest) {
+    return this.reviewService.saveFeedbackSettingsForClient(
       req.user,
       req.parts({ limits: { fileSize: 10 * 1024 * 1024 } })
     );

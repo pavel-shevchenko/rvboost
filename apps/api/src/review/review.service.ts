@@ -18,6 +18,7 @@ import { UploadedObjectInfo } from 'minio';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { ReviewCrudService } from './review_crud.service';
 import { CardDbService } from '../card';
+import { Organization } from '../organization/entity';
 
 const fbSettingsDtoValidate = createDtoValidator(FeedbackSettingsDto);
 
@@ -31,16 +32,31 @@ export class ReviewService {
     private readonly orgDbService: OrganizationDbService
   ) {}
 
-  async getFeedbackSettings(user: User) {
-    const organizations = await this.orgDbService.getOrganizationsByClient(user);
+  async getOrganizationByClient(client: User) {
+    const organizations =
+      await this.orgDbService.getOrganizationsByClient(client);
     if (!organizations.length) throw new ForbiddenException();
-    const assignedOrg = organizations[0];
 
-    return this.reviewDbService.getFeedbackSettingsByOrg(assignedOrg);
+    return organizations[0];
+  }
+
+  async getFeedbackSettingsForClient(client: User) {
+    const organization = await this.getOrganizationByClient(client);
+
+    return this.reviewDbService.getFeedbackSettingsByOrg(organization);
+  }
+
+  async saveFeedbackSettingsForClient(
+    client: User,
+    mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
+  ) {
+    const organization = await this.getOrganizationByClient(client);
+
+    return this.saveFeedbackSettings(organization, mpAsyncIterator);
   }
 
   async saveFeedbackSettings(
-    user: User,
+    assignedOrg: Organization,
     mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
   ) {
     const feedbackSettingsDto = {
@@ -52,10 +68,6 @@ export class ReviewService {
       whetherRequestEmail: false,
       requestEmailRequired: false
     } as FeedbackSettingsDto;
-
-    const organizations = await this.orgDbService.getOrganizationsByClient(user);
-    if (!organizations.length) throw new ForbiddenException();
-    const assignedOrg = organizations[0];
 
     let logoUploadRes: UploadedObjectInfo;
     let isLogoRemovingRequested = false;
