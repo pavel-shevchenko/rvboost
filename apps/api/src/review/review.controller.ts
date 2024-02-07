@@ -36,6 +36,7 @@ export class ReviewController extends CRUDController {
   constructor(
     private readonly minioService: MinioService,
     private readonly reviewService: ReviewService,
+    private readonly reviewCrudService: ReviewCrudService,
     private readonly reviewDbService: ReviewDbService
   ) {
     super();
@@ -66,7 +67,7 @@ export class ReviewController extends CRUDController {
 
   @Post('new-review-interception-evaluation')
   async newReviewInterceptionEvaluation(@Body() reviewDto: CrudReviewDto) {
-    return this.reviewService.newReviewInterceptionEvaluation(reviewDto);
+    return this.reviewCrudService.create({ data: reviewDto });
   }
 
   @Put('put-review-interception/:shortLinkCode/:reviewId')

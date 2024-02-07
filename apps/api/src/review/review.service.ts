@@ -3,11 +3,11 @@ import {
   ForbiddenException,
   Injectable
 } from '@nestjs/common';
-import type { MultipartValue, MultipartFile } from '@fastify/multipart';
+import type { MultipartFile, MultipartValue } from '@fastify/multipart';
 
 import { ReviewDbService } from './review_db.service';
 import { User } from '../user/entity';
-import { CrudReviewDto, FeedbackSettingsDto } from 'validation';
+import { FeedbackSettingsDto } from 'validation';
 import {
   addFastifyMultipartFieldToDto,
   createDtoValidator
@@ -16,7 +16,6 @@ import { OrganizationDbService } from '../organization';
 import { MinioService } from '../minio';
 import { UploadedObjectInfo } from 'minio';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
-import { ReviewCrudService } from './review_crud.service';
 import { CardDbService } from '../card';
 import { Organization } from '../organization/entity';
 
@@ -26,7 +25,6 @@ const fbSettingsDtoValidate = createDtoValidator(FeedbackSettingsDto);
 export class ReviewService {
   constructor(
     private readonly minioService: MinioService,
-    private readonly reviewCrudService: ReviewCrudService,
     private readonly reviewDbService: ReviewDbService,
     private readonly cardDbService: CardDbService,
     private readonly orgDbService: OrganizationDbService
@@ -56,7 +54,7 @@ export class ReviewService {
   }
 
   async saveFeedbackSettings(
-    assignedOrg: Organization,
+    organization: Organization,
     mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
   ) {
     const feedbackSettingsDto = {
@@ -73,7 +71,7 @@ export class ReviewService {
     let isLogoRemovingRequested = false;
     const newLogoS3Key = 'fb_settings_logo__' + randomStringGenerator();
     const feedbackSettings =
-      await this.reviewDbService.getFeedbackSettingsByOrg(assignedOrg);
+      await this.reviewDbService.getFeedbackSettingsByOrg(organization);
 
     for await (const part of mpAsyncIterator) {
       if (part.type === 'file' && part.fieldname === 'logo') {
@@ -117,15 +115,9 @@ export class ReviewService {
     } else {
       await this.reviewDbService.createFeedbackSettings({
         ...feedbackSettingsDto,
-        organization: assignedOrg
+        organization
       });
     }
-  }
-
-  async newReviewInterceptionEvaluation(reviewDto: CrudReviewDto) {
-    const review = await this.reviewCrudService.create({ data: reviewDto });
-
-    return review;
   }
 
   async putReviewInterceptionBadText(
