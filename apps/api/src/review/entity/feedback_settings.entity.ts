@@ -59,6 +59,6 @@ export class FeedbackSettings
   @Property({ default: false })
   requestEmailRequired: boolean;
 
-  @OneToOne(() => Organization, { owner: true, hidden: true })
+  @OneToOne(() => Organization, { owner: true })
   organization: Organization;
 }

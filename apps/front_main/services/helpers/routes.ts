@@ -13,5 +13,7 @@ export const Routes = {
   cards: '/cards',
   links: '/links',
   reviews: '/reviews',
-  feedbackSettings: '/feedback'
-};
+  feedbackSettings: '/feedback',
+  fbSettingsCreate: '/feedback/create',
+  fbSettingsEdit: (id: string) => `/feedback/edit/${id}`
+} as const;

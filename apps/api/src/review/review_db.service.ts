@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { QueryOrderMap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Organization } from '../organization/entity';
@@ -8,6 +9,10 @@ import { FeedbackSettingsDto } from 'validation';
 @Injectable()
 export class ReviewDbService {
   constructor(private readonly em: EntityManager) {}
+
+  getFbSettingsList(orderBy: QueryOrderMap<FeedbackSettings> = { id: 'desc' }) {
+    return this.em.find(FeedbackSettings, {}, { orderBy });
+  }
 
   getFeedbackSettingsByOrg(organization: Organization) {
     return this.em.findOne(FeedbackSettings, { organization });
@@ -33,6 +38,15 @@ export class ReviewDbService {
 
   async getById(id: number) {
     return this.em.findOne(Review, { id }, { populate: ['location'] });
+  }
+
+  async getFbSettingsById(id: number) {
+    return this.em.findOne(FeedbackSettings, { id });
+  }
+
+  async deleteFbSettings(feedbackSettings: FeedbackSettings) {
+    this.em.remove([feedbackSettings]);
+    await this.em.flush();
   }
 
   async saveReview(review: Review) {

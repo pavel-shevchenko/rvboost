@@ -103,6 +103,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
         },
         {
           id: 9,
+          name: 'Сбор отзывов',
+          route: Routes.feedbackSettings,
+          icon: <StopOutlined />
+        },
+        {
+          id: 10,
           name: 'Отзывы',
           route: Routes.reviews,
           icon: <MessageOutlined />

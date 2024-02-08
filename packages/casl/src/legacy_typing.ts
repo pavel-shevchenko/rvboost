@@ -8,6 +8,7 @@ export const PermissionSubject = {
   entityLocation: 'entityLocation',
   entityCard: 'entityCard',
   entityReview: 'entityReview',
+  entityFbSettings: 'entityFbSettings',
   pageNewClient: 'pageNewClient',
   pageCompanies: 'pageCompanies'
 } as const;

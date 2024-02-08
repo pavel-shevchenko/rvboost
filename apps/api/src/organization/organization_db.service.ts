@@ -37,6 +37,14 @@ export class OrganizationDbService {
     return organization;
   }
 
+  async getOrgWithFbSettingsById(id: number) {
+    return this.em.findOne(
+      Organization,
+      { id },
+      { populate: ['feedbackSettings'] }
+    );
+  }
+
   async getOrganizationsByOwner(user: User) {
     return this.getOrganizationsByUserAndRole(user, UserRoleInOrgEnum.owner);
   }

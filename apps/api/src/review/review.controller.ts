@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   ForbiddenException,
   Get,
   Param,
@@ -53,6 +54,58 @@ export class ReviewController extends CRUDController {
   async saveFeedbackSettingsForClient(@Request() req: AppRequest) {
     return this.reviewService.saveFeedbackSettingsForClient(
       req.user,
+      req.parts({ limits: { fileSize: 10 * 1024 * 1024 } })
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('feedback-settings-list')
+  async getFbSettingsListForAdmin(@Request() req: AppRequest) {
+    return this.reviewService.getFbSettingsListForAdmin(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('feedback-settings/:fbSettingsId')
+  async delFeedbackSettingsByAdmin(
+    @Request() req: AppRequest,
+    @Param('fbSettingsId', new ParseIntPipe()) fbSettingsId: number
+  ) {
+    return this.reviewService.delFeedbackSettingsByAdmin(req.user, fbSettingsId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('feedback-settings/:fbSettingsId')
+  async getFeedbackSettingsForAdmin(
+    @Request() req: AppRequest,
+    @Param('fbSettingsId', new ParseIntPipe()) fbSettingsId: number
+  ) {
+    return this.reviewService.getFeedbackSettingsForAdmin(req.user, fbSettingsId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('feedback-settings/:organizationId')
+  async addFeedbackSettingsByAdmin(
+    @Request() req: AppRequest,
+    @Param('organizationId', new ParseIntPipe()) organizationId: number
+  ) {
+    return this.reviewService.addFeedbackSettingsByAdmin(
+      req.user,
+      organizationId,
+      req.parts({ limits: { fileSize: 10 * 1024 * 1024 } })
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('feedback-settings/:organizationId/:fbSettingsId')
+  async saveFeedbackSettingsForAdmin(
+    @Request() req: AppRequest,
+    @Param('organizationId', new ParseIntPipe()) organizationId: number,
+    @Param('fbSettingsId', new ParseIntPipe()) fbSettingsId: number
+  ) {
+    return this.reviewService.saveFeedbackSettingsForAdmin(
+      req.user,
+      organizationId,
+      fbSettingsId,
       req.parts({ limits: { fileSize: 10 * 1024 * 1024 } })
     );
   }

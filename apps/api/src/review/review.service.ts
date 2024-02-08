@@ -18,6 +18,8 @@ import { UploadedObjectInfo } from 'minio';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { CardDbService } from '../card';
 import { Organization } from '../organization/entity';
+import { defineUserAbility, PermissionSubject } from 'casl';
+import { FeedbackSettings } from './entity';
 
 const fbSettingsDtoValidate = createDtoValidator(FeedbackSettingsDto);
 
@@ -44,6 +46,74 @@ export class ReviewService {
     return this.reviewDbService.getFeedbackSettingsByOrg(organization);
   }
 
+  async getFeedbackSettingsForAdmin(admin: User, fbSettingsId: number) {
+    const userAbility = defineUserAbility(admin);
+    if (userAbility.cannot('manage', PermissionSubject.entityFbSettings))
+      throw new ForbiddenException();
+
+    return this.reviewDbService.getFbSettingsById(fbSettingsId);
+  }
+
+  async delFeedbackSettingsByAdmin(admin: User, fbSettingsId: number) {
+    const userAbility = defineUserAbility(admin);
+    if (userAbility.cannot('manage', PermissionSubject.entityFbSettings))
+      throw new ForbiddenException();
+
+    const fbSettings = await this.reviewDbService.getFbSettingsById(fbSettingsId);
+    if (fbSettings?.logoS3Key) {
+      await this.minioService.removeObjects([fbSettings.logoS3Key]);
+    }
+
+    return this.reviewDbService.deleteFbSettings(fbSettings);
+  }
+
+  async getFbSettingsListForAdmin(admin: User) {
+    const userAbility = defineUserAbility(admin);
+    if (userAbility.cannot('manage', PermissionSubject.entityFbSettings))
+      throw new ForbiddenException();
+
+    return this.reviewDbService.getFbSettingsList();
+  }
+
+  async addFeedbackSettingsByAdmin(
+    admin: User,
+    organizationId: number,
+    mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
+  ) {
+    const userAbility = defineUserAbility(admin);
+    if (userAbility.cannot('manage', PermissionSubject.entityFbSettings))
+      throw new ForbiddenException();
+
+    const organization =
+      await this.orgDbService.getOrgWithFbSettingsById(organizationId);
+    if (organization?.feedbackSettings?.id) throw new ForbiddenException();
+
+    return this.saveFeedbackSettings(organization, mpAsyncIterator);
+  }
+
+  async saveFeedbackSettingsForAdmin(
+    admin: User,
+    organizationId: number,
+    fbSettingsId: number,
+    mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
+  ) {
+    const userAbility = defineUserAbility(admin);
+    if (userAbility.cannot('manage', PermissionSubject.entityFbSettings))
+      throw new ForbiddenException();
+
+    const organization =
+      await this.orgDbService.getOrgWithFbSettingsById(organizationId);
+    const fbSettings = await this.reviewDbService.getFbSettingsById(fbSettingsId);
+
+    if (
+      organization?.feedbackSettings?.id &&
+      organization?.feedbackSettings?.id !== fbSettings.id
+    )
+      throw new ForbiddenException();
+
+    return this.saveFeedbackSettings(organization, mpAsyncIterator, fbSettings);
+  }
+
   async saveFeedbackSettingsForClient(
     client: User,
     mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
@@ -55,7 +125,8 @@ export class ReviewService {
 
   async saveFeedbackSettings(
     organization: Organization,
-    mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
+    mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>,
+    feedbackSettings?: FeedbackSettings
   ) {
     const feedbackSettingsDto = {
       redirectPlatform: [],
@@ -67,11 +138,13 @@ export class ReviewService {
       requestEmailRequired: false
     } as FeedbackSettingsDto;
 
+    if (!feedbackSettings) {
+      feedbackSettings =
+        await this.reviewDbService.getFeedbackSettingsByOrg(organization);
+    }
     let logoUploadRes: UploadedObjectInfo;
     let isLogoRemovingRequested = false;
     const newLogoS3Key = 'fb_settings_logo__' + randomStringGenerator();
-    const feedbackSettings =
-      await this.reviewDbService.getFeedbackSettingsByOrg(organization);
 
     for await (const part of mpAsyncIterator) {
       if (part.type === 'file' && part.fieldname === 'logo') {
@@ -110,7 +183,10 @@ export class ReviewService {
 
     if (feedbackSettings) {
       await this.reviewDbService.saveFeedbackSettings(
-        Object.assign(feedbackSettings, feedbackSettingsDto)
+        Object.assign(feedbackSettings, {
+          ...feedbackSettingsDto,
+          organization
+        })
       );
     } else {
       await this.reviewDbService.createFeedbackSettings({
