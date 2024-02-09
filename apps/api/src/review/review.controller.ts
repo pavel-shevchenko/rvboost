@@ -28,7 +28,11 @@ const CRUDController = new MikroCrudControllerFactory<ReviewCrudService>({
   query: {
     limit: { max: 200, default: 50 },
     offset: { max: 10_000 },
-    order: { in: ['id:desc'], default: ['id:desc'] }
+    order: { in: ['id:desc'], default: ['id:desc'] },
+    expand: {
+      in: ['location'],
+      default: ['location']
+    }
   }
 }).applyDecoratorToActions(UseGuards(JwtAuthGuard)).product;
 
