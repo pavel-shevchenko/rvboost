@@ -24,7 +24,7 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
 
   const { selectProps: locSelectProps } = useSelect<Location>({
     resource: 'location',
-    optionLabel: 'id'
+    optionLabel: 'nameDashAddress'
   });
 
   useEffect(() => {

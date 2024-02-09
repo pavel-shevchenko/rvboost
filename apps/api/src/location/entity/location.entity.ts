@@ -23,6 +23,11 @@ export class Location extends BaseEntity<Location> implements ILocation {
   @Property({ nullable: false })
   address: string;
 
+  @Property({ persist: false })
+  get nameDashAddress() {
+    return `${this.name}-${this.address}`;
+  }
+
   @Property({ nullable: false })
   linkDefault: string;
 
