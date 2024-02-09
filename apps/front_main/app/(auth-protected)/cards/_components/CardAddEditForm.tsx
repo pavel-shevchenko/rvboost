@@ -2,13 +2,26 @@
 
 import { Card, Location } from '@/services/typing/apiEntities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
-import { Typography, Checkbox, Col, Form, Input, Row, Select, Space } from 'antd';
+import {
+  Typography,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  Button,
+  message,
+  Tooltip
+} from 'antd';
 import { useContext, useEffect, useState } from 'react';
+import { CopyOutlined } from '@ant-design/icons';
 
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { RedirectPlatformEnum } from 'typing/src/enums';
 import { CaslContext } from '@/services/casl/common';
-import { getQrImageLink } from 'business/src/index';
+import { getQrImageLink, getShortLink } from 'business/src/index';
 
 const redirectPlatforms = Object.keys(RedirectPlatformEnum)
   .filter((platform) => platform !== RedirectPlatformEnum.default)
@@ -21,6 +34,7 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   const ctxCan = useContext(CaslContext);
   const { formProps, saveButtonProps, queryResult } = useForm<Card>();
   const [qrImageLink, setQrImageLink] = useState('');
+  const [qrLink, setQrLink] = useState('');
 
   const { selectProps: locSelectProps } = useSelect<Location>({
     resource: 'location',
@@ -30,6 +44,7 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
   useEffect(() => {
     if (queryResult?.data?.data?.shortLinkCode) {
       setQrImageLink(getQrImageLink(queryResult?.data?.data?.shortLinkCode));
+      setQrLink(getShortLink(queryResult?.data?.data?.shortLinkCode));
     }
   }, [queryResult?.data?.data?.shortLinkCode]);
 
@@ -108,13 +123,32 @@ export const CardAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
                 <img src={qrImageLink} width="100%" />
                 <Space
                   style={{
-                    marginTop: '10px',
+                    margin: '10px 0',
                     width: '100%',
                     justifyContent: 'center'
                   }}
                 >
-                  <Typography.Link href={qrImageLink}>Скачать</Typography.Link>
+                  <Typography.Link href={qrImageLink}>
+                    Скачать изображение
+                  </Typography.Link>
                 </Space>
+                <Row gutter={5} align="top">
+                  <Col md={20} xs={24}>
+                    <Input value={qrLink} disabled />
+                  </Col>
+                  <Col md={4} xs={24}>
+                    <Tooltip title="Скопировать в буфер обмена">
+                      <Button
+                        icon={<CopyOutlined />}
+                        size="middle"
+                        onClick={() => {
+                          navigator.clipboard.writeText(qrLink);
+                          message.success('Ссылка скопирована в буфер обмена');
+                        }}
+                      />
+                    </Tooltip>
+                  </Col>
+                </Row>
               </Col>
             )}
           </Row>

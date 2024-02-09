@@ -40,6 +40,11 @@ export default function CardList() {
             </a>
           )}
         />
+        <Table.Column
+          dataIndex="shortLinkCode"
+          title="Ссылка в QR"
+          render={(code) => getShortLink(code)}
+        />
         {ctxCan.can(
           PermissionAction.viewDetailsOnList,
           PermissionSubject.entityCard
