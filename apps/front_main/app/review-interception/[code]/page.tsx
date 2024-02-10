@@ -53,5 +53,11 @@ export default async function FormPage({ params }: { params: { code: string } })
     linkTrustPilot: location.linkTrustPilot
   };
 
+  fetch.post(
+    `${env(
+      'NEXT_PUBLIC_SERVER_URL'
+    )}/api/analytics/new-show-review-form-with-rating-event/${params.code}`
+  );
+
   return <ClientSideForm {...{ data }} />;
 }

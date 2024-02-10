@@ -32,8 +32,25 @@ export default function ClientSideForm({
     if (!newReview?.id) throw new Error('Не удалось отправить оценку!');
 
     setReviewId(newReview.id);
-    if (+values.reviewRating >= +data.ratingThreshold) setScreen(2);
-    else setScreen(3);
+    if (+values.reviewRating >= +data.ratingThreshold) {
+      setScreen(2);
+      fetch.post(
+        `${env(
+          'NEXT_PUBLIC_SERVER_URL'
+        )}/api/analytics/new-show-review-form-with-platform-event/${
+          data.shortLinkCode
+        }`
+      );
+    } else {
+      setScreen(3);
+      fetch.post(
+        `${env(
+          'NEXT_PUBLIC_SERVER_URL'
+        )}/api/analytics/new-show-review-form-with-bad-event/${
+          data.shortLinkCode
+        }`
+      );
+    }
   };
 
   const submitBadReview = (values: any) => {
@@ -45,7 +62,22 @@ export default function ClientSideForm({
       }/${reviewId}`,
       values
     );
+    fetch.post(
+      `${env(
+        'NEXT_PUBLIC_SERVER_URL'
+      )}/api/analytics/new-submit-review-form-with-bad-event/${
+        data.shortLinkCode
+      }`
+    );
     setScreen(4);
+  };
+
+  const newFollowExternalLinkEvent = () => {
+    fetch.post(
+      `${env(
+        'NEXT_PUBLIC_SERVER_URL'
+      )}/api/analytics/new-follow-external-link-event/${data.shortLinkCode}`
+    );
   };
 
   return (
@@ -160,8 +192,9 @@ export default function ClientSideForm({
             <Typography.Paragraph style={{ textAlign: 'center' }}>
               <Button
                 type="link"
-                href={data.linkDefault}
                 icon={<ExportOutlined />}
+                href={data.linkDefault}
+                onClick={newFollowExternalLinkEvent}
               >
                 Default
               </Button>
@@ -171,8 +204,9 @@ export default function ClientSideForm({
             <Typography.Paragraph style={{ textAlign: 'center' }}>
               <Button
                 type="link"
-                href={data.linkGoogle}
                 icon={<ExportOutlined />}
+                href={data.linkGoogle}
+                onClick={newFollowExternalLinkEvent}
               >
                 Google
               </Button>
@@ -182,8 +216,9 @@ export default function ClientSideForm({
             <Typography.Paragraph style={{ textAlign: 'center' }}>
               <Button
                 type="link"
-                href={data.linkTrustPilot}
                 icon={<ExportOutlined />}
+                href={data.linkTrustPilot}
+                onClick={newFollowExternalLinkEvent}
               >
                 TrustPilot
               </Button>
