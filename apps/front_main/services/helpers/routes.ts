@@ -9,6 +9,7 @@ export const Routes = {
   users: '/users',
   companies: '/companies',
   subscriptions: '/subscriptions',
+  analytics: '/analytics',
   locations: '/locations',
   cards: '/cards',
   links: '/links',

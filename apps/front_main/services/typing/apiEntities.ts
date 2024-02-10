@@ -4,7 +4,8 @@ import {
   ILocation,
   ISubscription,
   IOrganization,
-  IUser
+  IUser,
+  IEvent
 } from 'typing';
 
 // Справочник ответов от API:
@@ -15,7 +16,8 @@ export type Organization = IOrganization & {
   subscriptions?: Subscription[];
   feedbackSettings?: any;
 };
-export type Location = ILocation & { id: number; card?: Card };
 export type Subscription = ISubscription & { id: number };
+export type Location = ILocation & { id: number; card?: Card };
+export type Event = IEvent & { id: number; card?: number };
 export type Card = ICard & { id: number };
 export type Review = IReview & { id: number };

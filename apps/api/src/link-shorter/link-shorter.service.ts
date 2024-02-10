@@ -4,10 +4,14 @@ import { FastifyReply } from 'fastify';
 import { OrganizationDbService } from '../organization';
 import { getReviewFormLink } from 'business';
 import { RedirectPlatformEnum } from 'typing';
+import { EventCrudService } from '../analytics';
 
 @Injectable()
 export class LinkShorterService {
-  constructor(private readonly orgDbService: OrganizationDbService) {}
+  constructor(
+    private readonly eventCrudService: EventCrudService,
+    private readonly orgDbService: OrganizationDbService
+  ) {}
 
   async redirect(response: FastifyReply, shortLinkCode: string) {
     if (!shortLinkCode) throw new ForbiddenException();

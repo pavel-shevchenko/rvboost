@@ -12,7 +12,8 @@ import {
   PlusCircleOutlined,
   UserOutlined,
   StopOutlined,
-  LinkOutlined
+  LinkOutlined,
+  AreaChartOutlined
 } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -112,6 +113,12 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
           name: 'Отзывы',
           route: Routes.reviews,
           icon: <MessageOutlined />
+        },
+        {
+          id: 11,
+          name: 'Аналитика',
+          route: Routes.analytics,
+          icon: <AreaChartOutlined />
         }
       ];
     else

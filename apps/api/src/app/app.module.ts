@@ -11,6 +11,7 @@ import { CardModule } from '../card';
 import { ReviewModule } from '../review';
 import { MinioModule } from '../minio';
 import { LinkShorterModule } from '../link-shorter';
+import { AnalyticsModule } from '../analytics';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { LinkShorterModule } from '../link-shorter';
     CardModule,
     MinioModule,
     ReviewModule,
+    AnalyticsModule,
     LinkShorterModule
   ]
 })

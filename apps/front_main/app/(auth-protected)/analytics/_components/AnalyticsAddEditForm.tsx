@@ -1,23 +1,31 @@
 'use client';
 
-import { Subscription, Organization } from '@/services/typing/apiEntities';
+import moment from 'moment/moment';
+import { Event, Card } from '@/services/typing/apiEntities';
 import { useForm, Edit, Create, useSelect } from '@refinedev/antd';
 import { Form, Input, Select } from 'antd';
-import moment from 'moment/moment';
+import { EventEnum } from 'typing/src/enums';
+import { eventLabels } from '@/services/helpers/analyticsEventLabels';
 
-export const SubscrAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
-  const { formProps, saveButtonProps, queryResult } = useForm<Subscription>();
+const events = Object.keys(EventEnum).map((event) => ({
+  // @ts-ignore
+  label: eventLabels[event],
+  value: event
+}));
 
-  const { selectProps: orgSelectProps } = useSelect<Organization>({
-    resource: 'organization',
+export const AnalyticsAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
+  const { formProps, saveButtonProps, queryResult } = useForm<Event>();
+
+  const { selectProps: cardSelectProps } = useSelect<Card>({
+    resource: 'card',
     optionLabel: 'id'
   });
 
   const commonForm = (
     <Form {...formProps} layout="vertical">
       <Form.Item
-        name={'validUntil'}
-        label="Действует до"
+        name={'createdAt'}
+        label="Дата и время"
         getValueProps={(i) => ({
           value: moment(i).format('YYYY-MM-DDTHH:mm')
         })}
@@ -25,12 +33,11 @@ export const SubscrAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       >
         <input type="datetime-local" className="like-antd-input" />
       </Form.Item>
-      <Form.Item
-        label="ID организации"
-        name={['organization']}
-        rules={[{ required: true }]}
-      >
-        <Select {...orgSelectProps} />
+      <Form.Item label="Тип действия" name="eventType">
+        <Select options={events} />
+      </Form.Item>
+      <Form.Item label="ID QR" name={['card']} rules={[{ required: true }]}>
+        <Select {...cardSelectProps} />
       </Form.Item>
     </Form>
   );
@@ -41,7 +48,7 @@ export const SubscrAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
         <Create
           breadcrumb={<></>}
           goBack={<>←&nbsp;Назад к списку</>}
-          title="Создание новой подписки"
+          title="Создание новой записи"
           saveButtonProps={saveButtonProps}
         >
           {commonForm}
@@ -51,7 +58,7 @@ export const SubscrAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
         <Edit
           breadcrumb={<></>}
           goBack={<>←&nbsp;Назад к списку</>}
-          title="Редактирование подписки"
+          title="Редактирование записи"
           saveButtonProps={saveButtonProps}
         >
           {commonForm}
