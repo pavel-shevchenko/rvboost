@@ -13,7 +13,13 @@ const CRUDController = new MikroCrudControllerFactory<CardCrudService>({
   query: {
     limit: { max: 200, default: 50 },
     offset: { max: 10_000 },
-    order: { in: ['id:desc'], default: ['id:desc'] }
+    order: { in: ['id:desc'], default: ['id:desc'] },
+    expand: {
+      // @ts-ignore
+      in: ['externalFollowedEventsCount'],
+      // @ts-ignore
+      default: ['externalFollowedEventsCount']
+    }
   }
 }).applyDecoratorToActions(UseGuards(JwtAuthGuard)).product;
 

@@ -80,16 +80,18 @@ function ReviewList() {
                     }}
                   />
                   &nbsp;{review?.reviewRating}
-                  <Typography.Paragraph>
-                    {!review?.reviewExternalLink ? (
-                      'Платформа:'
-                    ) : (
-                      <a target="_blank" href={review?.reviewExternalLink}>
-                        <ExportOutlined />
-                      </a>
-                    )}
-                    &nbsp;{capitalize(review?.platform)}
-                  </Typography.Paragraph>
+                  {review?.platform && (
+                    <Typography.Paragraph>
+                      {!review?.reviewExternalLink ? (
+                        'Платформа:'
+                      ) : (
+                        <a target="_blank" href={review?.reviewExternalLink}>
+                          <ExportOutlined />
+                        </a>
+                      )}
+                      &nbsp;{capitalize(review?.platform)}
+                    </Typography.Paragraph>
+                  )}
                   {/* @ts-ignore */}
                   {review?.location?.id && (
                     <Typography.Paragraph>
@@ -142,38 +144,42 @@ function ReviewList() {
                   )}
                 </Col>
                 <Col md={16} xs={24} style={{ alignSelf: 'start' }}>
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex'
-                    }}
-                  >
-                    <div style={{ paddingRight: '10px' }}>
-                      <MessageOutlined />
+                  {review.reviewText && (
+                    <div
+                      style={{
+                        width: '100%',
+                        display: 'flex'
+                      }}
+                    >
+                      <div style={{ paddingRight: '10px' }}>
+                        <MessageOutlined />
+                      </div>
+                      <div>{review.reviewText}</div>
                     </div>
-                    <div>{review.reviewText}</div>
-                  </div>
-                  <div
-                    style={{
-                      padding: '18px 0 0 15px',
-                      width: '100%',
-                      display: 'flex'
-                    }}
-                  >
-                    <div style={{ paddingRight: '10px' }}>
-                      <CommentOutlined />
+                  )}
+                  {review.replyText && (
+                    <div
+                      style={{
+                        padding: '18px 0 0 15px',
+                        width: '100%',
+                        display: 'flex'
+                      }}
+                    >
+                      <div style={{ paddingRight: '10px' }}>
+                        <CommentOutlined />
+                      </div>
+                      <div>
+                        {review.replyDatetime && (
+                          <Typography.Paragraph>
+                            {moment(review.replyDatetime).format(
+                              'DD.MM.YYYY HH:mm'
+                            )}
+                          </Typography.Paragraph>
+                        )}
+                        {review.replyText}
+                      </div>
                     </div>
-                    <div>
-                      {review.replyDatetime && (
-                        <Typography.Paragraph>
-                          {moment(review.replyDatetime).format(
-                            'DD.MM.YYYY HH:mm'
-                          )}
-                        </Typography.Paragraph>
-                      )}
-                      {review.replyText}
-                    </div>
-                  </div>
+                  )}
                 </Col>
                 <Col md={2} xs={24}>
                   <div style={{ width: '55px' }}>

@@ -37,6 +37,13 @@ export default function LocationList() {
           PermissionSubject.entityLocation,
           'organization'
         ) && <Table.Column dataIndex="organization" title="ID организации" />}
+        <Table.Column dataIndex="reviewsCount" title="Reviews count" />
+        <Table.Column
+          dataIndex="avgRating"
+          title="Avg. Rating"
+          render={(i) => Math.round(i * 100) / 100}
+        />
+        <Table.Column dataIndex="externalFollowedEventsCount" title="QR Cliks" />
         <Table.Column<Location>
           title="Действия"
           dataIndex="actions"

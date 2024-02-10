@@ -10,7 +10,13 @@ const CRUDController = new MikroCrudControllerFactory<LocationCrudService>({
   query: {
     limit: { max: 200, default: 50 },
     offset: { max: 10_000 },
-    order: { in: ['id:desc'], default: ['id:desc'] }
+    order: { in: ['id:desc'], default: ['id:desc'] },
+    expand: {
+      // @ts-ignore
+      in: ['externalFollowedEventsCount', 'reviewsCount', 'avgRating'],
+      // @ts-ignore
+      default: ['externalFollowedEventsCount', 'reviewsCount', 'avgRating']
+    }
   }
 }).applyDecoratorToActions(UseGuards(JwtAuthGuard)).product;
 
