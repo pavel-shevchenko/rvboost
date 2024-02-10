@@ -3,8 +3,9 @@ import { FastifyReply } from 'fastify';
 
 import { OrganizationDbService } from '../organization';
 import { getReviewFormLink } from 'business';
-import { RedirectPlatformEnum } from 'typing';
+import { EventEnum, RedirectPlatformEnum } from 'typing';
 import { EventCrudService } from '../analytics';
+import { Card } from '../card/entity';
 
 @Injectable()
 export class LinkShorterService {
@@ -39,17 +40,36 @@ export class LinkShorterService {
       if (location.card.linkCustom && location.card.isCustomLinkRedirect)
         customLink = location.card.linkCustom;
 
-      return response.redirect(307, customLink);
+      return this.redirectExternalLink(response, location.card, customLink);
     }
 
     // Если у QR кода выбрана какая-то платформа, переадресуем пользователя по ссылке из компании на эту платформу, иначе переадресуем на Default из компании
     switch (location.card.redirectPlatform) {
       case RedirectPlatformEnum.google:
-        return response.redirect(307, location.linkGoogle);
+        return this.redirectExternalLink(
+          response,
+          location.card,
+          location.linkGoogle
+        );
       case RedirectPlatformEnum.trustpilot:
-        return response.redirect(307, location.linkTrustPilot);
+        return this.redirectExternalLink(
+          response,
+          location.card,
+          location.linkTrustPilot
+        );
       default:
-        return response.redirect(307, location.linkDefault);
+        return this.redirectExternalLink(
+          response,
+          location.card,
+          location.linkDefault
+        );
     }
+  }
+
+  async redirectExternalLink(response: FastifyReply, card: Card, link: string) {
+    this.eventCrudService.create({
+      data: { card: card.id, eventType: EventEnum.followExternalLink }
+    });
+    return response.redirect(307, link);
   }
 }

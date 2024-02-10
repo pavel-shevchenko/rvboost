@@ -1,7 +1,9 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, UseGuards, Post, Param } from '@nestjs/common';
 import { MikroCrudControllerFactory } from '../nestjs-crud';
 import { JwtAuthGuard } from '../auth/guards';
 import { EventCrudService } from './event_crud.service';
+import { AnalyticsService } from './analytics.service';
+import { EventEnum } from 'typing';
 
 const EventCrudController = new MikroCrudControllerFactory<EventCrudService>({
   service: EventCrudService,
@@ -16,7 +18,47 @@ const EventCrudController = new MikroCrudControllerFactory<EventCrudService>({
 
 @Controller('analytics')
 export class AnalyticsController extends EventCrudController {
-  constructor() {
+  constructor(private readonly analyticsService: AnalyticsService) {
     super();
+  }
+
+  @Post('new-follow-external-link-event/:shortLinkCode')
+  newFollowExternalLink(@Param('shortLinkCode') shortLinkCode: string) {
+    return this.analyticsService.newEvent(
+      shortLinkCode,
+      EventEnum.followExternalLink
+    );
+  }
+
+  @Post('new-show-review-form-with-rating-event/:shortLinkCode')
+  newShowReviewFormWithRating(@Param('shortLinkCode') shortLinkCode: string) {
+    return this.analyticsService.newEvent(
+      shortLinkCode,
+      EventEnum.showReviewFormWithRating
+    );
+  }
+
+  @Post('new-show-review-form-with-platform-event/:shortLinkCode')
+  newShowReviewFormWithPlatform(@Param('shortLinkCode') shortLinkCode: string) {
+    return this.analyticsService.newEvent(
+      shortLinkCode,
+      EventEnum.showReviewFormWithPlatform
+    );
+  }
+
+  @Post('new-show-review-form-with-bad-event/:shortLinkCode')
+  newShowReviewFormWithBad(@Param('shortLinkCode') shortLinkCode: string) {
+    return this.analyticsService.newEvent(
+      shortLinkCode,
+      EventEnum.showReviewFormWithBad
+    );
+  }
+
+  @Post('new-submit-review-form-with-bad-event/:shortLinkCode')
+  newSubmitReviewFormWithBad(@Param('shortLinkCode') shortLinkCode: string) {
+    return this.analyticsService.newEvent(
+      shortLinkCode,
+      EventEnum.submitReviewFormWithBad
+    );
   }
 }

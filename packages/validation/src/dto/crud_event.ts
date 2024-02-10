@@ -16,7 +16,7 @@ export class CrudEventDto implements typing.IEvent {
   @IsNotEmpty()
   @IsISO8601()
   @Transform(({ value }) => value?.trim())
-  createdAt: Date;
+  createdAt?: Date;
 
   @IsNumber()
   card: number;
