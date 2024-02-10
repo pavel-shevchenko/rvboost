@@ -1,13 +1,14 @@
 import {
   Collection,
   Entity,
+  Formula,
   Index,
   OneToMany,
   OneToOne,
   Property
 } from '@mikro-orm/core';
 import { PermissionSubject } from 'casl';
-import { ICard, RedirectPlatformType } from 'typing';
+import { EventEnum, ICard, RedirectPlatformType } from 'typing';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Location } from '../../location/entity';
 import { CrudEntityFilter } from '../../common/permissions';
@@ -37,6 +38,13 @@ export class Card extends BaseEntity<Card> implements ICard {
   @OneToOne(() => Location, { owner: true })
   location: Location;
 
-  @OneToMany(() => Event, (event) => event.card)
+  @OneToMany(() => Event, (event) => event.card, { hidden: true })
   events = new Collection<Event>(this);
+
+  @Formula(
+    (alias) =>
+      `(select count(*) from events e where e.card_id = ${alias}.id and e.event_type = '${EventEnum.followExternalLink}')`,
+    { lazy: true }
+  )
+  externalFollowedEventsCount?: number;
 }

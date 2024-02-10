@@ -40,6 +40,9 @@ export default function CardList() {
             </a>
           )}
         />
+        {!ctxCan.can('manage', PermissionSubject.entityCard) && (
+          <Table.Column dataIndex="externalFollowedEventsCount" title="Cliks" />
+        )}
         <Table.Column
           dataIndex="shortLinkCode"
           title="Ссылка в QR"
