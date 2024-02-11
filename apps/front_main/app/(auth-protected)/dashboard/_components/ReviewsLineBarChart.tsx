@@ -43,7 +43,7 @@ export default function ReviewsLineBarChart({
 }) {
   return (
     <ChartCard>
-      <ChartTitle>Line Bar Area Composed Chart</ChartTitle>
+      <ChartTitle>{title}</ChartTitle>
       <ResponsiveContainer width="99%" height="280px" aspect={2}>
         <ComposedChart
           width={500}
@@ -57,12 +57,12 @@ export default function ReviewsLineBarChart({
           }}
         >
           <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="platform" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="google" barSize={20} fill="#413ea0" />
-          <Line type="monotone" dataKey="trustpilot" stroke="#ff7300" />
+          <Bar dataKey="rating" barSize={20} fill="#413ea0" />
+          <Line dataKey="reviews" type="monotone" stroke="#ff7300" />
         </ComposedChart>
       </ResponsiveContainer>
     </ChartCard>

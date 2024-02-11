@@ -165,24 +165,40 @@ export class AnalyticsService {
   }
 
   async getClientReviewsChartData(organization: Organization, days = 7) {
-    const nowTs = new Date().getTime();
-    const data = [];
-    for (let minus = days - 1; minus >= 0; minus--) {
-      const date = new Date(nowTs - minus * 86400000);
-      data.push({
-        name: this.getChartNameOfDate(date),
-        google: await this.reviewDbService.countReviewsByPlatformDayOrg(
-          RedirectPlatformEnum.google,
-          date,
+    return [
+      {
+        platform: RedirectPlatformEnum.default,
+        reviews: await this.reviewDbService.countOfReviewsByPlatformAndOrg(
+          RedirectPlatformEnum.default,
           organization
         ),
-        trustpilot: await this.reviewDbService.countReviewsByPlatformDayOrg(
-          RedirectPlatformEnum.trustpilot,
-          date,
+        rating: await this.reviewDbService.ratingOfReviewsByPlatformAndOrg(
+          RedirectPlatformEnum.default,
           organization
         )
-      });
-    }
-    return data;
+      },
+      {
+        platform: RedirectPlatformEnum.google,
+        reviews: await this.reviewDbService.countOfReviewsByPlatformAndOrg(
+          RedirectPlatformEnum.google,
+          organization
+        ),
+        rating: await this.reviewDbService.ratingOfReviewsByPlatformAndOrg(
+          RedirectPlatformEnum.google,
+          organization
+        )
+      },
+      {
+        platform: RedirectPlatformEnum.trustpilot,
+        reviews: await this.reviewDbService.countOfReviewsByPlatformAndOrg(
+          RedirectPlatformEnum.trustpilot,
+          organization
+        ),
+        rating: await this.reviewDbService.ratingOfReviewsByPlatformAndOrg(
+          RedirectPlatformEnum.trustpilot,
+          organization
+        )
+      }
+    ];
   }
 }

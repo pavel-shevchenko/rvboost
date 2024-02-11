@@ -60,23 +60,31 @@ export class ReviewDbService {
     return this.em.count(Review);
   }
 
-  countReviewsByPlatformDayOrg(
+  countOfReviewsByPlatformAndOrg(
     platform: RedirectPlatformType,
-    day: Date,
     organization: Organization
   ) {
-    const start = new Date(day);
-    start.setUTCHours(0, 0, 0, 0);
-    const end = new Date(day);
-    end.setUTCHours(23, 59, 59, 999);
-
     return this.em.count(Review, {
       platform,
-      publicationDatetime: {
-        $gte: start,
-        $lt: end
-      },
       location: { organization }
     });
+  }
+
+  async ratingOfReviewsByPlatformAndOrg(
+    platform: RedirectPlatformType,
+    organization: Organization
+  ) {
+    const qb = this.em.createQueryBuilder(Review);
+    const rating = (
+      await qb
+        .select('avg(review_rating)')
+        .where({
+          platform,
+          location: { organization }
+        })
+        .execute('get', false)
+    )['avg'];
+
+    return Math.round(rating * 100) / 100;
   }
 }
