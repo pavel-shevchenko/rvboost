@@ -5,6 +5,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Organization } from '../organization/entity';
 import { FeedbackSettings, Review } from './entity';
 import { FeedbackSettingsDto } from 'validation';
+import { RedirectPlatformType } from 'typing';
 
 @Injectable()
 export class ReviewDbService {
@@ -57,5 +58,25 @@ export class ReviewDbService {
 
   getAllReviewsCount() {
     return this.em.count(Review);
+  }
+
+  countReviewsByPlatformDayOrg(
+    platform: RedirectPlatformType,
+    day: Date,
+    organization: Organization
+  ) {
+    const start = new Date(day);
+    start.setUTCHours(0, 0, 0, 0);
+    const end = new Date(day);
+    end.setUTCHours(23, 59, 59, 999);
+
+    return this.em.count(Review, {
+      platform,
+      publicationDatetime: {
+        $gte: start,
+        $lt: end
+      },
+      location: { organization }
+    });
   }
 }

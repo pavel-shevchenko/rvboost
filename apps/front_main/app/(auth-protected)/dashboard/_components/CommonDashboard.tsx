@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ClicksStackedChart from './ClicksStackedChart';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
+import ReviewsLineBarChart from '@/app/(auth-protected)/dashboard/_components/ReviewsLineBarChart';
 
 const Title = styled.h1`
   font-weight: 600;
@@ -127,10 +128,12 @@ const Stat = ({
 const CommonDashboard = ({
   title,
   stats,
+  reviewsLineBarChart,
   clicksStackedChart
 }: {
   title: string;
   stats: Array<{ title: string; value: any }>;
+  reviewsLineBarChart?: { title: string; data: any };
   clicksStackedChart?: { title: string; data: any };
 }) => {
   return (
@@ -145,6 +148,12 @@ const CommonDashboard = ({
       </StatsCard>
 
       <ChartsContainer>
+        {reviewsLineBarChart && (
+          <ReviewsLineBarChart
+            title={reviewsLineBarChart.title}
+            data={reviewsLineBarChart.data}
+          />
+        )}
         {clicksStackedChart && (
           <ClicksStackedChart
             title={clicksStackedChart.title}

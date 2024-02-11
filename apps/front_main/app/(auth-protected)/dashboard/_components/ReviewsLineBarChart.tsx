@@ -1,13 +1,16 @@
 import React from 'react';
 import {
-  AreaChart,
+  ComposedChart,
+  Line,
   Area,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Legend
+  Legend,
+  Scatter,
+  ResponsiveContainer
 } from 'recharts';
 import styled from 'styled-components';
 import { colors } from '@/app/_components/root-layout/styles';
@@ -31,7 +34,7 @@ const ChartTitle = styled.h2`
   margin-bottom: 1.5rem;
 `;
 
-export default function ClicksStackedChart({
+export default function ReviewsLineBarChart({
   title,
   data
 }: {
@@ -40,41 +43,27 @@ export default function ClicksStackedChart({
 }) {
   return (
     <ChartCard>
-      <ChartTitle>{title}</ChartTitle>
+      <ChartTitle>Line Bar Area Composed Chart</ChartTitle>
       <ResponsiveContainer width="99%" height="280px" aspect={2}>
-        <AreaChart
+        <ComposedChart
           width={500}
           height={400}
           data={data}
           margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 0
+            top: 20,
+            right: 20,
+            bottom: 20,
+            left: 20
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid stroke="#f5f5f5" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Area
-            type="monotone"
-            dataKey="followExternal"
-            name="переходов на внешние ресурсы"
-            stackId="1"
-            stroke="#8884d8"
-            fill="#8884d8"
-          />
-          <Area
-            type="monotone"
-            dataKey="submitBadForm"
-            name="перехваченных отзывов"
-            stackId="1"
-            stroke="#82ca9d"
-            fill="#82ca9d"
-          />
-        </AreaChart>
+          <Bar dataKey="google" barSize={20} fill="#413ea0" />
+          <Line type="monotone" dataKey="trustpilot" stroke="#ff7300" />
+        </ComposedChart>
       </ResponsiveContainer>
     </ChartCard>
   );

@@ -4,7 +4,7 @@ import {
   Injectable
 } from '@nestjs/common';
 import { EventCrudService } from './event_crud.service';
-import { EventEnum, EventEnumType } from 'typing';
+import { EventEnum, EventEnumType, RedirectPlatformEnum } from 'typing';
 import { CardDbService } from '../card';
 import { User } from '../user/entity';
 import { defineUserAbility } from 'casl';
@@ -13,6 +13,7 @@ import { LocationDbService } from '../location/location_db.service';
 import { ReviewDbService } from '../review/review_db.service';
 import { EventDbService } from './event_db.service';
 import { OrganizationService } from '../organization';
+import { Organization } from '../organization/entity';
 
 @Injectable()
 export class AnalyticsService {
@@ -90,11 +91,11 @@ export class AnalyticsService {
       const date = new Date(nowTs - minus * 86400000);
       data.push({
         name: this.getChartNameOfDate(date),
-        followExternal: await this.eventDbService.countEventsByTypeAndDay(
+        followExternal: await this.eventDbService.countEventsByTypeDayOrg(
           EventEnum.followExternalLink,
           date
         ),
-        submitBadForm: await this.eventDbService.countEventsByTypeAndDay(
+        submitBadForm: await this.eventDbService.countEventsByTypeDayOrg(
           EventEnum.submitReviewFormWithBad,
           date
         )
@@ -116,22 +117,72 @@ export class AnalyticsService {
         EventEnum.submitReviewFormWithBad,
         organization
       );
-    const clientClicksChartDataPromise = this.getAdminClicksChartData();
+    const clientClicksChartDataPromise =
+      this.getClientClicksChartData(organization);
+    const clientReviewsChartDataPromise =
+      this.getClientReviewsChartData(organization);
 
     const [
       externalFollowEventsCnt,
       submitBadFormEventsCnt,
-      clientClicksChartData
+      clientClicksChartData,
+      clientReviewsChartData
     ] = await Promise.all([
       externalFollowEventsCntPromise,
       submitBadFormEventsCntPromise,
-      clientClicksChartDataPromise
+      clientClicksChartDataPromise,
+      clientReviewsChartDataPromise
     ]);
 
     return {
       externalFollowEventsCnt,
       submitBadFormEventsCnt,
-      clientClicksChartData
+      clientClicksChartData,
+      clientReviewsChartData
     };
+  }
+
+  async getClientClicksChartData(organization: Organization, days = 7) {
+    const nowTs = new Date().getTime();
+    const data = [];
+    for (let minus = days - 1; minus >= 0; minus--) {
+      const date = new Date(nowTs - minus * 86400000);
+      data.push({
+        name: this.getChartNameOfDate(date),
+        followExternal: await this.eventDbService.countEventsByTypeDayOrg(
+          EventEnum.followExternalLink,
+          date,
+          organization
+        ),
+        submitBadForm: await this.eventDbService.countEventsByTypeDayOrg(
+          EventEnum.submitReviewFormWithBad,
+          date,
+          organization
+        )
+      });
+    }
+    return data;
+  }
+
+  async getClientReviewsChartData(organization: Organization, days = 7) {
+    const nowTs = new Date().getTime();
+    const data = [];
+    for (let minus = days - 1; minus >= 0; minus--) {
+      const date = new Date(nowTs - minus * 86400000);
+      data.push({
+        name: this.getChartNameOfDate(date),
+        google: await this.reviewDbService.countReviewsByPlatformDayOrg(
+          RedirectPlatformEnum.google,
+          date,
+          organization
+        ),
+        trustpilot: await this.reviewDbService.countReviewsByPlatformDayOrg(
+          RedirectPlatformEnum.trustpilot,
+          date,
+          organization
+        )
+      });
+    }
+    return data;
   }
 }
