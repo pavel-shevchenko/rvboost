@@ -11,7 +11,7 @@ export default function ClientDashboard() {
 
   const init = async () => {
     const data = await fetch.get(
-      `${env('NEXT_PUBLIC_SERVER_URL')}/api/analytics/get-admin-dashboard-data`
+      `${env('NEXT_PUBLIC_SERVER_URL')}/api/analytics/get-client-dashboard-data`
     );
     setData(data);
   };
@@ -24,18 +24,15 @@ export default function ClientDashboard() {
   return (
     <CommonDashboard
       title="Dashboard"
-      stackedChart={{ title: 'Clicks', data: data.adminClicksChartData }}
+      clicksStackedChart={{ title: 'Clicks', data: data.clientClicksChartData }}
       stats={[
         {
-          title: 'общее количество юзеров с ролью не админ',
-          value: data.nonAdminUsersCount
+          title: 'переходов по ссылкам на внешний источник по всем компаниям',
+          value: data.externalFollowEventsCnt
         },
-        { title: 'общее количество компаний', value: data.allLocationsCount },
-        { title: 'общее количество QR карт', value: data.allCardsCount },
-        { title: 'общее количество отзывов', value: data.allReviewsCount },
         {
-          title: 'общее количество переходов за сегодня',
-          value: data.todayExtFolEventsCount
+          title: 'перехваченных негативных отзывов по всем компаниям',
+          value: data.submitBadFormEventsCnt
         }
       ]}
     />

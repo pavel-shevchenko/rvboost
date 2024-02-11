@@ -12,6 +12,7 @@ import { UserDbService } from '../user';
 import { LocationDbService } from '../location/location_db.service';
 import { ReviewDbService } from '../review/review_db.service';
 import { EventDbService } from './event_db.service';
+import { OrganizationService } from '../organization';
 
 @Injectable()
 export class AnalyticsService {
@@ -19,6 +20,7 @@ export class AnalyticsService {
     private readonly eventCrudService: EventCrudService,
     private readonly eventDbService: EventDbService,
     private readonly userDbService: UserDbService,
+    private readonly orgService: OrganizationService,
     private readonly locationDbService: LocationDbService,
     private readonly reviewDbService: ReviewDbService,
     private readonly cardDbService: CardDbService
@@ -101,5 +103,35 @@ export class AnalyticsService {
     return data;
   }
 
-  async getClientDashboardData(client: User) {}
+  async getClientDashboardData(client: User) {
+    const organization = await this.orgService.getOrganizationByClient(client);
+
+    const externalFollowEventsCntPromise =
+      this.eventDbService.countEventsByTypeAndOrg(
+        EventEnum.followExternalLink,
+        organization
+      );
+    const submitBadFormEventsCntPromise =
+      this.eventDbService.countEventsByTypeAndOrg(
+        EventEnum.submitReviewFormWithBad,
+        organization
+      );
+    const clientClicksChartDataPromise = this.getAdminClicksChartData();
+
+    const [
+      externalFollowEventsCnt,
+      submitBadFormEventsCnt,
+      clientClicksChartData
+    ] = await Promise.all([
+      externalFollowEventsCntPromise,
+      submitBadFormEventsCntPromise,
+      clientClicksChartDataPromise
+    ]);
+
+    return {
+      externalFollowEventsCnt,
+      submitBadFormEventsCnt,
+      clientClicksChartData
+    };
+  }
 }

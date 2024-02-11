@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   return (
     <CommonDashboard
       title="Dashboard"
-      stackedChart={{ title: 'Clicks', data: data.adminClicksChartData }}
+      clicksStackedChart={{ title: 'Clicks', data: data.adminClicksChartData }}
       stats={[
         {
           title: 'общее количество юзеров с ролью не админ',

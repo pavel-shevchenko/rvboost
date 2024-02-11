@@ -30,7 +30,7 @@ const ChartTitle = styled.h2`
   margin-bottom: 1.5rem;
 `;
 
-export default function StackedChart({
+export default function ClicksStackedChart({
   title,
   data
 }: {

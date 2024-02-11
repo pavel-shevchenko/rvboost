@@ -12,7 +12,7 @@ import {
   addFastifyMultipartFieldToDto,
   createDtoValidator
 } from '../common/helpers';
-import { OrganizationDbService } from '../organization';
+import { OrganizationDbService, OrganizationService } from '../organization';
 import { MinioService } from '../minio';
 import { UploadedObjectInfo } from 'minio';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
@@ -29,19 +29,12 @@ export class ReviewService {
     private readonly minioService: MinioService,
     private readonly reviewDbService: ReviewDbService,
     private readonly cardDbService: CardDbService,
+    private readonly orgService: OrganizationService,
     private readonly orgDbService: OrganizationDbService
   ) {}
 
-  async getOrganizationByClient(client: User) {
-    const organizations =
-      await this.orgDbService.getOrganizationsByClient(client);
-    if (!organizations.length) throw new ForbiddenException();
-
-    return organizations[0];
-  }
-
   async getFeedbackSettingsForClient(client: User) {
-    const organization = await this.getOrganizationByClient(client);
+    const organization = await this.orgService.getOrganizationByClient(client);
 
     return this.reviewDbService.getFeedbackSettingsByOrg(organization);
   }
@@ -118,7 +111,7 @@ export class ReviewService {
     client: User,
     mpAsyncIterator: AsyncIterableIterator<MultipartValue | MultipartFile>
   ) {
-    const organization = await this.getOrganizationByClient(client);
+    const organization = await this.orgService.getOrganizationByClient(client);
 
     return this.saveFeedbackSettings(organization, mpAsyncIterator);
   }

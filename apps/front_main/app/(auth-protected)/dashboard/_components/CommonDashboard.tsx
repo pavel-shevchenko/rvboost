@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import StackedChart from './StackedChart';
+import ClicksStackedChart from './ClicksStackedChart';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
 
 const Title = styled.h1`
@@ -127,11 +127,11 @@ const Stat = ({
 const CommonDashboard = ({
   title,
   stats,
-  stackedChart
+  clicksStackedChart
 }: {
   title: string;
   stats: Array<{ title: string; value: any }>;
-  stackedChart?: { title: string; data: any };
+  clicksStackedChart?: { title: string; data: any };
 }) => {
   return (
     <>
@@ -145,8 +145,11 @@ const CommonDashboard = ({
       </StatsCard>
 
       <ChartsContainer>
-        {stackedChart && (
-          <StackedChart title={stackedChart.title} data={stackedChart.data} />
+        {clicksStackedChart && (
+          <ClicksStackedChart
+            title={clicksStackedChart.title}
+            data={clicksStackedChart.data}
+          />
         )}
       </ChartsContainer>
     </>

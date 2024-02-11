@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Event } from './entity';
 import { EventEnum, EventEnumType } from 'typing';
+import { Organization } from '../organization/entity';
 
 @Injectable()
 export class EventDbService {
@@ -30,6 +31,15 @@ export class EventDbService {
       createdAt: {
         $gte: start,
         $lt: end
+      }
+    });
+  }
+
+  countEventsByTypeAndOrg(eventType: EventEnumType, organization: Organization) {
+    return this.em.count(Event, {
+      eventType,
+      card: {
+        location: { organization }
       }
     });
   }

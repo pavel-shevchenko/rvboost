@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable
+} from '@nestjs/common';
 
 import { UserService } from '../user';
 import { User } from '../user/entity';
@@ -44,5 +49,13 @@ export class OrganizationService {
       );
     }
     return await Promise.all(locationsPromises);
+  }
+
+  async getOrganizationByClient(client: User) {
+    const organizations =
+      await this.orgDbService.getOrganizationsByClient(client);
+    if (!organizations.length) throw new ForbiddenException();
+
+    return organizations[0];
   }
 }

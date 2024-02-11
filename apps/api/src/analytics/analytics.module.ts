@@ -9,10 +9,12 @@ import { UserModule } from '../user';
 import { LocationModule } from '../location';
 import { ReviewModule } from '../review';
 import { EventDbService } from './event_db.service';
+import { OrganizationModule } from '../organization';
 
 @Module({
   imports: [
     UserModule,
+    OrganizationModule,
     CardModule,
     ReviewModule,
     LocationModule,
