@@ -9,4 +9,8 @@ export class CardDbService {
   async getByShortLinkCode(shortLinkCode: string) {
     return this.em.findOne(Card, { shortLinkCode }, { populate: ['location'] });
   }
+
+  getAllCardsCount() {
+    return this.em.count(Card);
+  }
 }

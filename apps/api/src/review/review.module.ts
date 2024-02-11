@@ -21,6 +21,6 @@ import { CardModule } from '../card';
   ],
   controllers: [ReviewController],
   providers: [ReviewCrudService, ReviewService, ReviewDbService],
-  exports: []
+  exports: [ReviewDbService]
 })
 export class ReviewModule {}

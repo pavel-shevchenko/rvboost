@@ -54,4 +54,8 @@ export class ReviewDbService {
 
     return review;
   }
+
+  getAllReviewsCount() {
+    return this.em.count(Review);
+  }
 }

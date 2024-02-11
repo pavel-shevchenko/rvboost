@@ -1,9 +1,10 @@
-import { Controller, UseGuards, Post, Param } from '@nestjs/common';
+import { Controller, UseGuards, Post, Param, Get, Request } from '@nestjs/common';
 import { MikroCrudControllerFactory } from '../nestjs-crud';
 import { JwtAuthGuard } from '../auth/guards';
 import { EventCrudService } from './event_crud.service';
 import { AnalyticsService } from './analytics.service';
 import { EventEnum } from 'typing';
+import { AppRequest } from '../common/typing';
 
 const EventCrudController = new MikroCrudControllerFactory<EventCrudService>({
   service: EventCrudService,
@@ -20,6 +21,18 @@ const EventCrudController = new MikroCrudControllerFactory<EventCrudService>({
 export class AnalyticsController extends EventCrudController {
   constructor(private readonly analyticsService: AnalyticsService) {
     super();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get-admin-dashboard-data')
+  async getAdminDashboardData(@Request() req: AppRequest) {
+    return this.analyticsService.getAdminDashboardData(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get-client-dashboard-data')
+  async getClientDashboardData(@Request() req: AppRequest) {
+    return this.analyticsService.getClientDashboardData(req.user);
   }
 
   @Post('new-follow-external-link-event/:shortLinkCode')

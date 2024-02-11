@@ -44,4 +44,8 @@ export class UserDbService {
       'organizations.users',
       'organizations.subscriptions'
     ] as const;
+
+  getNonAdminUsersCount() {
+    return this.em.count(User, { isAdmin: false });
+  }
 }

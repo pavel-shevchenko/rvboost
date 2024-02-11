@@ -5,10 +5,20 @@ import { Event } from './entity';
 import { EventCrudService } from './event_crud.service';
 import { CardModule } from '../card';
 import { AnalyticsService } from './analytics.service';
+import { UserModule } from '../user';
+import { LocationModule } from '../location';
+import { ReviewModule } from '../review';
+import { EventDbService } from './event_db.service';
 
 @Module({
-  imports: [CardModule, MikroOrmModule.forFeature([Event])],
-  providers: [AnalyticsService, EventCrudService],
+  imports: [
+    UserModule,
+    CardModule,
+    ReviewModule,
+    LocationModule,
+    MikroOrmModule.forFeature([Event])
+  ],
+  providers: [AnalyticsService, EventCrudService, EventDbService],
   controllers: [AnalyticsController],
   exports: [EventCrudService]
 })
