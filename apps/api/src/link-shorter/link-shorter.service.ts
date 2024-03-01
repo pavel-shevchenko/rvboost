@@ -28,7 +28,8 @@ export class LinkShorterService {
     for (const subscription of organization?.subscriptions || []) {
       if (
         new Date(subscription?.validUntil) > curDatetime &&
-        location.card.isReviewInterception
+        location.card.isReviewInterception &&
+        organization?.feedbackSettings
       ) {
         return response.redirect(307, getReviewFormLink(shortLinkCode));
       }
