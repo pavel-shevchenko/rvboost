@@ -97,51 +97,6 @@ export default function ClientSideForm({
 
       {screen === 1 && (
         <Form onFinish={submitEvaluation}>
-          {data.whetherRequestUsername && (
-            <Form.Item
-              name="authorName"
-              rules={[
-                data.requestUsernameRequired
-                  ? {
-                      required: true,
-                      message: 'Обязательное поле для заполнения'
-                    }
-                  : {}
-              ]}
-            >
-              <Input placeholder="Как вас зовут?" />
-            </Form.Item>
-          )}
-          {data.whetherRequestEmail && (
-            <Form.Item
-              name="authorEmail"
-              rules={[
-                data.requestEmailRequired
-                  ? {
-                      required: true,
-                      message: 'Обязательное поле для заполнения'
-                    }
-                  : {}
-              ]}
-            >
-              <Input type="email" placeholder="Ваш email" />
-            </Form.Item>
-          )}
-          {data.whetherRequestPhone && (
-            <Form.Item
-              name="authorPhone"
-              rules={[
-                data.requestPhoneRequired
-                  ? {
-                      required: true,
-                      message: 'Обязательное поле для заполнения'
-                    }
-                  : {}
-              ]}
-            >
-              <Input placeholder="Ваш номер телефона" />
-            </Form.Item>
-          )}
           {data.questionTitle && (
             <Typography.Paragraph style={{ textAlign: 'center' }}>
               <b>{data.questionTitle}</b>
@@ -233,6 +188,51 @@ export default function ClientSideForm({
             <Typography.Paragraph style={{ textAlign: 'center' }}>
               <b>{data.badReviewRequestText}</b>
             </Typography.Paragraph>
+          )}
+          {data.whetherRequestUsername && (
+            <Form.Item
+              name="authorName"
+              rules={[
+                data.requestUsernameRequired
+                  ? {
+                      required: true,
+                      message: 'Обязательное поле для заполнения'
+                    }
+                  : {}
+              ]}
+            >
+              <Input placeholder="Как вас зовут?" />
+            </Form.Item>
+          )}
+          {data.whetherRequestEmail && (
+            <Form.Item
+              name="authorEmail"
+              rules={[
+                data.requestEmailRequired
+                  ? {
+                      required: true,
+                      message: 'Обязательное поле для заполнения'
+                    }
+                  : {}
+              ]}
+            >
+              <Input type="email" placeholder="Ваш email" />
+            </Form.Item>
+          )}
+          {data.whetherRequestPhone && (
+            <Form.Item
+              name="authorPhone"
+              rules={[
+                data.requestPhoneRequired
+                  ? {
+                      required: true,
+                      message: 'Обязательное поле для заполнения'
+                    }
+                  : {}
+              ]}
+            >
+              <Input placeholder="Ваш номер телефона" />
+            </Form.Item>
           )}
           <Form.Item
             name="reviewText"

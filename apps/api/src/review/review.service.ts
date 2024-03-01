@@ -7,7 +7,7 @@ import type { MultipartFile, MultipartValue } from '@fastify/multipart';
 
 import { ReviewDbService } from './review_db.service';
 import { User } from '../user/entity';
-import { FeedbackSettingsDto } from 'validation';
+import { CrudReviewDto, FeedbackSettingsDto } from 'validation';
 import {
   addFastifyMultipartFieldToDto,
   createDtoValidator
@@ -192,16 +192,19 @@ export class ReviewService {
   async putReviewInterceptionBadText(
     shortLinkCode: string,
     reviewId: number,
-    reviewText: string
+    reviewDto: CrudReviewDto
   ) {
-    if (!shortLinkCode || !reviewId || !reviewText)
+    if (!shortLinkCode || !reviewId || !reviewDto.reviewText)
       throw new ForbiddenException();
 
     const card = await this.cardDbService.getByShortLinkCode(shortLinkCode);
     const review = await this.reviewDbService.getById(reviewId);
     if (card.location.id !== review.location.id) throw new ForbiddenException();
 
-    review.reviewText = reviewText;
+    review.authorName = reviewDto.authorName;
+    review.authorEmail = reviewDto.authorEmail;
+    review.authorPhone = reviewDto.authorPhone;
+    review.reviewText = reviewDto.reviewText;
     review.isBadFormCollected = true;
     this.reviewDbService.saveReview(review);
   }

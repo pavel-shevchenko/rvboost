@@ -136,7 +136,7 @@ export class ReviewController extends CRUDController {
     return this.reviewService.putReviewInterceptionBadText(
       shortLinkCode,
       reviewId,
-      reviewDto.reviewText
+      reviewDto
     );
   }
 }
