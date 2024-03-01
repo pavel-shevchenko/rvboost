@@ -21,7 +21,7 @@ export class CrudCardDto implements typing.ICard {
 
   @IsOptional()
   @IsString({ message: 'Must be a string' })
-  @Length(2, 200, { message: 'От 2 до 200 символов' })
+  @Length(2, 1024, { message: 'От 2 до 1024 символов' })
   @ValidateIf((object, value) => !!value)
   @Transform(({ value }) => value?.trim())
   linkCustom?: string;

@@ -29,7 +29,7 @@ export class Card extends BaseEntity<Card> implements ICard {
   @Property({ default: false })
   isCustomLinkRedirect: boolean;
 
-  @Property({ nullable: true })
+  @Property({ nullable: true, length: 1024 })
   linkCustom: string;
 
   @Property({ nullable: true })

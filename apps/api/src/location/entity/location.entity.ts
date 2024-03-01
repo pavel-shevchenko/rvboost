@@ -27,13 +27,13 @@ export class Location extends BaseEntity<Location> implements ILocation {
     return `${this.name}-${this.address}`;
   }
 
-  @Property({ nullable: false })
+  @Property({ nullable: false, length: 1024 })
   linkDefault: string;
 
-  @Property({ nullable: true })
+  @Property({ nullable: true, length: 1024 })
   linkGoogle: string;
 
-  @Property({ nullable: true })
+  @Property({ nullable: true, length: 1024 })
   linkTrustPilot: string;
 
   @ManyToOne(() => Organization)
