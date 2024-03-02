@@ -31,7 +31,7 @@ export class Review extends BaseEntity<Review> implements IReview {
   @Property({ type: TextType, nullable: true })
   reviewText: string;
 
-  @Property({ type: DecimalType, precision: 4, scale: 2, nullable: true })
+  @Property({ type: DecimalType, precision: 3, scale: 2, nullable: true })
   reviewRating: string;
 
   @Property({ nullable: false })

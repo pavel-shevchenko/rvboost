@@ -140,8 +140,6 @@ export default function FeedbackAddEditForm({
       if (initValues) {
         if (initValues?.redirectPlatform?.length)
           initValues.redirectPlatform = initValues.redirectPlatform.pop();
-        if (initValues?.ratingThreshold)
-          initValues.ratingThreshold = initValues.ratingThreshold / 2;
         setFormValues(initValues);
       }
       // @ts-ignore
@@ -181,7 +179,7 @@ export default function FeedbackAddEditForm({
       if (Array.isArray(value))
         value.map((item) => formData.append(key + '[]', item));
       else if (key === 'ratingThreshold')
-        formData.append(key, String(parseFloat(value as string) * 2));
+        formData.append(key, String(parseFloat(value as string)));
       else if (key === 'redirectPlatform')
         formData.append(key + '[]', String(value));
       else if (value) formData.append(key, value as string);

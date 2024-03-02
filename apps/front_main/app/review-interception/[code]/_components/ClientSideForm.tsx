@@ -20,7 +20,7 @@ export default function ClientSideForm({
 
   const submitEvaluation = async (values: any) => {
     values.location = data.locationId;
-    values.reviewRating = String(values.reviewRating * 2);
+    values.reviewRating = String(values.reviewRating);
     values.publicationDatetime = new Date();
 
     const newReview = await fetch.post(

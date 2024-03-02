@@ -31,7 +31,7 @@ export class FeedbackSettingsDto implements typing.IFeedbackSettings {
 
   @IsNotEmpty()
   @Min(1, { message: 'Порог оценки не меньше чем 1' })
-  @Max(10, { message: 'Порог оценки не больше чем 10' })
+  @Max(5, { message: 'Порог оценки не больше чем 5' })
   @Transform(({ value }) => parseFloat(value?.trim()))
   ratingThreshold: string;
 
