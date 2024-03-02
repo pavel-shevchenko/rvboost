@@ -9,7 +9,11 @@ import {
 } from 'typing';
 
 // Справочник ответов от API:
-export type User = IUser & { id: number; password?: string };
+export type User = IUser & {
+  id: number;
+  password?: string;
+  isAssignedToOrg?: boolean;
+};
 export type Organization = IOrganization & {
   id: number;
   locations?: Location[];

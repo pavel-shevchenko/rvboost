@@ -37,7 +37,7 @@ export class UserController extends CRUDController {
   @UseGuards(JwtAuthGuard)
   @Get('current-user-info')
   jwtUserInfo(@Request() req: AppRequest) {
-    return req.user;
+    return this.userService.getUserInfo(req.user);
   }
 
   @UseGuards(JwtAuthGuard)

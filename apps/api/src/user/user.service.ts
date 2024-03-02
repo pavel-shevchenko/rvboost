@@ -13,6 +13,8 @@ import {
 import { User } from './entity';
 import { UserSocialAuth } from '../auth/entity';
 import { EntityManager } from '@mikro-orm/postgresql';
+import { wrap } from '@mikro-orm/core';
+import { OrganizationService } from '../organization';
 
 type CreateUserDto = {
   email: string;
@@ -27,7 +29,8 @@ export class UserService {
     @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
     private readonly em: EntityManager,
-    private userDbService: UserDbService
+    private userDbService: UserDbService,
+    private orgService: OrganizationService
   ) {}
 
   async createUser(dto: CreateUserDto) {
@@ -95,5 +98,17 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async getUserInfo(user: User) {
+    let isAssignedToOrg: boolean;
+    try {
+      const org = await this.orgService.getOrganizationByClient(user);
+      isAssignedToOrg = true;
+    } catch (e) {
+      isAssignedToOrg = false;
+    }
+
+    return { ...wrap(user).toJSON(), isAssignedToOrg };
   }
 }

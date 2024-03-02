@@ -1,5 +1,7 @@
 'use client';
 
+import { redirect, usePathname } from 'next/navigation';
+import { env } from 'next-runtime-env';
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Refine } from '@refinedev/core';
@@ -7,7 +9,6 @@ import { RefineThemes, notificationProvider } from '@refinedev/antd';
 import dataProvider from '@refinedev/nestjsx-crud';
 import routerProvider from '@refinedev/nextjs-router/app';
 import { ConfigProvider } from 'antd';
-import { env } from 'next-runtime-env';
 
 import { defineUserAbility } from 'casl/src/defineUserAbility';
 import { breakpoints, colors } from '@/app/_components/root-layout/styles';
@@ -64,6 +65,14 @@ export function LayoutClientSide({
   children: React.ReactNode;
   userInitState: UserStoreState | undefined;
 }) {
+  if (
+    userInitState &&
+    !userInitState.isAdmin &&
+    !userInitState.isAssignedToOrg &&
+    usePathname() !== Routes.accountSettings
+  )
+    redirect(Routes.accountSettings);
+
   const ability = useMemo(
     () => userInitState && defineUserAbility(userInitState),
     [userInitState]
