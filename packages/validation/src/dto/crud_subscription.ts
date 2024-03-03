@@ -10,4 +10,8 @@ export class CrudSubscriptionDto implements ISubscription {
 
   @IsNumber()
   organization: number;
+
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  locationsCnt: number;
 }

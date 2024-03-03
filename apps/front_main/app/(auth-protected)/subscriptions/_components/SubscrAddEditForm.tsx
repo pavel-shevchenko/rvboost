@@ -25,6 +25,9 @@ export const SubscrAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       >
         <input type="datetime-local" className="like-antd-input" />
       </Form.Item>
+      <Form.Item label="Доступно компаний" name={['locationsCnt']}>
+        <Input />
+      </Form.Item>
       <Form.Item
         label="ID организации"
         name={['organization']}

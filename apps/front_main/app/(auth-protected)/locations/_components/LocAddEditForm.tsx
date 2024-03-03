@@ -48,9 +48,7 @@ export const LocAddEditForm = ({ isEdit }: { isEdit: boolean }) => {
       >
         <Input />
       </Form.Item>
-      <Can do={PermissionAction.read} on={PermissionSubject.entityOrganization}>
-        <OrganizationSelect />
-      </Can>
+      <OrganizationSelect />
     </Form>
   );
 

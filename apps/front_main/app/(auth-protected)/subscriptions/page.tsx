@@ -28,6 +28,7 @@ export default function SubscriptionList() {
           title="Действует до"
           render={(i) => moment(i).format('DD.MM.YYYY HH:mm')}
         />
+        <Table.Column dataIndex="locationsCnt" title="Доступно компаний" />
         <Table.Column dataIndex="organization" title="ID организации" />
         <Table.Column<Subscription>
           title="Действия"

@@ -16,6 +16,9 @@ export class Subscription
   @Property({ nullable: false })
   validUntil: Date;
 
+  @Property()
+  locationsCnt: number;
+
   @ManyToOne(() => Organization)
   organization: Organization;
 }

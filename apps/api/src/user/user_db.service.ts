@@ -42,6 +42,7 @@ export class UserDbService {
     [
       'socialAuths',
       'organizations.users',
+      'organizations.locations',
       'organizations.subscriptions'
     ] as const;
 

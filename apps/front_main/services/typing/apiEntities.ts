@@ -13,6 +13,7 @@ export type User = IUser & {
   id: number;
   password?: string;
   isAssignedToOrg?: boolean;
+  organizations?: Organization[];
 };
 export type Organization = IOrganization & {
   id: number;

@@ -22,7 +22,7 @@ export type UserStoreState = User & {
 type UserStoreActions = {
   login: (dto: LocalLoginDto) => Promise<void>;
   register: (dto: LocalRegistrationDto) => Promise<void>;
-  loadUserAndPersistToken: (authToken: string) => Promise<void>;
+  loadUserAndPersistToken: (authToken: string) => Promise<User>;
   logout: () => void;
   changeUsername: (username: string) => void;
 };
@@ -69,6 +69,8 @@ export const useUserStore = create<UserStore>()(
       set({ authToken, ...currentUser });
       // Important await before redirect to have actual state after redirect
       await setCookie(AuthCookieName, authToken);
+
+      return currentUser;
     },
     logout: () => delCookie(AuthCookieName),
     changeUsername: (username: string) => set({ username })

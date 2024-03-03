@@ -7,12 +7,13 @@ import {
   DeleteButton,
   CreateButton
 } from '@refinedev/antd';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Table, Space } from 'antd';
 
 import { Location } from '@/services/typing/apiEntities';
 import { PermissionAction, PermissionSubject } from 'casl/src/legacy_typing';
 import { Can, CaslContext } from '@/services/casl/common';
+import { useUserStore } from '@/services/stores/user';
 
 export default function LocationList() {
   const ctxCan = useContext(CaslContext);
@@ -20,13 +21,35 @@ export default function LocationList() {
     pagination: { pageSize: 50 }
   });
 
+  const authToken = useUserStore((state) => state.authToken);
+  const lUaPt = useUserStore((state) => state.loadUserAndPersistToken);
+  const [canCreate, setCanCreate] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      const curUser = await lUaPt(authToken);
+      const curDatetime = new Date();
+
+      for (const organization of curUser?.organizations || []) {
+        for (const subscription of organization?.subscriptions || []) {
+          if (
+            new Date(subscription?.validUntil) > curDatetime &&
+            organization?.locations?.length &&
+            organization.locations.length < subscription?.locationsCnt
+          ) {
+            setCanCreate(true);
+          }
+        }
+      }
+    };
+    if (authToken) init();
+  }, [authToken]);
+
   return (
     <List
       title="Компании"
       headerButtons={
-        <Can do={PermissionAction.create} on={PermissionSubject.entityLocation}>
-          <CreateButton>Новая компания</CreateButton>
-        </Can>
+        canCreate ? <CreateButton>Новая компания</CreateButton> : <></>
       }
     >
       <Table {...tableProps} rowKey="id">
