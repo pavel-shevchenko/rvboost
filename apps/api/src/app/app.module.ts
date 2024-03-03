@@ -12,6 +12,7 @@ import { ReviewModule } from '../review';
 import { MinioModule } from '../minio';
 import { LinkShorterModule } from '../link-shorter';
 import { AnalyticsModule } from '../analytics';
+import { PromocodeModule } from '../promocode';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AnalyticsModule } from '../analytics';
     {
       ...MikroCrudModule.configure({
         filters: (entityFilterContext: CrudEntityFilterContext) => {
-          return { crudEntityFilter: entityFilterContext }; // `efk` via filter parameters
+          return { crudEntityFilter: entityFilterContext }; // `efCtx` via filter parameters
         }
       }),
       global: true
@@ -28,6 +29,7 @@ import { AnalyticsModule } from '../analytics';
     AuthModule,
     OrganizationModule,
     SubscriptionModule,
+    PromocodeModule,
     LocationModule,
     CardModule,
     MinioModule,

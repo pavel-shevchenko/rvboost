@@ -143,6 +143,12 @@ export function LayoutClientSide({
                           edit: `${Routes.subscriptions}/edit/:id`
                         },
                         {
+                          name: 'promocodes',
+                          list: Routes.promocodes,
+                          create: `${Routes.promocodes}/create`,
+                          edit: `${Routes.promocodes}/edit/:id`
+                        },
+                        {
                           name: 'analytics',
                           list: Routes.analytics,
                           create: `${Routes.analytics}/create`,

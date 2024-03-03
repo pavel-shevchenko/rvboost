@@ -46,4 +46,28 @@ export class User extends BaseEntity<User> implements IUser {
 
   @Property({ default: false })
   isAdmin: boolean;
+
+  @Property({ nullable: true })
+  promoRegedCode: string;
+
+  @Property({ nullable: true })
+  promoRegedCountry: string;
+
+  @Property({ nullable: true })
+  promoRegedCity: string;
+
+  @Property({ nullable: true })
+  promoRegedAddress: string;
+
+  @Property({ nullable: true })
+  promoRegedZip: string;
+
+  @Property({ nullable: true })
+  promoRegedName: string;
+
+  @Property({ nullable: true })
+  promoRegedSurname: string;
+
+  @Property({ nullable: true })
+  promoRegedPhone: string;
 }

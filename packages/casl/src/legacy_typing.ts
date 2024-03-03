@@ -5,6 +5,7 @@ export const PermissionSubject = {
   entityUser: 'entityUser',
   entityOrganization: 'entityOrganization',
   entitySubscription: 'entitySubscription',
+  entityPromocode: 'entityPromocode',
   entityLocation: 'entityLocation',
   entityCard: 'entityCard',
   entityReview: 'entityReview',

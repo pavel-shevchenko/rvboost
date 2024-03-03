@@ -1,6 +1,7 @@
 export * from './user.interface';
 export * from './organization.interface';
 export * from './subscription.interface';
+export * from './promocode.interface';
 export * from './location.interface';
 export * from './card.interface';
 export * from './event.interface';

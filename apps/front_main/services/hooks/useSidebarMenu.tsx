@@ -13,7 +13,8 @@ import {
   UserOutlined,
   StopOutlined,
   LinkOutlined,
-  AreaChartOutlined
+  AreaChartOutlined,
+  BarcodeOutlined
 } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
@@ -86,36 +87,42 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
         },
         {
           id: 6,
+          name: 'Промокоды',
+          route: Routes.promocodes,
+          icon: <BarcodeOutlined />
+        },
+        {
+          id: 7,
           name: 'Компании',
           route: Routes.locations,
           icon: <ShoppingOutlined />
         },
         {
-          id: 7,
+          id: 8,
           name: 'Карточки QR',
           route: Routes.cards,
           icon: <CreditCardOutlined />
         },
         {
-          id: 8,
+          id: 9,
           name: 'Шортссылки',
           route: Routes.links,
           icon: <LinkOutlined />
         },
         {
-          id: 9,
+          id: 10,
           name: 'Сбор отзывов',
           route: Routes.feedbackSettings,
           icon: <StopOutlined />
         },
         {
-          id: 10,
+          id: 11,
           name: 'Отзывы',
           route: Routes.reviews,
           icon: <MessageOutlined />
         },
         {
-          id: 11,
+          id: 12,
           name: 'Аналитика',
           route: Routes.analytics,
           icon: <AreaChartOutlined />

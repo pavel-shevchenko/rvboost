@@ -5,6 +5,7 @@ export * from './dto/crud_user';
 export * from './dto/crud_organization';
 export * from './dto/crud_location';
 export * from './dto/crud_subscription';
+export * from './dto/crud_promocode';
 export * from './dto/crud_card';
 export * from './dto/crud_event';
 export * from './dto/crud_review';

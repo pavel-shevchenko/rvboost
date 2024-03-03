@@ -43,7 +43,7 @@ export class Review extends BaseEntity<Review> implements IReview {
   @Property({ type: TextType, nullable: true })
   replyText: string;
 
-  @Property({ nullable: true })
+  @Property({ nullable: true, length: 1024 })
   reviewExternalLink: string;
 
   @Property({ nullable: true })

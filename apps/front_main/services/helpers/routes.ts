@@ -10,6 +10,7 @@ export const Routes = {
   users: '/users',
   companies: '/companies',
   subscriptions: '/subscriptions',
+  promocodes: '/promocodes',
   analytics: '/analytics',
   locations: '/locations',
   cards: '/cards',
