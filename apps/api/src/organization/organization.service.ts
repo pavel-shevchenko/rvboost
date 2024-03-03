@@ -8,7 +8,7 @@ import {
 import { UserService } from '../user';
 import { User } from '../user/entity';
 import { OrganizationDbService } from './organization_db.service';
-import { NewClientDto } from 'validation';
+import { NewClientDto, StartClientDto } from 'validation';
 import { LocationCrudService } from '../location';
 import { Location } from '../location/entity';
 
@@ -20,6 +20,14 @@ export class OrganizationService {
     private readonly orgDbService: OrganizationDbService,
     private readonly locationCrudService: LocationCrudService
   ) {}
+
+  async getOrganizationByClient(client: User) {
+    const organizations =
+      await this.orgDbService.getOrganizationsByClient(client);
+    if (!organizations.length) throw new ForbiddenException();
+
+    return organizations[0];
+  }
 
   async newClient(admin: User, newClientDto: NewClientDto) {
     const client = await this.userService.createUser({
@@ -51,11 +59,38 @@ export class OrganizationService {
     return await Promise.all(locationsPromises);
   }
 
-  async getOrganizationByClient(client: User) {
-    const organizations =
-      await this.orgDbService.getOrganizationsByClient(client);
-    if (!organizations.length) throw new ForbiddenException();
+  async startClient(client: User, startClientDto: StartClientDto) {
+    let isAssignedToOrg: boolean;
+    try {
+      await this.getOrganizationByClient(client);
+      isAssignedToOrg = true;
+    } catch (e) {
+      isAssignedToOrg = false;
+    }
+    if (isAssignedToOrg) throw new ForbiddenException();
 
-    return organizations[0];
+    const orgAndCompanyName = startClientDto.orgName;
+    const organization = await this.orgDbService.newOrganizationForClient(
+      client,
+      orgAndCompanyName
+    );
+
+    const locationsPromises: Array<Promise<Location>> = [];
+    for (const companyData of startClientDto.companies) {
+      locationsPromises.push(
+        this.locationCrudService.create({
+          user: client,
+          data: {
+            organization: organization.id,
+            name: orgAndCompanyName,
+            address: companyData.companyAddress,
+            linkDefault: companyData.companyLinkDefault,
+            linkGoogle: companyData.companyLinkGoogle,
+            linkTrustPilot: companyData.companyLinkTrustPilot
+          }
+        })
+      );
+    }
+    return await Promise.all(locationsPromises);
   }
 }

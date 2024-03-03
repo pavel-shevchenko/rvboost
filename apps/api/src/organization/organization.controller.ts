@@ -13,7 +13,7 @@ import { AppRequest } from '../common/typing';
 import { OrganizationDbService } from './organization_db.service';
 import { MikroCrudControllerFactory } from '../nestjs-crud';
 import { OrganizationCrudService } from './organization_crud.service';
-import { NewClientDto } from 'validation';
+import { NewClientDto, StartClientDto } from 'validation';
 
 const CRUDController = new MikroCrudControllerFactory<OrganizationCrudService>({
   service: OrganizationCrudService,
@@ -59,6 +59,15 @@ export class OrganizationController extends CRUDController {
   @Post('new-client')
   newClient(@Request() req: AppRequest, @Body() newClientDto: NewClientDto) {
     return this.orgService.newClient(req.user, newClientDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('start-client')
+  startClient(
+    @Request() req: AppRequest,
+    @Body() startClientDto: StartClientDto
+  ) {
+    return this.orgService.startClient(req.user, startClientDto);
   }
 
   @Get('get-populated-org-for-review-interception-secured52735/:shortLinkCode')

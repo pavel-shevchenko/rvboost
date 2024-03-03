@@ -63,7 +63,7 @@ const getSidebarMenus = (): Array<SidebarMenuItem> => {
         {
           id: 2,
           name: 'Новый клиент',
-          route: Routes.newclient,
+          route: Routes.newClient,
           icon: <PlusCircleOutlined />
         },
         {

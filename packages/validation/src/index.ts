@@ -9,4 +9,5 @@ export * from './dto/crud_card';
 export * from './dto/crud_event';
 export * from './dto/crud_review';
 export * from './dto/new_client';
+export * from './dto/start_client';
 export * from './dto/feedback_settings';

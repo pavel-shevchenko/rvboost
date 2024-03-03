@@ -69,9 +69,9 @@ export function LayoutClientSide({
     userInitState &&
     !userInitState.isAdmin &&
     !userInitState.isAssignedToOrg &&
-    usePathname() !== Routes.accountSettings
+    usePathname() !== Routes.startClient
   )
-    redirect(Routes.accountSettings);
+    redirect(Routes.startClient);
 
   const ability = useMemo(
     () => userInitState && defineUserAbility(userInitState),
