@@ -9,11 +9,19 @@ import { Routes } from '@/services/helpers/routes';
 
 export default function StartClient() {
   const authToken = useUserStore((state) => state.authToken);
+  const promoRegedCode = useUserStore((state) => state.promoRegedCode);
 
   const onFinish = async (values: { [key: string]: string }) => {
     const fetch = useFetch(authToken);
     const data = {
       orgName: values.orgName,
+      promoRegedCountry: values.promoRegedCountry || '',
+      promoRegedCity: values.promoRegedCity || '',
+      promoRegedAddress: values.promoRegedAddress || '',
+      promoRegedZip: values.promoRegedZip || '',
+      promoRegedName: values.promoRegedName || '',
+      promoRegedSurname: values.promoRegedSurname || '',
+      promoRegedPhone: values.promoRegedPhone || '',
       companies: [
         {
           companyAddress: values.companyAddress,
@@ -33,12 +41,44 @@ export default function StartClient() {
     window.location.href = Routes.dashboard;
   };
 
-  return (
+  return authToken ? (
     <>
-      <Typography.Title level={4}>Создание нового клиента</Typography.Title>
+      <Typography.Title level={4}>Создание клиента</Typography.Title>
 
       <Card>
         <Form layout="vertical" {...{ onFinish }} scrollToFirstError={true}>
+          {promoRegedCode && (
+            <>
+              <Typography.Title level={5} style={{ marginBottom: '15px' }}>
+                Информация по доставке карты:
+              </Typography.Title>
+              <Form.Item label="Страна доставки" name="promoRegedCountry">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Город" name="promoRegedCity">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Адрес" name="promoRegedAddress">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Почтовый индекс" name="promoRegedZip">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Имя получателя" name="promoRegedName">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Фамилия получателя" name="promoRegedSurname">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Номер телефона получателя" name="promoRegedPhone">
+                <Input />
+              </Form.Item>
+              <br />
+              <Typography.Title level={5} style={{ marginBottom: '15px' }}>
+                Информация о компании:
+              </Typography.Title>
+            </>
+          )}
           <Form.Item label="Название организации" name="orgName">
             <Input />
           </Form.Item>
@@ -73,5 +113,7 @@ export default function StartClient() {
         </Form>
       </Card>
     </>
+  ) : (
+    <></>
   );
 }

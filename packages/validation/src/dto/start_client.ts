@@ -20,6 +20,13 @@ interface IStartClientCompany {
 interface IStartClient {
   orgName: string;
   companies: Array<IStartClientCompany>;
+  promoRegedCountry?: string;
+  promoRegedCity?: string;
+  promoRegedAddress?: string;
+  promoRegedZip?: string;
+  promoRegedName?: string;
+  promoRegedSurname?: string;
+  promoRegedPhone?: string;
 }
 
 export class StartClientCompany implements IStartClientCompany {
@@ -59,4 +66,32 @@ export class StartClientDto implements IStartClient {
   @ArrayMaxSize(1)
   @Type(() => StartClientCompany)
   companies: StartClientCompany[];
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedCountry?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedCity?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedAddress?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedZip?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedName?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedSurname?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedPhone?: string;
 }

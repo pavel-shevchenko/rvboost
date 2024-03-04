@@ -9,11 +9,15 @@ import { MikroCrudModule } from '../nestjs-crud';
 import { Organization } from './entity';
 import { OrganizationCrudService } from './organization_crud.service';
 import { LocationModule } from '../location';
+import { SubscriptionModule } from '../subscription';
+import { PromocodeModule } from '../promocode';
 
 @Module({
   imports: [
     LocationModule,
     MikroCrudModule,
+    SubscriptionModule,
+    PromocodeModule,
     MikroOrmModule.forFeature([Organization]),
     forwardRef(() => UserModule)
   ],

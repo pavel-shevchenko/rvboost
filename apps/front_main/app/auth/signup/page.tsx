@@ -55,7 +55,7 @@ export default function Signup() {
 
       <AuthCard>
         <Formik
-          initialValues={{ email: '', password: '', username: '' }}
+          initialValues={{ email: '', password: '', username: '', promocode: '' }}
           onSubmit={registerSubmit}
           validate={registerValidate}
         >
@@ -114,6 +114,21 @@ export default function Signup() {
               </InputWrapper>
               {errors.password && touched.password && (
                 <FormErrorText>{errors.password}</FormErrorText>
+              )}
+              <AuthFormLabel htmlFor="promocode">Promocode:</AuthFormLabel>
+              <InputWrapper>
+                <TextInput
+                  type="text"
+                  name="promocode"
+                  id="promocode"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.promocode}
+                  data-test-id="promocode"
+                />
+              </InputWrapper>
+              {errors.promocode && touched.promocode && (
+                <FormErrorText>{errors.promocode}</FormErrorText>
               )}
               <AuthButton type="submit">SignUp</AuthButton>
             </form>

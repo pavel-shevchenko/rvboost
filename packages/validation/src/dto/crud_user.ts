@@ -4,7 +4,8 @@ import {
   IsNumberString, // use it for number from url request param
   Length,
   IsBoolean,
-  ValidateIf
+  ValidateIf,
+  IsOptional
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { IUser } from 'typing';
@@ -32,4 +33,36 @@ export class CrudUserDto implements IUser {
 
   @IsBoolean()
   readonly isAdmin: boolean | null;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedCode?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedCountry?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedCity?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedAddress?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedZip?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedName?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedSurname?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  promoRegedPhone?: string;
 }

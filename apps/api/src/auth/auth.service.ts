@@ -41,7 +41,8 @@ export class AuthService {
     const user: User = await this.userDbService.createUserByRequiredEntityDto({
       passwordHash,
       email: userDto.email,
-      username: userDto.username
+      username: userDto.username,
+      promoRegedCode: userDto.promocode
     });
 
     this.mailService.sendRegistrationNotify(user.email);

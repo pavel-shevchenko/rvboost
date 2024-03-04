@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Length, Matches } from 'class-validator';
+import { IsEmail, IsOptional, IsString, Length, Matches } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class LocalRegistrationDto {
@@ -21,4 +21,9 @@ export class LocalRegistrationDto {
   @Length(3, 30, { message: 'От 3 до 30 символов' })
   @Transform(({ value }) => value.trim())
   readonly username: string;
+
+  @IsOptional()
+  @IsString({ message: 'Must be a string' })
+  @Transform(({ value }) => value.trim())
+  readonly promocode?: string;
 }

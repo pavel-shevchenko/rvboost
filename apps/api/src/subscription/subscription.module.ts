@@ -10,6 +10,6 @@ import { SubscriptionController } from './subscription.controller';
   imports: [MikroCrudModule, MikroOrmModule.forFeature([Subscription])],
   controllers: [SubscriptionController],
   providers: [SubscriptionCrudService],
-  exports: []
+  exports: [SubscriptionCrudService]
 })
 export class SubscriptionModule {}
