@@ -20,17 +20,21 @@ export class UserDbService {
     return user;
   }
 
-  async retrieveUser(id: number): Promise<User> {
+  async retrieveUser(id: number) {
     return this.em.findOne(User, id, { populate: ['organizations'] as const });
   }
 
-  getPassportUserById(id: number): Promise<User> {
+  getUserByPromoRegedCode(promoRegedCode: string) {
+    return this.em.findOne(User, { promoRegedCode });
+  }
+
+  getPassportUserById(id: number) {
     return this.em.findOne(User, id, {
       populate: this.getPassportUserPopulates()
     });
   }
 
-  async getPassportUserByEmail(email: string): Promise<User> {
+  async getPassportUserByEmail(email: string) {
     return this.em.findOne(
       User,
       { email },

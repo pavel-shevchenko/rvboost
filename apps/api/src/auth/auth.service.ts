@@ -18,6 +18,7 @@ import { UserSocialAuth } from './entity';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { SocialAuthProvider } from '../common/typing/social_auth.types';
 import { FastifyReply } from 'fastify';
+import { PromocodeDbService } from '../promocode/promocode_db.service';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +27,7 @@ export class AuthService {
     private readonly usersService: UserService,
     @Inject(forwardRef(() => UserDbService))
     private readonly userDbService: UserDbService,
+    private readonly promoDbService: PromocodeDbService,
     private readonly jwtService: JwtService,
     private readonly em: EntityManager,
     private readonly mailService: MailService
@@ -37,6 +39,19 @@ export class AuthService {
     if (await this.userDbService.getPassportUserByEmail(userDto.email)) {
       throw new BadRequestException({ email: 'E-mail уже зарегистрирован!' });
     }
+    if (
+      userDto.promocode?.length &&
+      !(await this.promoDbService.getPromocode(userDto.promocode))
+    ) {
+      throw new BadRequestException({ promocode: 'Промокод не найден!' });
+    }
+    if (
+      userDto.promocode?.length &&
+      (await this.userDbService.getUserByPromoRegedCode(userDto.promocode))
+    ) {
+      throw new BadRequestException({ promocode: 'Промокод уже использован!' });
+    }
+
     const passwordHash = await this.hashPassword(userDto.password);
     const user: User = await this.userDbService.createUserByRequiredEntityDto({
       passwordHash,

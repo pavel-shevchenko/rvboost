@@ -103,7 +103,7 @@ export class OrganizationService {
         client.promoRegedCode
       );
       if (promocode) {
-        this.subscrCrudService.create({
+        await this.subscrCrudService.create({
           user: client,
           data: {
             validUntil: new Date(new Date().getTime() + 3153600000000),
@@ -119,7 +119,7 @@ export class OrganizationService {
         client.promoRegedName = startClientDto.promoRegedName;
         client.promoRegedSurname = startClientDto.promoRegedSurname;
         client.promoRegedPhone = startClientDto.promoRegedPhone;
-        this.userDbService.saveUser(client);
+        await this.userDbService.saveUser(client);
       }
     }
 

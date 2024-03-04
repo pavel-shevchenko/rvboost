@@ -12,6 +12,7 @@ import { PassportModule } from '../fastify-passport';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { UserSocialAuth } from './entity';
 import { GoogleStrategy } from './strategies/passport_google';
+import { PromocodeModule } from '../promocode';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GoogleStrategy } from './strategies/passport_google';
     MikroOrmModule.forFeature([UserSocialAuth]),
     forwardRef(() => UserModule),
     PassportModule,
+    PromocodeModule,
     MailModule
   ],
   controllers: [AuthController],

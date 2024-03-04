@@ -15,8 +15,12 @@ export class PromocodeDbService {
 
     promocode.isActivated = true;
     promocode.activationDate = new Date();
-    this.em.persistAndFlush(promocode);
+    await this.em.persistAndFlush(promocode);
 
     return promocode;
+  }
+
+  async getPromocode(code: string) {
+    return this.em.findOne(Promocode, { code });
   }
 }

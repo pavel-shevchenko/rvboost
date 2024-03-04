@@ -12,7 +12,7 @@ export class Promocode extends BaseEntity<Promocode> implements IPromocode {
   @Property({ nullable: false })
   code: string;
 
-  @Property({ nullable: true })
+  @Property({ nullable: false, default: false })
   isActivated: boolean;
 
   @Property({ nullable: true })
