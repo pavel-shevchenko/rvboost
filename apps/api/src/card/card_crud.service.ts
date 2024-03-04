@@ -31,7 +31,7 @@ export class CardCrudService extends CRUDService {
     const shortLinkCode = generateShortLinkCode();
     const card = await super.create({ data: { ...data, shortLinkCode }, user });
 
-    this.cardService.generateQR(shortLinkCode, getShortLink(shortLinkCode));
+    await this.cardService.generateQR(shortLinkCode, getShortLink(shortLinkCode));
 
     return card;
   }

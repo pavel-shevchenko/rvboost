@@ -22,7 +22,7 @@ export class CardService {
       }
     });
     qrcode.toFileStream(stream, link, { width: 1024 });
-    this.minioService.putObject(getS3qrCodeFullKey(s3shortKey), stream);
+    await this.minioService.putObject(getS3qrCodeFullKey(s3shortKey), stream);
   }
 
   async getQrCodeImage(response: FastifyReply, shortLinkCode: string) {
