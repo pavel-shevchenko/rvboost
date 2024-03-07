@@ -10,12 +10,12 @@ import { Can } from '@/services/casl/common';
 function OrganizationSelect() {
   const { selectProps: orgSelectProps } = useSelect<Organization>({
     resource: 'organization',
-    optionLabel: 'id'
+    optionLabel: 'name'
   });
 
   return (
     <Form.Item
-      label="ID организации"
+      label="Организация"
       name={['organization']}
       rules={[{ required: true }]}
     >

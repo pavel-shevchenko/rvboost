@@ -254,6 +254,7 @@ export default function FeedbackAddEditForm({
             label="Куда ведёт редирект"
             name="redirectPlatform"
             labelCol={{ span: 24 }}
+            rules={[{ required: true }]}
           >
             <Radio.Group options={redirectPlatforms} />
           </Form.Item>
