@@ -52,8 +52,8 @@ services:
     restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "${POSTGRES_EXT_PORT}:${POSTGRES_PORT}"
+#    ports:
+#      - "${POSTGRES_EXT_PORT}:${POSTGRES_PORT}"
     env_file:
       - .env
     environment:

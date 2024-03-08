@@ -30,6 +30,8 @@ export default function LocationList() {
       const curUser = await lUaPt(authToken);
       const curDatetime = new Date();
 
+      if (curUser?.isAdmin) setCanCreate(true);
+
       for (const organization of curUser?.organizations || []) {
         for (const subscription of organization?.subscriptions || []) {
           if (
